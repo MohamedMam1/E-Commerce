@@ -9,7 +9,7 @@ namespace FinalProject.Models
         public int Id { get; set; }
 
         [Required]
-        public string UserId { get; set; }  // Changed to string
+        public string UserId { get; set; }  
 
         [Required]
         public DateTime CreatedAt { get; set; }
