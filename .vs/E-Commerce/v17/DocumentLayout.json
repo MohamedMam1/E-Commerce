@@ -1,7 +1,12 @@
 {
   "Version": 1,
   "WorkspaceRootPath": "D:\\ITI AEC\\MVC\\PROJECT\\E-Commerce\\",
-  "Documents": [],
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{7B984F8E-FD12-42AC-B915-F7C2B730DF91}|E-Commerce\\E-Commerce.csproj|d:\\iti aec\\mvc\\project\\e-commerce\\e-commerce\\viewmodels\\uservm.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7B984F8E-FD12-42AC-B915-F7C2B730DF91}|E-Commerce\\E-Commerce.csproj|solutionrelative:e-commerce\\viewmodels\\uservm.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
@@ -9,11 +14,24 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": -1,
+          "SelectedChildIndex": 1,
           "Children": [
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{aa2115a1-9712-457b-9047-dbb71ca2cdd2}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "UserVM.cs",
+              "DocumentMoniker": "D:\\ITI AEC\\MVC\\PROJECT\\E-Commerce\\E-Commerce\\ViewModels\\UserVM.cs",
+              "RelativeDocumentMoniker": "E-Commerce\\ViewModels\\UserVM.cs",
+              "ToolTip": "D:\\ITI AEC\\MVC\\PROJECT\\E-Commerce\\E-Commerce\\ViewModels\\UserVM.cs",
+              "RelativeToolTip": "E-Commerce\\ViewModels\\UserVM.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-31T22:21:39.592Z",
+              "EditorCaption": ""
             }
           ]
         }
