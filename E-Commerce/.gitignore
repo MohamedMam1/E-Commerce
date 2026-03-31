@@ -1,0 +1,75 @@
+# ======================
+# Build output
+# ======================
+bin/
+obj/
+*.exe
+*.dll
+*.pdb
+*.cache
+publish/
+
+# ======================
+# User-specific files
+# ======================
+*.user
+*.suo
+*.stackdump
+
+# ======================
+# IDE files
+# ======================
+.vs/
+.vscode/
+.idea/
+_ReSharper*/
+*.swp
+*.swo
+
+# ======================
+# OS generated files
+# ======================
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+[Tt]humbs.db
+Thumbs.db
+
+# ======================
+# NuGet packages
+# ======================
+packages/
+*.nupkg
+
+# ======================
+# Logs and temporary files
+# ======================
+*.log
+logs/
+*.tmp
+*.temp
+
+# ======================
+# ASP.NET Core
+# ======================
+wwwroot/lib/
+
+# ======================
+# Entity Framework
+# ======================
+*.db
+*.db-shm
+*.db-wal
+
+# ======================
+# Node.js / Frontend
+# ======================
+node_modules/
+npm-debug.log*
+
+# ======================
+# Bower
+# ======================
+bower_components/
