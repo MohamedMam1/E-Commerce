@@ -1,0 +1,79 @@
+﻿@model E_Commerce.ViewModels.RegisterUserVM
+
+@{
+    ViewData["Title"] = "Register";
+}
+
+<section class="vh-100" style="background-color: #508bfc;">
+    <div class="container py-5 h-100">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+                <div class="card shadow-2-strong" style="border-radius: 1rem;">
+                    <div class="card-body p-5 text-center">
+
+                        <h3 class="mb-5">Register</h3>
+
+                        <!-- Form Start -->
+                        <form asp-action="Register" method="post">
+                            <div asp-validation-summary="ModelOnly" class="text-danger mb-4"></div>
+
+                            <!-- Full Name -->
+                            <div class="form-outline mb-4">
+                                <input asp-for="FullName" type="text" id="FullName" class="form-control form-control-lg" />
+                                <label class="form-label" for="FullName">Full Name</label>
+                                <span asp-validation-for="FullName" class="text-danger"></span>
+                            </div>
+
+                            <!-- Email -->
+                            <div class="form-outline mb-4">
+                                <input asp-for="Email" type="email" id="Email" class="form-control form-control-lg" />
+                                <label class="form-label" for="Email">Email</label>
+                                <span asp-validation-for="Email" class="text-danger"></span>
+                            </div>
+
+                            <!-- Password -->
+                            <div class="form-outline mb-4">
+                                <input asp-for="Password" type="password" id="Password" class="form-control form-control-lg" />
+                                <label class="form-label" for="Password">Password</label>
+                                <span asp-validation-for="Password" class="text-danger"></span>
+                            </div>
+
+                            <!-- Confirm Password -->
+                            <div class="form-outline mb-4">
+                                <input asp-for="ConfirmPassword" type="password" id="ConfirmPassword" class="form-control form-control-lg" />
+                                <label class="form-label" for="ConfirmPassword">Confirm Password</label>
+                                <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                            </div>
+
+                            <!-- Phone -->
+                            <div class="form-outline mb-4">
+                                <input asp-for="Phone" type="text" id="Phone" class="form-control form-control-lg" />
+                                <label class="form-label" for="Phone">Phone</label>
+                                <span asp-validation-for="Phone" class="text-danger"></span>
+                            </div>
+
+                            <!-- Register Button -->
+                            <button type="submit" class="btn btn-primary btn-lg btn-block mb-4">Register</button>
+
+                        </form>
+                        <!-- Form End -->
+
+                        <div class="mt-3">
+                            <p class="fs-6 mb-0">
+                                Already have an account?
+                                <a asp-controller="Account" asp-action="Login" class="text-decoration-none fw-bold">Login here</a>
+                            </p>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

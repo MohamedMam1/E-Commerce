@@ -1896,6 +1896,10 @@ input.num-product::-webkit-inner-spin-button {
   opacity: 0.8;
 }
 
+.dropdown:hover .dropdown-menu {
+    display: block;
+    margin-top: 0;
+}
 .show-modal1 {
   visibility: visible;
   opacity: 1;
