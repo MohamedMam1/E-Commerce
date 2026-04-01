@@ -45,6 +45,10 @@
           "SelectedChildIndex": 6,
           "Children": [
             {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{aa2115a1-9712-457b-9047-dbb71ca2cdd2}"
+            },
+            {
               "$type": "Document",
               "DocumentIndex": 2,
               "Title": "Register.cshtml",
@@ -54,8 +58,7 @@
               "RelativeToolTip": "E-Commerce\\Views\\Account\\Register.cshtml",
               "ViewState": "AgIAADEAAAAAAAAAAAAuwDsAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-04-01T17:38:27.538Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-04-01T17:38:27.538Z"
             },
             {
               "$type": "Document",
@@ -67,8 +70,7 @@
               "RelativeToolTip": "E-Commerce\\Views\\Account\\Login.cshtml",
               "ViewState": "AgIAACwAAAAAAAAAAAAuwDcAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-04-01T17:35:18.67Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-04-01T17:35:18.67Z"
             },
             {
               "$type": "Document",
@@ -80,8 +82,7 @@
               "RelativeToolTip": "E-Commerce\\Views\\Shared\\_Layout.cshtml",
               "ViewState": "AgIAABgAAAAAAAAAAAAAACkAAABaAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-04-01T17:21:11.114Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-04-01T17:21:11.114Z"
             },
             {
               "$type": "Document",
@@ -93,12 +94,7 @@
               "RelativeToolTip": "E-Commerce\\wwwroot\\css\\main.css",
               "ViewState": "AgIAAOABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003000|",
-              "WhenOpened": "2026-04-01T16:46:23.499Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{aa2115a1-9712-457b-9047-dbb71ca2cdd2}"
+              "WhenOpened": "2026-04-01T16:46:23.499Z"
             },
             {
               "$type": "Document",
@@ -110,8 +106,7 @@
               "RelativeToolTip": "E-Commerce\\ViewModels\\RegisterUserVM.cs",
               "ViewState": "AgIAAAMAAAAAAAAAAAAAAA0AAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-04-01T16:56:32.877Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-04-01T16:56:32.877Z"
             },
             {
               "$type": "Document",
@@ -121,7 +116,7 @@
               "RelativeDocumentMoniker": "E-Commerce\\Controllers\\AccountController.cs",
               "ToolTip": "D:\\ITI AEC\\MVC\\E-Commerce\\E-Commerce\\Controllers\\AccountController.cs",
               "RelativeToolTip": "E-Commerce\\Controllers\\AccountController.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABEAAAAJAAAAAAAAAA==",
+              "ViewState": "AgIAADoAAAAAAAAAAAA5wD4AAAAaAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-04-01T16:50:19.638Z",
               "EditorCaption": ""
@@ -136,8 +131,7 @@
               "RelativeToolTip": "E-Commerce\\Views\\Shared\\_Navbar.cshtml",
               "ViewState": "AgIAAE4AAAAAAAAAAAAewF4AAAANAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-04-01T16:23:03.865Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-04-01T16:23:03.865Z"
             },
             {
               "$type": "Document",
@@ -149,8 +143,7 @@
               "RelativeToolTip": "E-Commerce\\Views\\_ViewImports.cshtml",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAMAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-04-01T16:20:06.905Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-04-01T16:20:06.905Z"
             }
           ]
         }
