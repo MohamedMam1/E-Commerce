@@ -17,7 +17,6 @@ namespace E_Commerce.Controllers
             _signInManager = signInManager;
         }
 
-        // GET: /Account/Register
         [HttpGet]
         public IActionResult Register()
         {
@@ -26,7 +25,6 @@ namespace E_Commerce.Controllers
             return View();
         }
 
-        // POST: /Account/Register
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(RegisterUserVM userFromReq)
@@ -83,7 +81,6 @@ namespace E_Commerce.Controllers
             return View(userFromReq);
         }
 
-        // GET: /Account/SignOut
         [HttpGet]
         public async Task<IActionResult> SignOut()
         {
