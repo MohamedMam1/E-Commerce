@@ -1,0 +1,115 @@
+﻿@using E_Commerce.ViewModels.UserDashboard
+@model UserDashboardVM
+@{
+    ViewData["Title"] = "My Dashboard";
+}
+
+<div class="container mt-4">
+
+    <h2 class="mb-4">My Dashboard</h2>
+
+    <!-- User Info -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-header">
+            <h4>Account Information</h4>
+        </div>
+
+        <div class="card-body">
+            <p><strong>Full Name:</strong> @Model.FullName</p>
+            <p><strong>Email:</strong> @Model.Email</p>
+            <p><strong>Phone:</strong> @Model.PhoneNumber</p>
+            <hr />
+            <h5>Addresses</h5>
+
+            @if (Model.Addresses != null && Model.Addresses.Any())
+            {
+                <ul class="list-group mb-3">
+                    @foreach (var Address in Model.Addresses)
+                    {
+                        <li class="list-group-item">
+                            @Address.AddressLine
+                        </li>
+                    }
+                </ul>
+            }
+            else
+            {
+                <div class="alert alert-info">
+                    No addresses added yet.
+                </div>
+            }
+
+            <a asp-action="EditProfile" asp-asp-controller="UserDashboard" class="btn btn-primary">
+                Edit Profile
+            </a>
+
+            <a asp-action="Orders" asp-asp-controller="UserDashboard" class="btn btn-outline-dark ms-2">
+                View All Orders
+            </a>
+        </div>
+    </div>
+
+    <!-- Recent Orders -->
+    <div class="card shadow-sm">
+        <div class="card-header d-flex justify-content-between">
+            <h4>Recent Orders</h4>
+
+            <a asp-action="Orders" asp-asp-controller="UserDashboard" class="btn btn-sm btn-outline-primary">
+                See All
+            </a>
+        </div>
+
+        <div class="card-body">
+
+            @if (Model.RecentOrders != null && Model.RecentOrders.Any())
+            {
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Order Id</th>
+                            <th>Date</th>
+                            <th>Items</th>
+                            <th>Total</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @foreach (var order in Model.RecentOrders)
+                        {
+                            <tr>
+                                <td>@order.OrderId</td>
+
+                                <td>
+                                    @order.OrderDate.ToString("dd/MM/yyyy")
+                                </td>
+
+                                <td>@order.ItemsCount</td>
+
+                                <td>
+                                    @order.TotalPrice.ToString("0.00")
+                                </td>
+
+                                <td>
+                                    <a asp-action="OrderDetails" asp-controller="UserDashboard" asp-route-id="@order.OrderId"
+                                       class="btn btn-sm btn-info text-white">
+                                        Details
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+            else
+            {
+                <div class="alert alert-info">
+                    No orders yet.
+                </div>
+            }
+
+        </div>
+    </div>
+
+</div>
+
