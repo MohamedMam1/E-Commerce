@@ -1,3 +1,6 @@
+using E_Commerce.Interfaces;
+using E_Commerce.Repositories;
+using E_Commerce.Services;
 using FinalProject.Context;
 using FinalProject.Models;
 using Microsoft.AspNetCore.Identity;
@@ -17,6 +20,10 @@ namespace E_Commerce
             // Add services to the container.
             builder.Services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<ITiContext>();
             builder.Services.AddControllersWithViews();
+            builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+            builder.Services.AddScoped<IUserRepository, UserRepository>();
+            builder.Services.AddScoped<IUserService, UserService>();
+            builder.Services.AddScoped<IOrderService, OrderService>();
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.

@@ -1,0 +1,55 @@
+﻿@using E_Commerce.ViewModels.UserDashboard
+@model List<UserOrderSummaryVM>
+@{
+    ViewData["Title"] = "My Orders";
+}
+
+<div class="container mt-4">
+    <h2 class="mb-4">My Orders</h2>
+
+    @if (Model != null && Model.Any())
+    {
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <table class="table table-hover align-middle">
+                    <thead>
+                        <tr>
+                            <th>Order Id</th>
+                            <th>Date</th>
+                            <th>Items Count</th>
+                            <th>Total Price</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @foreach (var Order in Model)
+                        {
+                            <tr>
+                                <td>@Order.OrderId</td>
+                                <td>@Order.OrderDate.ToString("dd/MM/yyyy hh:mm tt")</td>
+                                <td>@Order.ItemsCount</td>
+                                <td>@Order.TotalPrice.ToString("0.00")</td>
+                                <td>
+                                    <a asp-action="OrderDetails"
+                                       asp-asp-controller="UserDashboard"
+                                       asp-route-id="@Order.OrderId"
+                                       class="btn btn-sm btn-primary">
+                                        View Details
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-info">
+            You have no orders yet.
+        </div>
+    }
+</div>
+
