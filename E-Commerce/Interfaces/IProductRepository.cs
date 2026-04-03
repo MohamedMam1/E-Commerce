@@ -10,5 +10,6 @@ namespace E_Commerce.Interfaces
         Task UpdateAsync(Product product);
         Task DeleteAsync(Product product);
         Task<bool> ExistsAsync(int id);
+        Task<IEnumerable<Product>> SearchByNameorCat(string SearchValue);
     }
 }

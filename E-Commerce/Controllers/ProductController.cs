@@ -1,4 +1,5 @@
 ﻿using E_Commerce.Interfaces;
+using E_Commerce.ViewModels.Product;
 using Microsoft.AspNetCore.Mvc;
 
 namespace E_Commerce.Controllers
@@ -10,9 +11,21 @@ namespace E_Commerce.Controllers
         {
             _productServce = service;
         }
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            var products = await _productServce.GetAllProductsAsync();
+            return View(products);
+        }
+
+        public async Task<IActionResult> Search(string SearchValue)
+        {
+            var products = await _productServce.SearchProducts(SearchValue);
+            var allproducts = await _productServce.GetAllProductsAsync();
+            if (products == null || !products.Any())
+            {
+                return View("Index", allproducts);
+            }
+            return View("Index", products);
         }
     }
 }

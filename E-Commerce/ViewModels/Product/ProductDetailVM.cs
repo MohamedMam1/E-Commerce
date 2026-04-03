@@ -1,4 +1,6 @@
-﻿namespace E_Commerce.ViewModels.Product
+﻿using E_Commerce.Models;
+
+namespace E_Commerce.ViewModels.Product
 {
     public class ProductDetailVM
     {
@@ -10,5 +12,7 @@
         public string ImageUrl { get; set; }
         public int CategoryId { get; set; }
         public string CategoryName { get; set; }
+
+        public List<string> productImages { get; set; }
     }
 }

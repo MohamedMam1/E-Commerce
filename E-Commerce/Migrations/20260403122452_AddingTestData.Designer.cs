@@ -4,6 +4,7 @@ using FinalProject.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace E_Commerce.Migrations
 {
     [DbContext(typeof(ITiContext))]
-    partial class ITiContextModelSnapshot : ModelSnapshot
+    [Migration("20260403122452_AddingTestData")]
+    partial class AddingTestData
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -91,36 +94,6 @@ namespace E_Commerce.Migrations
                             Id = 8,
                             ImageUrl = "Product4_Add2.avif",
                             ProductId = 4
-                        },
-                        new
-                        {
-                            Id = 9,
-                            ImageUrl = "Product5_Add1.avif",
-                            ProductId = 5
-                        },
-                        new
-                        {
-                            Id = 10,
-                            ImageUrl = "Product6_Add1.avif",
-                            ProductId = 6
-                        },
-                        new
-                        {
-                            Id = 11,
-                            ImageUrl = "Product6_Add2.avif",
-                            ProductId = 6
-                        },
-                        new
-                        {
-                            Id = 12,
-                            ImageUrl = "Product7_Add1.avif",
-                            ProductId = 7
-                        },
-                        new
-                        {
-                            Id = 13,
-                            ImageUrl = "Product7_Add2.avif",
-                            ProductId = 7
                         });
                 });
 
@@ -413,36 +386,6 @@ namespace E_Commerce.Migrations
                             IsAvailable = true,
                             Name = "VERO MODA Womens Tessa Wide Denim Jeans",
                             Price = 900m
-                        },
-                        new
-                        {
-                            Id = 5,
-                            CategoryId = 3,
-                            Description = "This elegant shoulder bag features a sleek and modern design, perfect for adding a touch of sophistication to any outfit. Crafted from high-quality materials, it offers durability and style. The bag includes a spacious main compartment with a secure closure, as well as additional pockets for organizing your essentials. The adjustable shoulder strap allows for comfortable wear, making it an ideal accessory for both casual and formal occasions.",
-                            ImageUrl = "Product5_Main.avif",
-                            IsAvailable = true,
-                            Name = "Elegant shoulder bag with a sleek and modern design",
-                            Price = 300m
-                        },
-                        new
-                        {
-                            Id = 6,
-                            CategoryId = 4,
-                            Description = "These men's textile sports sneakers are designed for both comfort and performance. Made from breathable textile material, they provide excellent ventilation to keep your feet cool during physical activities. The sneakers feature a cushioned sole that offers support and shock absorption, making them ideal for running, training, or casual wear. With a stylish design and durable construction, these sneakers are a great addition to any athletic wardrobe.",
-                            ImageUrl = "Product6_Main.avif",
-                            IsAvailable = true,
-                            Name = "Men Textile Sports Sneakers",
-                            Price = 500m
-                        },
-                        new
-                        {
-                            Id = 7,
-                            CategoryId = 5,
-                            Description = "This men 's Mason round shape wrist watch features a stainless steel case and a sleek silver finish. The analog display offers a classic look, while the 45 mm case size provides a bold and stylish presence on the wrist. The watch is designed for durability and precision, making it suitable for everyday wear or special occasions.",
-                            ImageUrl = "Product7_Main.avif",
-                            IsAvailable = true,
-                            Name = "Men's Mason Round Shape Stainless Steel Analog Wrist Watch 45 mm - Silver - 1791788",
-                            Price = 4000m
                         });
                 });
 

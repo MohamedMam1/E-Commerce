@@ -25,7 +25,7 @@ namespace E_Commerce.Repositories
         public async Task<Product> GetByIdAsync(int id)
         {
             return await _context.Products
-                .Include(p => p.Category)
+                .Include(p => p.Category).Include(p => p.ExtraImages)
                 .FirstOrDefaultAsync(p => p.Id == id);
         }
 
@@ -50,6 +50,19 @@ namespace E_Commerce.Repositories
         public async Task<bool> ExistsAsync(int id)
         {
             return await _context.Products.AnyAsync(p => p.Id == id);
+        }
+
+        public async Task<IEnumerable<Product>> SearchByNameorCat(string SearchValue)
+        {
+            if (string.IsNullOrWhiteSpace(SearchValue))
+                return new List<Product>();
+
+            return await _context.Products
+                .Include(p => p.Category)
+                .Where(p =>
+                    p.Name.Contains(SearchValue) ||
+                    p.Category.Name.Contains(SearchValue))
+                .ToListAsync();
         }
     }
 }

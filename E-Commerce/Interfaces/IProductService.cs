@@ -2,7 +2,7 @@
 
 namespace E_Commerce.Interfaces
 {
-    public interface IProductService
+    public interface IProductService 
     {
         Task<IEnumerable<ProductListVM>> GetAllProductsAsync();
         Task<ProductDetailVM> GetProductByIdAsync(int id);
@@ -10,5 +10,6 @@ namespace E_Commerce.Interfaces
         Task UpdateProductAsync(ProductUpdateVM model);
         Task DeleteProductAsync(int id);
         Task<bool> ProductExistsAsync(int id);
+        Task<IEnumerable<ProductListVM>> SearchProducts(string SearchValue);
     }
 }
