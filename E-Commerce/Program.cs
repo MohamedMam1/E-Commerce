@@ -5,6 +5,7 @@ using FinalProject.Context;
 using FinalProject.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Stripe;
 
 namespace E_Commerce
 {
@@ -12,6 +13,7 @@ namespace E_Commerce
     {
         public static void Main(string[] args)
         {
+
             var builder = WebApplication.CreateBuilder(args);
             builder.Services.AddDbContext<ITiContext>(options =>
             {
@@ -20,7 +22,9 @@ namespace E_Commerce
             // Add services to the container.
             builder.Services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<ITiContext>();
             builder.Services.AddScoped<IProductRepository, ProductRepository>();
-            builder.Services.AddScoped<IProductService, ProductService>();
+            builder.Services.AddScoped<IProductService, Services.ProductService>();
+            builder.Services.AddScoped<IPaymentService, PaymentService>();
+            StripeConfiguration.ApiKey = builder.Configuration["Stripe:SecretKey"];
             builder.Services.AddControllersWithViews();
             var app = builder.Build();
 
@@ -37,7 +41,6 @@ namespace E_Commerce
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
-
             app.MapStaticAssets();
             app.MapControllerRoute(
                 name: "default",
