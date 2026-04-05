@@ -1,0 +1,10 @@
+﻿@model E_Commerce.ViewModels.PaymentFailedVM
+@{
+    ViewData["Title"] = "Payment Failed";
+}
+
+<div class="container" style="text-align:center; margin-top:80px;">
+    <h2 style="color:red;">❌ Payment Failed</h2>
+    <p>@Model.ErrorMessage</p>
+    <a href="/Payment/Checkout" class="btn btn-warning">Try Again</a>
+</div>
