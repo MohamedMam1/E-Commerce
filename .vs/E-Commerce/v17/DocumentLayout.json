@@ -3,12 +3,8 @@
   "WorkspaceRootPath": "D:\\ITI\\Web Development\\BackEnd\\ASP.NET MVC\\Project\\E-Commerce\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{7B984F8E-FD12-42AC-B915-F7C2B730DF91}|E-Commerce\\E-Commerce.csproj|d:\\iti\\web development\\backend\\asp.net mvc\\project\\e-commerce\\e-commerce\\services\\productservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{7B984F8E-FD12-42AC-B915-F7C2B730DF91}|E-Commerce\\E-Commerce.csproj|solutionrelative:e-commerce\\services\\productservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{7B984F8E-FD12-42AC-B915-F7C2B730DF91}|E-Commerce\\E-Commerce.csproj|d:\\iti\\web development\\backend\\asp.net mvc\\project\\e-commerce\\e-commerce\\controllers\\productcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{7B984F8E-FD12-42AC-B915-F7C2B730DF91}|E-Commerce\\E-Commerce.csproj|solutionrelative:e-commerce\\controllers\\productcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{7B984F8E-FD12-42AC-B915-F7C2B730DF91}|E-Commerce\\E-Commerce.csproj|d:\\iti\\web development\\backend\\asp.net mvc\\project\\e-commerce\\e-commerce\\views\\product\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{7B984F8E-FD12-42AC-B915-F7C2B730DF91}|E-Commerce\\E-Commerce.csproj|solutionrelative:e-commerce\\views\\product\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     }
   ],
   "DocumentGroupContainers": [
@@ -18,12 +14,8 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 2,
+          "SelectedChildIndex": 1,
           "Children": [
-            {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{e1b7d1f8-9b3c-49b1-8f4f-bfc63a88835d}"
-            },
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{d78612c7-9962-4b83-95d9-268046dad23a}"
@@ -31,27 +23,15 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "ProductService.cs",
-              "DocumentMoniker": "D:\\ITI\\Web Development\\BackEnd\\ASP.NET MVC\\Project\\E-Commerce\\E-Commerce\\Services\\ProductService.cs",
-              "RelativeDocumentMoniker": "E-Commerce\\Services\\ProductService.cs",
-              "ToolTip": "D:\\ITI\\Web Development\\BackEnd\\ASP.NET MVC\\Project\\E-Commerce\\E-Commerce\\Services\\ProductService.cs",
-              "RelativeToolTip": "E-Commerce\\Services\\ProductService.cs",
-              "ViewState": "AgIAAFYAAAAAAAAAAAAswGUAAAAmAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-04-03T16:04:03.387Z",
+              "Title": "Index.cshtml",
+              "DocumentMoniker": "D:\\ITI\\Web Development\\BackEnd\\ASP.NET MVC\\Project\\E-Commerce\\E-Commerce\\Views\\Product\\Index.cshtml",
+              "RelativeDocumentMoniker": "E-Commerce\\Views\\Product\\Index.cshtml",
+              "ToolTip": "D:\\ITI\\Web Development\\BackEnd\\ASP.NET MVC\\Project\\E-Commerce\\E-Commerce\\Views\\Product\\Index.cshtml",
+              "RelativeToolTip": "E-Commerce\\Views\\Product\\Index.cshtml",
+              "ViewState": "AgIAAH4AAAAAAAAAAAAAAL4AAAAIAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-04-08T16:13:32.015Z",
               "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "ProductController.cs",
-              "DocumentMoniker": "D:\\ITI\\Web Development\\BackEnd\\ASP.NET MVC\\Project\\E-Commerce\\E-Commerce\\Controllers\\ProductController.cs",
-              "RelativeDocumentMoniker": "E-Commerce\\Controllers\\ProductController.cs",
-              "ToolTip": "D:\\ITI\\Web Development\\BackEnd\\ASP.NET MVC\\Project\\E-Commerce\\E-Commerce\\Controllers\\ProductController.cs",
-              "RelativeToolTip": "E-Commerce\\Controllers\\ProductController.cs",
-              "ViewState": "AgIAAAYAAAAAAAAAAAAuwB8AAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-04-03T15:43:40.6Z"
             }
           ]
         }

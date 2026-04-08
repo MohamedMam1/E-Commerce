@@ -1,4 +1,5 @@
 ﻿using E_Commerce.Interfaces;
+using E_Commerce.ViewModels.Product;
 using FinalProject.Context;
 using FinalProject.Models;
 using Microsoft.EntityFrameworkCore;
@@ -57,12 +58,46 @@ namespace E_Commerce.Repositories
             if (string.IsNullOrWhiteSpace(SearchValue))
                 return new List<Product>();
 
+            var lowerSearchValue = SearchValue.Trim().ToLower();
+
             return await _context.Products
                 .Include(p => p.Category)
                 .Where(p =>
-                    p.Name.Contains(SearchValue) ||
-                    p.Category.Name.Contains(SearchValue))
+                    p.Name.ToLower().Contains(lowerSearchValue) ||
+                    (p.Category != null && p.Category.Name.ToLower().Contains(lowerSearchValue)))
                 .ToListAsync();
+        }
+
+        public async Task<IEnumerable<Product>> FilterAsync(ProductFilterVM filter)
+        {
+            var query = _context.Products
+                .Include(p => p.Category)
+                .AsQueryable();
+
+            if (filter.MinPrice.HasValue)
+                query = query.Where(p => p.Price >= filter.MinPrice.Value);
+
+            if (filter.MaxPrice.HasValue)
+                query = query.Where(p => p.Price <= filter.MaxPrice.Value);
+
+            if (!string.IsNullOrEmpty(filter.Tag))
+                query = query.Where(p => p.Name.Contains(filter.Tag));
+
+            if (!string.IsNullOrEmpty(filter.SortBy))
+            {
+                switch (filter.SortBy)
+                {
+                    case "price_asc":
+                        query = query.OrderBy(p => p.Price);
+                        break;
+
+                    case "price_desc":
+                        query = query.OrderByDescending(p => p.Price);
+                        break;
+                }
+            }
+
+            return await query.ToListAsync();
         }
     }
 }

@@ -103,5 +103,20 @@ namespace E_Commerce.Services
                 CategoryName = p.Category?.Name
             });
         }
+
+        public async Task<IEnumerable<ProductListVM>> FilterProducts(ProductFilterVM filter)
+        {
+            var products = await _repo.FilterAsync(filter);
+
+            return products.Select(p => new ProductListVM
+            {
+                Id = p.Id,
+                Name = p.Name,
+                Price = p.Price,
+                IsAvailable = p.IsAvailable,
+                ImageUrl = p.ImageUrl,
+                CategoryName = p.Category?.Name
+            });
+        }
     }
 }

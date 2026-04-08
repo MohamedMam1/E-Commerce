@@ -11,5 +11,6 @@ namespace E_Commerce.Interfaces
         Task DeleteProductAsync(int id);
         Task<bool> ProductExistsAsync(int id);
         Task<IEnumerable<ProductListVM>> SearchProducts(string SearchValue);
+        Task<IEnumerable<ProductListVM>> FilterProducts(ProductFilterVM filter);
     }
 }

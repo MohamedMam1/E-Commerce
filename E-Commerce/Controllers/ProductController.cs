@@ -19,12 +19,25 @@ namespace E_Commerce.Controllers
 
         public async Task<IActionResult> Search(string SearchValue)
         {
+            if (string.IsNullOrWhiteSpace(SearchValue))
+            {
+                return RedirectToAction(nameof(Index));
+            }
+
             var products = await _productServce.SearchProducts(SearchValue);
-            var allproducts = await _productServce.GetAllProductsAsync();
+
             if (products == null || !products.Any())
             {
-                return View("Index", allproducts);
+                return View("Index", new List<ProductListVM>());
             }
+
+            return View("Index", products);
+        }
+
+        public async Task<IActionResult> Filter(ProductFilterVM filter)
+        {
+            var products = await _productServce.FilterProducts(filter);
+
             return View("Index", products);
         }
     }
