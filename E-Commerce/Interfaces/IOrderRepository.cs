@@ -11,5 +11,15 @@ namespace E_Commerce.Interfaces
         Task<List<Order>> GetAllOrdersByUserIdAsync(string UserId);
 
         Task<Order?> GetOrderDetailsByUserIdAsync(string UserId, int OrderId);
+
+        Task<(List<Order> Orders, int TotalCount)> SearchAndFilterAsync(
+            string searchTerm,
+            OrderStatus? status,
+            DateTime? dateFrom,
+            DateTime? dateTo,
+            decimal? minAmount,
+            decimal? maxAmount,
+            int pageNumber = 1,
+            int pageSize = 10);
     }
 }

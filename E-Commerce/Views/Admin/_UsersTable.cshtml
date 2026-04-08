@@ -1,0 +1,204 @@
+@using E_Commerce.ViewModels.AdminDashboard
+@model List<UserDashBoardVM>
+
+<div class="table-responsive">
+    <table class="table table-hover align-middle">
+        <thead class="table-header-sticky">
+            <tr>
+                <th class="px-3">User ID</th>
+                <th>Full Name</th>
+                <th>Email</th>
+                <th>Role</th>
+                <th>Status</th>
+                <th>Created Date</th>
+                <th class="text-center">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.Any())
+            {
+                @foreach (var user in Model)
+                {
+                    <tr>
+                        <td class="px-3"><span class="badge-id">@user.User.Id.Substring(0, 8)...</span></td>
+                        <td>
+                            <div class="user-cell">
+                                <div class="user-avatar">@user.User.FullName.Substring(0, 1)</div>
+                                <div>
+                                    <div class="user-name">@user.User.FullName</div>
+                                    <span class="text-muted" style="font-size:12px;">@user.User.UserName</span>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <a href="mailto:@user.User.Email" class="email-link">@user.User.Email</a>
+                        </td>
+                        <td>
+                            @if (user.Roles.Any())
+                            {
+                                @foreach (var role in user.Roles)
+                                {
+                                    <span class="badge bg-primary">@role</span>
+                                }
+                            }
+                            else
+                            {
+                                <span class="badge bg-secondary">No Role</span>
+                            }
+                        </td>
+                        <td>
+                            @if (user.User.Status.ToString() == "Active")
+                            {
+                                <span class="badge bg-success">Active</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-danger">Banned</span>
+                            }
+                        </td>
+                        <td>
+                            <span class="created-date">@user.User.CreatedAt.ToString("MMM dd, yyyy")</span>
+                        </td>
+                        <td>
+                            <div class="action-buttons">
+                                <div class="dropdown d-inline">
+                                    <button class="btn-icon dropdown-toggle" type="button" title="More Options" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <i class="bi bi-three-dots-vertical"></i>
+                                    </button>
+                                    <ul class="dropdown-menu dropdown-menu-end">
+                                        <li>
+                                            <a class="dropdown-item" href="/admindashboard/users/assign-role/@user.User.Id">
+                                                <i class="bi bi-person-plus me-2"></i>Assign Role
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" href="javascript:void(0)" onclick="editUserStatus('@user.User.Id', '@(user.User.Status.ToString() == "Active" ? "Banned" : "Active")'); return false;">
+                                                @(user.User.Status.ToString() == "Active" ? "Ban User" : "Unban User")
+                                            </a>
+                                        </li>
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li>
+                                            <a class="dropdown-item text-danger" href="javascript:void(0)" onclick="deleteUser('@user.User.Id'); return false;">
+                                                Delete User
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="7" class="text-center py-4">
+                        <div class="empty-state">
+                            <i class="bi bi-inbox"></i>
+                            <p>No users found</p>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<style>
+    .user-cell {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .user-avatar {
+        width: 40px;
+        height: 40px;
+        background-color: #0066cc;
+        color: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        font-size: 18px;
+    }
+
+    .user-name {
+        font-weight: 600;
+        color: #333;
+    }
+
+    .email-link {
+        color: #0066cc;
+        text-decoration: none;
+    }
+
+    .email-link:hover {
+        text-decoration: underline;
+    }
+
+    .created-date {
+        color: #666;
+    }
+
+    .badge-id {
+        background-color: #f0f0f0;
+        color: #666;
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 600;
+    }
+
+    .action-buttons {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+    }
+
+    .btn-icon {
+        background: none;
+        border: none;
+        color: #0066cc;
+        cursor: pointer;
+        padding: 6px 8px;
+        border-radius: 4px;
+        transition: all 0.2s;
+        font-size: 18px;
+    }
+
+    .btn-icon:hover {
+        background-color: #f0f0f0;
+    }
+
+    .dropdown-menu {
+        border-radius: 8px;
+        border: 1px solid #e0e0e0;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .dropdown-item {
+        padding: 10px 16px;
+        font-size: 14px;
+        color: #333;
+        transition: all 0.2s;
+    }
+
+    .dropdown-item:hover {
+        background-color: #f5f5f5;
+        color: #0066cc;
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 40px 20px;
+        color: #999;
+    }
+
+    .empty-state i {
+        font-size: 48px;
+        display: block;
+        margin-bottom: 16px;
+    }
+</style>

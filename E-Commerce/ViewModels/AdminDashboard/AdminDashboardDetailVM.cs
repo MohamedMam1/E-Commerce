@@ -3,10 +3,13 @@ using FinalProject.Models;
 
 namespace E_Commerce.ViewModels.AdminDashboard
 {
-
     public class AdminDashboardDetailVM
     {
-        public List<UserDashBoardVM> Users { get; set; }
-        public List<ProductListVM> Products { get; set; }
+        public DashboardStatsVM Stats { get; set; }
+        public List<UserDashBoardVM> Users { get; set; } = new List<UserDashBoardVM>();
+        public List<ProductListVM> Products { get; set; } = new List<ProductListVM>();
+        public List<AdminOrderSummaryVM> Orders { get; set; } = new List<AdminOrderSummaryVM>();
+        public List<Category> Categories { get; set; } = new List<Category>();
+        public List<string> Roles { get; set; } = new List<string>();
     }
 }

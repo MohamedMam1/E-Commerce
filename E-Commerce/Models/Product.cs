@@ -23,10 +23,13 @@ namespace FinalProject.Models
 
         [Required]
         [Range(0, int.MaxValue, ErrorMessage = "Quantity must be 0 or greater.")]
-        public int Quantity { get; set; }  
+        public int Quantity { get; set; }
 
         [Required]
         public int CategoryId { get; set; }
+
+        [Required]
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
         // Navigation
         [ForeignKey("CategoryId")]

@@ -25,6 +25,7 @@ namespace E_Commerce
             builder.Services.AddScoped<IProductService, Services.ProductService>();
             builder.Services.AddScoped<IPaymentService, PaymentService>();
             StripeConfiguration.ApiKey = builder.Configuration["Stripe:SecretKey"];
+            builder.Services.AddScoped<IAdminDashboardService, AdminDashboardService>();
 
             builder.Services.AddControllersWithViews();
             builder.Services.AddScoped<IOrderRepository, OrderRepository>();
