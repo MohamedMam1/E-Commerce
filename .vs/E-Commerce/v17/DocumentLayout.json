@@ -3,28 +3,40 @@
   "WorkspaceRootPath": "D:\\ITI AEC\\MVC\\E-Commerce\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{7B984F8E-FD12-42AC-B915-F7C2B730DF91}|E-Commerce\\E-Commerce.csproj|d:\\iti aec\\mvc\\e-commerce\\e-commerce\\views\\admindashboard\\admindashboard.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{7B984F8E-FD12-42AC-B915-F7C2B730DF91}|E-Commerce\\E-Commerce.csproj|solutionrelative:e-commerce\\views\\admindashboard\\admindashboard.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+      "AbsoluteMoniker": "D:0:0:{7B984F8E-FD12-42AC-B915-F7C2B730DF91}|E-Commerce\\E-Commerce.csproj|d:\\iti aec\\mvc\\e-commerce\\e-commerce\\views\\admin\\_producttable.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{7B984F8E-FD12-42AC-B915-F7C2B730DF91}|E-Commerce\\E-Commerce.csproj|solutionrelative:e-commerce\\views\\admin\\_producttable.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{7B984F8E-FD12-42AC-B915-F7C2B730DF91}|E-Commerce\\E-Commerce.csproj|d:\\iti aec\\mvc\\e-commerce\\e-commerce\\controllers\\productcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{7B984F8E-FD12-42AC-B915-F7C2B730DF91}|E-Commerce\\E-Commerce.csproj|solutionrelative:e-commerce\\controllers\\productcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{7B984F8E-FD12-42AC-B915-F7C2B730DF91}|E-Commerce\\E-Commerce.csproj|d:\\iti aec\\mvc\\e-commerce\\e-commerce\\services\\adminservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{7B984F8E-FD12-42AC-B915-F7C2B730DF91}|E-Commerce\\E-Commerce.csproj|solutionrelative:e-commerce\\services\\adminservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{7B984F8E-FD12-42AC-B915-F7C2B730DF91}|E-Commerce\\E-Commerce.csproj|d:\\iti aec\\mvc\\e-commerce\\e-commerce\\views\\admin\\products.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{7B984F8E-FD12-42AC-B915-F7C2B730DF91}|E-Commerce\\E-Commerce.csproj|solutionrelative:e-commerce\\views\\admin\\products.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{7B984F8E-FD12-42AC-B915-F7C2B730DF91}|E-Commerce\\E-Commerce.csproj|d:\\iti aec\\mvc\\e-commerce\\e-commerce\\services\\productservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{7B984F8E-FD12-42AC-B915-F7C2B730DF91}|E-Commerce\\E-Commerce.csproj|solutionrelative:e-commerce\\services\\productservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{7B984F8E-FD12-42AC-B915-F7C2B730DF91}|E-Commerce\\E-Commerce.csproj|d:\\iti aec\\mvc\\e-commerce\\e-commerce\\viewmodels\\product\\productcreatevm.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{7B984F8E-FD12-42AC-B915-F7C2B730DF91}|E-Commerce\\E-Commerce.csproj|solutionrelative:e-commerce\\viewmodels\\product\\productcreatevm.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{7B984F8E-FD12-42AC-B915-F7C2B730DF91}|E-Commerce\\E-Commerce.csproj|d:\\iti aec\\mvc\\e-commerce\\e-commerce\\wwwroot\\vendor\\jqueryui\\jquery-ui.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{7B984F8E-FD12-42AC-B915-F7C2B730DF91}|E-Commerce\\E-Commerce.csproj|solutionrelative:e-commerce\\wwwroot\\vendor\\jqueryui\\jquery-ui.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{7B984F8E-FD12-42AC-B915-F7C2B730DF91}|E-Commerce\\E-Commerce.csproj|d:\\iti aec\\mvc\\e-commerce\\e-commerce\\viewmodels\\admindashboard\\admindashboarddetailvm.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{7B984F8E-FD12-42AC-B915-F7C2B730DF91}|E-Commerce\\E-Commerce.csproj|solutionrelative:e-commerce\\viewmodels\\admindashboard\\admindashboarddetailvm.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{7B984F8E-FD12-42AC-B915-F7C2B730DF91}|E-Commerce\\E-Commerce.csproj|d:\\iti aec\\mvc\\e-commerce\\e-commerce\\wwwroot\\vendor\\daterangepicker\\daterangepicker.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{7B984F8E-FD12-42AC-B915-F7C2B730DF91}|E-Commerce\\E-Commerce.csproj|solutionrelative:e-commerce\\wwwroot\\vendor\\daterangepicker\\daterangepicker.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7B984F8E-FD12-42AC-B915-F7C2B730DF91}|E-Commerce\\E-Commerce.csproj|d:\\iti aec\\mvc\\e-commerce\\e-commerce\\wwwroot\\css\\bootstrap-login-form.min.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}",
+      "RelativeMoniker": "D:0:0:{7B984F8E-FD12-42AC-B915-F7C2B730DF91}|E-Commerce\\E-Commerce.csproj|solutionrelative:e-commerce\\wwwroot\\css\\bootstrap-login-form.min.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7B984F8E-FD12-42AC-B915-F7C2B730DF91}|E-Commerce\\E-Commerce.csproj|d:\\iti aec\\mvc\\e-commerce\\e-commerce\\services\\admindashboardservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7B984F8E-FD12-42AC-B915-F7C2B730DF91}|E-Commerce\\E-Commerce.csproj|solutionrelative:e-commerce\\services\\admindashboardservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7B984F8E-FD12-42AC-B915-F7C2B730DF91}|E-Commerce\\E-Commerce.csproj|d:\\iti aec\\mvc\\e-commerce\\e-commerce\\controllers\\admincontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7B984F8E-FD12-42AC-B915-F7C2B730DF91}|E-Commerce\\E-Commerce.csproj|solutionrelative:e-commerce\\controllers\\admincontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7B984F8E-FD12-42AC-B915-F7C2B730DF91}|E-Commerce\\E-Commerce.csproj|d:\\iti aec\\mvc\\e-commerce\\e-commerce\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7B984F8E-FD12-42AC-B915-F7C2B730DF91}|E-Commerce\\E-Commerce.csproj|solutionrelative:e-commerce\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -34,7 +46,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 6,
+          "SelectedChildIndex": 1,
           "Children": [
             {
               "$type": "Bookmark",
@@ -42,80 +54,119 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "ProductController.cs",
-              "DocumentMoniker": "D:\\ITI AEC\\MVC\\E-Commerce\\E-Commerce\\Controllers\\ProductController.cs",
-              "RelativeDocumentMoniker": "E-Commerce\\Controllers\\ProductController.cs",
-              "ToolTip": "D:\\ITI AEC\\MVC\\E-Commerce\\E-Commerce\\Controllers\\ProductController.cs",
-              "RelativeToolTip": "E-Commerce\\Controllers\\ProductController.cs",
-              "ViewState": "AgIAAAsAAAAAAAAAAAAswB8AAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-04-08T05:05:58.747Z",
+              "DocumentIndex": 0,
+              "Title": "_ProductTable.cshtml",
+              "DocumentMoniker": "D:\\ITI AEC\\MVC\\E-Commerce\\E-Commerce\\Views\\Admin\\_ProductTable.cshtml",
+              "RelativeDocumentMoniker": "E-Commerce\\Views\\Admin\\_ProductTable.cshtml",
+              "ToolTip": "D:\\ITI AEC\\MVC\\E-Commerce\\E-Commerce\\Views\\Admin\\_ProductTable.cshtml",
+              "RelativeToolTip": "E-Commerce\\Views\\Admin\\_ProductTable.cshtml",
+              "ViewState": "AgIAAGkAAAAAAAAAAAAAAHEAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-04-08T19:34:02.583Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 3,
-              "Title": "ProductService.cs",
-              "DocumentMoniker": "D:\\ITI AEC\\MVC\\E-Commerce\\E-Commerce\\Services\\ProductService.cs",
-              "RelativeDocumentMoniker": "E-Commerce\\Services\\ProductService.cs",
-              "ToolTip": "D:\\ITI AEC\\MVC\\E-Commerce\\E-Commerce\\Services\\ProductService.cs",
-              "RelativeToolTip": "E-Commerce\\Services\\ProductService.cs",
-              "ViewState": "AgIAAEcAAAAAAAAAAAAswFsAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-04-08T05:01:39.632Z",
+              "Title": "jquery-ui.js",
+              "DocumentMoniker": "D:\\ITI AEC\\MVC\\E-Commerce\\E-Commerce\\wwwroot\\vendor\\jqueryui\\jquery-ui.js",
+              "RelativeDocumentMoniker": "E-Commerce\\wwwroot\\vendor\\jqueryui\\jquery-ui.js",
+              "ToolTip": "D:\\ITI AEC\\MVC\\E-Commerce\\E-Commerce\\wwwroot\\vendor\\jqueryui\\jquery-ui.js",
+              "RelativeToolTip": "E-Commerce\\wwwroot\\vendor\\jqueryui\\jquery-ui.js",
+              "ViewState": "AgIAAAgfAAAAAAAAAAAiwBMfAAAiAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
+              "WhenOpened": "2026-04-08T19:32:06.432Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 4,
-              "Title": "ProductCreateVM.cs",
-              "DocumentMoniker": "D:\\ITI AEC\\MVC\\E-Commerce\\E-Commerce\\ViewModels\\Product\\ProductCreateVM.cs",
-              "RelativeDocumentMoniker": "E-Commerce\\ViewModels\\Product\\ProductCreateVM.cs",
-              "ToolTip": "D:\\ITI AEC\\MVC\\E-Commerce\\E-Commerce\\ViewModels\\Product\\ProductCreateVM.cs",
-              "RelativeToolTip": "E-Commerce\\ViewModels\\Product\\ProductCreateVM.cs",
-              "ViewState": "AgIAAAkAAAAAAAAAAAA3wBoAAAABAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-04-08T05:00:28.083Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "AdminService.cs",
-              "DocumentMoniker": "D:\\ITI AEC\\MVC\\E-Commerce\\E-Commerce\\Services\\AdminService.cs",
-              "RelativeDocumentMoniker": "E-Commerce\\Services\\AdminService.cs",
-              "ToolTip": "D:\\ITI AEC\\MVC\\E-Commerce\\E-Commerce\\Services\\AdminService.cs",
-              "RelativeToolTip": "E-Commerce\\Services\\AdminService.cs",
-              "ViewState": "AgIAAA0AAAAAAAAAAAA/wB0AAAAmAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-04-05T21:58:35.927Z",
+              "Title": "daterangepicker.js",
+              "DocumentMoniker": "D:\\ITI AEC\\MVC\\E-Commerce\\E-Commerce\\wwwroot\\vendor\\daterangepicker\\daterangepicker.js",
+              "RelativeDocumentMoniker": "E-Commerce\\wwwroot\\vendor\\daterangepicker\\daterangepicker.js",
+              "ToolTip": "D:\\ITI AEC\\MVC\\E-Commerce\\E-Commerce\\wwwroot\\vendor\\daterangepicker\\daterangepicker.js",
+              "RelativeToolTip": "E-Commerce\\wwwroot\\vendor\\daterangepicker\\daterangepicker.js",
+              "ViewState": "AgIAAHEEAAAAAAAAAAAiwIAEAAAeAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
+              "WhenOpened": "2026-04-08T19:31:55.668Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 5,
-              "Title": "AdminDashboardDetailVM.cs",
-              "DocumentMoniker": "D:\\ITI AEC\\MVC\\E-Commerce\\E-Commerce\\ViewModels\\AdminDashboard\\AdminDashboardDetailVM.cs",
-              "RelativeDocumentMoniker": "E-Commerce\\ViewModels\\AdminDashboard\\AdminDashboardDetailVM.cs",
-              "ToolTip": "D:\\ITI AEC\\MVC\\E-Commerce\\E-Commerce\\ViewModels\\AdminDashboard\\AdminDashboardDetailVM.cs",
-              "RelativeToolTip": "E-Commerce\\ViewModels\\AdminDashboard\\AdminDashboardDetailVM.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-04-08T04:38:41.371Z",
+              "Title": "bootstrap-login-form.min.css",
+              "DocumentMoniker": "D:\\ITI AEC\\MVC\\E-Commerce\\E-Commerce\\wwwroot\\css\\bootstrap-login-form.min.css",
+              "RelativeDocumentMoniker": "E-Commerce\\wwwroot\\css\\bootstrap-login-form.min.css",
+              "ToolTip": "D:\\ITI AEC\\MVC\\E-Commerce\\E-Commerce\\wwwroot\\css\\bootstrap-login-form.min.css",
+              "RelativeToolTip": "E-Commerce\\wwwroot\\css\\bootstrap-login-form.min.css",
+              "ViewState": "AgIAAAkAAAAAAAAAAAAAABgAAABrUgEAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003000|",
+              "WhenOpened": "2026-04-08T19:31:33.302Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "AdminDashboard.cshtml",
-              "DocumentMoniker": "D:\\ITI AEC\\MVC\\E-Commerce\\E-Commerce\\Views\\AdminDashboard\\AdminDashboard.cshtml",
-              "RelativeDocumentMoniker": "E-Commerce\\Views\\AdminDashboard\\AdminDashboard.cshtml",
-              "ToolTip": "D:\\ITI AEC\\MVC\\E-Commerce\\E-Commerce\\Views\\AdminDashboard\\AdminDashboard.cshtml",
-              "RelativeToolTip": "E-Commerce\\Views\\AdminDashboard\\AdminDashboard.cshtml",
-              "ViewState": "AgIAAC4EAAAAAAAAAADwv0MEAAAJAAAAAAAAAA==",
+              "DocumentIndex": 1,
+              "Title": "Products.cshtml",
+              "DocumentMoniker": "D:\\ITI AEC\\MVC\\E-Commerce\\E-Commerce\\Views\\Admin\\Products.cshtml",
+              "RelativeDocumentMoniker": "E-Commerce\\Views\\Admin\\Products.cshtml",
+              "ToolTip": "D:\\ITI AEC\\MVC\\E-Commerce\\E-Commerce\\Views\\Admin\\Products.cshtml",
+              "RelativeToolTip": "E-Commerce\\Views\\Admin\\Products.cshtml",
+              "ViewState": "AgIAAEgAAAAAAAAAAAAAAEQAAAAGAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-04-05T22:07:19.205Z",
+              "WhenOpened": "2026-04-08T18:20:16.973Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "ProductService.cs",
+              "DocumentMoniker": "D:\\ITI AEC\\MVC\\E-Commerce\\E-Commerce\\Services\\ProductService.cs",
+              "RelativeDocumentMoniker": "E-Commerce\\Services\\ProductService.cs",
+              "ToolTip": "D:\\ITI AEC\\MVC\\E-Commerce\\E-Commerce\\Services\\ProductService.cs",
+              "RelativeToolTip": "E-Commerce\\Services\\ProductService.cs",
+              "ViewState": "AgIAAGMAAAAAAAAAAAAiwG4AAABUAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-08T18:37:06.16Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "AdminDashboardService.cs",
+              "DocumentMoniker": "D:\\ITI AEC\\MVC\\E-Commerce\\E-Commerce\\Services\\AdminDashboardService.cs",
+              "RelativeDocumentMoniker": "E-Commerce\\Services\\AdminDashboardService.cs",
+              "ToolTip": "D:\\ITI AEC\\MVC\\E-Commerce\\E-Commerce\\Services\\AdminDashboardService.cs",
+              "RelativeToolTip": "E-Commerce\\Services\\AdminDashboardService.cs",
+              "ViewState": "AgIAAA4AAAAAAAAAAAAqwEsAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-08T19:23:19.677Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "Program.cs",
+              "DocumentMoniker": "D:\\ITI AEC\\MVC\\E-Commerce\\E-Commerce\\Program.cs",
+              "RelativeDocumentMoniker": "E-Commerce\\Program.cs",
+              "ToolTip": "D:\\ITI AEC\\MVC\\E-Commerce\\E-Commerce\\Program.cs",
+              "RelativeToolTip": "E-Commerce\\Program.cs",
+              "ViewState": "AgIAABkAAAAAAAAAAAAQwCUAAAAzAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-08T17:25:41.47Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "AdminController.cs",
+              "DocumentMoniker": "D:\\ITI AEC\\MVC\\E-Commerce\\E-Commerce\\Controllers\\AdminController.cs",
+              "RelativeDocumentMoniker": "E-Commerce\\Controllers\\AdminController.cs",
+              "ToolTip": "D:\\ITI AEC\\MVC\\E-Commerce\\E-Commerce\\Controllers\\AdminController.cs",
+              "RelativeToolTip": "E-Commerce\\Controllers\\AdminController.cs",
+              "ViewState": "AgIAABsAAAAAAAAAAAAwwCcAAABTAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-08T16:46:33.25Z",
               "EditorCaption": ""
             }
           ]

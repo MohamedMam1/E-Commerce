@@ -1,0 +1,148 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@using E_Commerce.ViewModels.AdminViewModel.Product
+@using FinalProject.Models
+@using E_Commerce.Models
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<!-- ── Sidebar Overlay ───────────────────────────────────────────────── -->
+
+
+<!-- ── Main Wrapper ─────────────────────────────────────────────────── -->
+<div class="main-wrapper">
+
+    <!-- ── Page Content ─────────────────────────────────────────────── -->
+    <main class="page-content">
+        <div class="page-header">
+            <div>
+                <h1>Product Management</h1>
+                <p>Manage your product catalog and inventory.</p>
+            </div>
+            <div class="d-flex gap-2">
+                <a href="/admindashboard/categories/add" class="btn btn-outline-primary">
+                    <i class="bi bi-plus-circle"></i> Add Category
+                </a>
+                <a href="/admindashboard/products/add" class="btn-primary-custom">
+                    <i class="bi bi-plus-lg"></i> Add Product
+                </a>
+            </div>
+        </div>
+
+        <div class="card-box">
+            <!-- Filters Row -->
+            <div class="d-flex align-items-center gap-2 mb-3 flex-wrap" id="productFilters">
+                <input type="text" id="productSearch" placeholder="Search products…" style="border:1.5px solid var(--border);border-radius:8px;padding:6px 12px;font-size:13px;font-family:var(--font);width:200px" />
+                <select id="productCategoryFilter" style="width:auto;font-family:var(--font);font-size:12.5px;border-radius:8px;border:1.5px solid var(--border);padding:6px 12px">
+                    <option value="">All Categories</option>
+                    @foreach (var category in ViewBag.Categories as List<Category>)
+                    {
+                        <option value="@category.Id">@category.Name</option>
+                    }
+                </select>
+                <select id="productIsAvailable" style="width:auto;font-family:var(--font);font-size:12.5px;border-radius:8px;border:1.5px solid var(--border);padding:6px 12px">
+                    <option value="">All Status</option>
+                    <option value="true">Available</option>
+                    <option value="false">Unavailable</option>
+                </select>
+                <button class="btn-primary-custom" onclick="loadProducts(1)" style="padding:6px 16px;font-size:13px">
+                    <i class="bi bi-search"></i> Search
+                </button>
+            </div>
+            <div id="productsTableContainer"></div>
+        </div>
+    </main>
+</div>
+
+<div id="notificationContainer" class="notification-container">
+    @if (TempData["StatusMessage"] != null)
+    {
+        <div class="alert alert-@(TempData["StatusType"] ?? "info") alert-dismissible fade show" role="alert">
+            @TempData["StatusMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+</div>
+
+<!-- JavaScript Functions -->
+<script>
+    function loadProducts(pageNumber) {
+        const searchTerm = document.getElementById('productSearch')?.value || '';
+        const categoryId = document.getElementById('productCategoryFilter')?.value || '';
+        const isAvailable = document.getElementById('productIsAvailable')?.value || '';
+
+        const url = new URL('/Admin/GetTable', window.location.origin);
+        if (searchTerm) url.searchParams.append('searchTerm', searchTerm);
+        if (categoryId) url.searchParams.append('categoryId', categoryId);
+        if (isAvailable) url.searchParams.append('isAvailable', isAvailable);
+        url.searchParams.append('page', pageNumber);
+
+        fetch(url)
+            .then(response => response.text())
+            .then(html => {
+                document.getElementById('productsTableContainer').innerHTML = html;
+            })
+            .catch(error => {
+                console.error('Error loading products:', error);
+                document.getElementById('productsTableContainer').innerHTML = '<p class="text-danger">Error loading products</p>';
+            });
+    }
+
+    function editProduct(productId) {
+        console.log('Edit product:', productId);
+    }
+
+    function deleteProduct(productId) {
+        if (!confirm('Are you sure you want to delete this product?')) return;
+
+        fetch('/admindashboard/products/delete/' + productId, { method: 'POST' })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    loadProducts(1);
+                    showNotification('Product deleted successfully', 'success');
+                } else {
+                    showNotification(data.message || 'Error deleting product', 'danger');
+                }
+            })
+            .catch(() => showNotification('Error deleting product', 'danger'));
+    }
+
+    function showNotification(message, type) {
+        const container = document.getElementById('notificationContainer');
+        if (!container) {
+            console.log(message, type);
+            return;
+        }
+
+        const alert = document.createElement('div');
+        alert.className = `alert alert-${type === 'success' ? 'success' : 'danger'} alert-dismissible fade show`;
+        alert.role = 'alert';
+        alert.innerHTML = `
+            <div>${message}</div>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        `;
+
+        container.appendChild(alert);
+        setTimeout(() => {
+            const bsAlert = bootstrap.Alert.getOrCreateInstance(alert);
+            bsAlert.close();
+        }, 5000);
+    }
+
+    function toggleSidebar() {
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('sidebarOverlay');
+        sidebar?.classList.toggle('active');
+        overlay?.classList.toggle('active');
+    }
+
+    // Load initial data
+    document.addEventListener('DOMContentLoaded', function() {
+        loadProducts(1);
+    });
+</script>

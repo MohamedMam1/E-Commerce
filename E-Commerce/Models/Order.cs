@@ -9,15 +9,30 @@ namespace FinalProject.Models
         public int Id { get; set; }
 
         [Required]
-        public string UserId { get; set; }  
+        public string UserId { get; set; }
 
         [Required]
         public DateTime CreatedAt { get; set; }
+
+        [Required]
+        public decimal TotalAmount { get; set; }
+
+        [Required]
+        public OrderStatus Status { get; set; } = OrderStatus.Pending;
 
         // Navigation
         [ForeignKey("UserId")]
         public ApplicationUser User { get; set; }
 
         public ICollection<OrderItem> OrderItems { get; set; }
+    }
+
+    public enum OrderStatus
+    {
+        Pending,
+        Processing,
+        Completed,
+        Cancelled,
+        Failed
     }
 }

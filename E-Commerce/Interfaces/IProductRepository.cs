@@ -10,5 +10,14 @@ namespace E_Commerce.Interfaces
         Task UpdateAsync(Product product);
         Task DeleteAsync(Product product);
         Task<bool> ExistsAsync(int id);
+        IQueryable<Product> GetQueryable();
+        Task<(List<Product> Products, int TotalCount)> SearchAndFilterAsync(
+            string searchTerm,
+            int? categoryId,
+            bool? isAvailable,
+            decimal? minPrice,
+            decimal? maxPrice,
+            int pageNumber = 1,
+            int pageSize = 10);
     }
 }

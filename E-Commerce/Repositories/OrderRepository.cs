@@ -53,7 +53,10 @@ namespace E_Commerce.Repositories
 
         public async Task<IEnumerable<Order>> GetAllAsync()
         {
-            return await _context.Orders.ToListAsync();
+            return await _context.Orders
+                .Include(O => O.User)
+                .Include(O => O.OrderItems)
+                .ToListAsync();
         }
 
         public async Task<IEnumerable<Order>> FindAsync(Expression<Func<Order, bool>> predicate)
@@ -79,6 +82,69 @@ namespace E_Commerce.Repositories
         public void Remove(Order entity)
         {
             _context.Orders.Remove(entity);
+        }
+
+        public async Task<(List<Order> Orders, int TotalCount)> SearchAndFilterAsync(
+            string searchTerm,
+            OrderStatus? status,
+            DateTime? dateFrom,
+            DateTime? dateTo,
+            decimal? minAmount,
+            decimal? maxAmount,
+            int pageNumber = 1,
+            int pageSize = 10)
+        {
+            var query = _context.Orders
+                .Include(O => O.User)
+                .Include(O => O.OrderItems)
+                .AsQueryable();
+
+            // Search by user name or email
+            if (!string.IsNullOrEmpty(searchTerm))
+            {
+                query = query.Where(o =>
+                    o.User.FullName.Contains(searchTerm) ||
+                    o.User.Email.Contains(searchTerm));
+            }
+
+            // Filter by status
+            if (status.HasValue)
+            {
+                query = query.Where(o => o.Status == status);
+            }
+
+            // Filter by date range
+            if (dateFrom.HasValue)
+            {
+                query = query.Where(o => o.CreatedAt >= dateFrom);
+            }
+
+            if (dateTo.HasValue)
+            {
+                var endOfDay = dateTo.Value.AddDays(1).AddSeconds(-1);
+                query = query.Where(o => o.CreatedAt <= endOfDay);
+            }
+
+            // Filter by amount range
+            if (minAmount.HasValue)
+            {
+                query = query.Where(o => o.TotalAmount >= minAmount);
+            }
+
+            if (maxAmount.HasValue)
+            {
+                query = query.Where(o => o.TotalAmount <= maxAmount);
+            }
+
+            var totalCount = await query.CountAsync();
+
+            var orders = await query
+                .OrderByDescending(o => o.CreatedAt)
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            return (orders, totalCount);
         }
     }
 }
