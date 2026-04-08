@@ -1,4 +1,5 @@
 ﻿using E_Commerce.Interfaces;
+using E_Commerce.ViewModels.AdminDashboard;
 using E_Commerce.ViewModels.UserDashboard;
 using FinalProject.Models;
 
@@ -45,6 +46,10 @@ namespace E_Commerce.Services
                 .ToList();
 
             await _userRepository.UpdateUserAddressesAsync(User, UpdatedAddresses, NewAddressLine);
+        }
+        public async Task<List<UserDashBoardVM>> GetUsersWithRolesAsync()
+        {
+            return await _userRepository.GetUsersWithRolesAsync();
         }
     }
 }

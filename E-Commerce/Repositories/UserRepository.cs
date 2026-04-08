@@ -2,6 +2,7 @@
 using FinalProject.Context;
 using FinalProject.Models;
 using Microsoft.EntityFrameworkCore;
+using E_Commerce.ViewModels.AdminDashboard;
 
 namespace E_Commerce.Repositories
 {
@@ -16,7 +17,9 @@ namespace E_Commerce.Repositories
 
         public async Task<ApplicationUser?> GetUserWithAddressesAsync(string UserId)
         {
-            return await _context.Users.Include(U => U.Addresses).FirstOrDefaultAsync(U => U.Id == UserId);
+            return await _context.Users
+                .Include(U => U.Addresses)
+                .FirstOrDefaultAsync(U => U.Id == UserId);
         }
 
         public async Task UpdateUserAddressesAsync(ApplicationUser User, List<string> UpdatedAddresses, string? NewAddressLine)
@@ -37,5 +40,33 @@ namespace E_Commerce.Repositories
 
             await _context.SaveChangesAsync();
         }
+
+        public async Task<List<UserDashBoardVM>> GetUsersWithRolesAsync()
+        {
+            var usersWithRoles = await (
+                from user in _context.Users
+                join userRole in _context.UserRoles
+                    on user.Id equals userRole.UserId into userRolesGroup
+                from userRole in userRolesGroup.DefaultIfEmpty()
+
+                join role in _context.Roles
+                    on userRole.RoleId equals role.Id into rolesGroup
+                from role in rolesGroup.DefaultIfEmpty()
+
+                group role by user into g
+
+                select new UserDashBoardVM
+                {
+                    User = g.Key,
+                    Roles = g
+                        .Where(r => r != null)
+                        .Select(r => r.Name)
+                        .ToList()
+                }
+            ).ToListAsync();
+
+            return usersWithRoles;
+        }
+
     }
 }

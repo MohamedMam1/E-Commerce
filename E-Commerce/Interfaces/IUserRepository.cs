@@ -1,4 +1,5 @@
-﻿using FinalProject.Models;
+﻿using E_Commerce.ViewModels.AdminDashboard;
+using FinalProject.Models;
 
 namespace E_Commerce.Interfaces
 {
@@ -6,5 +7,7 @@ namespace E_Commerce.Interfaces
     {
         Task<ApplicationUser?> GetUserWithAddressesAsync(string UserId);
         Task UpdateUserAddressesAsync(ApplicationUser User, List<string> UpdatedAddresses, string? NewAddressLine);
+        Task<List<UserDashBoardVM>> GetUsersWithRolesAsync();
+
     }
 }
