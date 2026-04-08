@@ -1,0 +1,105 @@
+@model E_Commerce.ViewModels.Wishlist.WishlistVM
+
+@{
+    ViewData["Title"] = "My Wishlist";
+}
+
+<!-- breadcrumb -->
+<div class="container">
+    <div class="bread-crumb flex-w p-l-25 p-r-15 p-t-30 p-lr-0-lg">
+        <a href="/" class="stext-109 cl8 hov-cl1 trans-04">
+            Home
+            <i class="fa fa-angle-right m-l-9 m-r-10" aria-hidden="true"></i>
+        </a>
+
+        <span class="stext-109 cl4">
+            My Wishlist
+        </span>
+    </div>
+</div>
+
+<!-- Wishlist -->
+<div class="bg0 p-t-75 p-b-85">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-10 col-xl-10 m-lr-auto m-b-50">
+                <div class="m-l-25 m-r--38 m-lr-0-xl">
+                    <div class="wrap-table-shopping-cart">
+                        <table class="table-shopping-cart">
+                            <tr class="table_head">
+                                <th class="column-1">Product</th>
+                                <th class="column-2"></th>
+                                <th class="column-3">Price</th>
+                                <th class="column-4">Status</th>
+                                <th class="column-5 text-center">Action</th>
+                            </tr>
+
+                            @if(Model.Items.Any())
+                            {
+                                foreach(var item in Model.Items)
+                                {
+                                    <tr class="table_row">
+                                        <td class="column-1">
+                                            <div class="how-itemcart1">
+                                                <img src="@item.ImageUrl" alt="IMG">
+                                            </div>
+                                        </td>
+                                        <td class="column-2">@item.ProductName</td>
+                                        <td class="column-3">$ @item.Price.ToString("0.00")</td>
+                                        <td class="column-4">
+                                            @if(item.IsAvailable)
+                                            {
+                                                <span class="badge bg-success text-white p-2">In Stock</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge bg-danger text-white p-2">Out of Stock</span>
+                                            }
+                                        </td>
+                                        <td class="column-5 text-center">
+                                            <div class="d-flex justify-content-center align-items-center">
+                                                @if(item.IsAvailable)
+                                                {
+                                                    <button onclick="addToCart(@item.ProductId)" class="flex-c-m stext-101 cl0 size-111 bg1 bor1 hov-btn1 p-lr-15 trans-04 m-r-10">
+                                                        Add to Cart
+                                                    </button>
+                                                }
+                                                <form asp-action="RemoveFromWishlist" asp-controller="Wishlist" method="post" class="d-inline">
+                                                    <input type="hidden" name="productId" value="@item.ProductId" />
+                                                    <button type="submit" class="btn btn-sm btn-outline-danger"><i class="fa fa-trash"></i></button>
+                                                </form>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td colspan="5" class="text-center p-4">Your wishlist is empty.</td>
+                                </tr>
+                            }
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function addToCart(productId) {
+            $.ajax({
+                url: '/Cart/AddToCart',
+                type: 'POST',
+                data: { productId: productId, quantity: 1 },
+                success: function (result) {
+                    if (result.success) {
+                        swal("Success", result.message, "success");
+                    }
+                }
+            });
+        }
+    </script>
+}
