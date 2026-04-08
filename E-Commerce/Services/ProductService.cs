@@ -1,6 +1,9 @@
 ﻿using E_Commerce.Interfaces;
+using E_Commerce.ViewModels.AdminDashboard;
+using E_Commerce.ViewModels.AdminViewModel.Product;
 using E_Commerce.ViewModels.Product;
 using FinalProject.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace E_Commerce.Services
 {
@@ -117,6 +120,76 @@ namespace E_Commerce.Services
                 ImageUrl = p.ImageUrl,
                 CategoryName = p.Category?.Name
             });
+        public async Task<IEnumerable<AdminProductListVM>> GetAdminProductsAsync()
+        {
+            var products = await _repo.GetAllAsync();
+            return products
+                .Select(p => new AdminProductListVM
+                {
+                    Id = p.Id,
+                    Name = p.Name,
+                    CategoryName = p.Category?.Name,
+                    ImageUrl = p.ImageUrl,
+                    Price = p.Price,
+                    Quantity = p.Quantity,
+                    IsAvailable = p.IsAvailable
+                })
+                .ToList(); 
+        }
+
+        public async Task<PaginatedResultVM<AdminProductListVM>> GetFilteredProductsAsync(string searchTerm, int? categoryId, bool? isAvailable, int pageNumber = 1, int pageSize = 10)
+        {
+            var query = _repo.GetQueryable()
+                .Include(p => p.Category)
+                .AsQueryable();
+
+            // Apply filters
+            if (!string.IsNullOrWhiteSpace(searchTerm))
+            {
+                query = query.Where(p => p.Name.Contains(searchTerm));
+            }
+
+            if (categoryId.HasValue)
+            {
+                query = query.Where(p => p.CategoryId == categoryId.Value);
+            }
+
+            if (isAvailable.HasValue)
+            {
+                query = query.Where(p => p.IsAvailable == isAvailable.Value);
+            }
+
+            // Get total count
+            var totalCount = await query.CountAsync();
+
+            // Apply pagination
+            var products = await query
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            // Map to view model
+            var productVMs = products.Select(p => new AdminProductListVM
+            {
+                Id = p.Id,
+                Name = p.Name,
+                CategoryName = p.Category?.Name,
+                ImageUrl = p.ImageUrl,
+                Price = p.Price,
+                Quantity = p.Quantity,
+                IsAvailable = p.IsAvailable
+            }).ToList();
+
+            var totalPages = (int)Math.Ceiling(totalCount / (double)pageSize);
+
+            return new PaginatedResultVM<AdminProductListVM>
+            {
+                Data = productVMs,
+                TotalCount = totalCount,
+                PageNumber = pageNumber,
+                PageSize = pageSize,
+                TotalPages = totalPages
+            };
         }
     }
 }

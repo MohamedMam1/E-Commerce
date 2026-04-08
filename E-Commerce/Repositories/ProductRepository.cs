@@ -69,6 +69,19 @@ namespace E_Commerce.Repositories
         }
 
         public async Task<IEnumerable<Product>> FilterAsync(ProductFilterVM filter)
+        public IQueryable<Product> GetQueryable()
+        {
+            return _context.Products.AsQueryable();
+        }
+
+        public async Task<(List<Product> Products, int TotalCount)> SearchAndFilterAsync(
+            string searchTerm, 
+            int? categoryId, 
+            bool? isAvailable, 
+            decimal? minPrice, 
+            decimal? maxPrice,
+            int pageNumber = 1,
+            int pageSize = 10)
         {
             var query = _context.Products
                 .Include(p => p.Category)
@@ -98,6 +111,46 @@ namespace E_Commerce.Repositories
             }
 
             return await query.ToListAsync();
+            // Search by name or description
+            if (!string.IsNullOrEmpty(searchTerm))
+            {
+                query = query.Where(p => 
+                    p.Name.Contains(searchTerm) || 
+                    p.Description.Contains(searchTerm));
+            }
+
+            // Filter by category
+            if (categoryId.HasValue)
+            {
+                query = query.Where(p => p.CategoryId == categoryId);
+            }
+
+            // Filter by availability
+            if (isAvailable.HasValue)
+            {
+                query = query.Where(p => p.IsAvailable == isAvailable);
+            }
+
+            // Filter by price range
+            if (minPrice.HasValue)
+            {
+                query = query.Where(p => p.Price >= minPrice);
+            }
+
+            if (maxPrice.HasValue)
+            {
+                query = query.Where(p => p.Price <= maxPrice);
+            }
+
+            var totalCount = await query.CountAsync();
+
+            var products = await query
+                .OrderByDescending(p => p.CreatedAt)
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            return (products, totalCount);
         }
     }
 }

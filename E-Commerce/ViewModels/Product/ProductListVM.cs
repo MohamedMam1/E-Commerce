@@ -8,5 +8,6 @@
         public bool IsAvailable { get; set; }
         public string ImageUrl { get; set; }
         public string CategoryName { get; set; }
+        public int Quantity { get; set; }  
     }
 }

@@ -40,5 +40,17 @@ namespace E_Commerce.Controllers
 
             return View("Index", products);
         }
+        [HttpPost]
+        public async Task<IActionResult> Create(ProductCreateVM model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            await _productServce.AddProductAsync(model);
+            TempData["SuccessMessage"] = "Product added successfully!";
+            return RedirectToAction("Index"); // redirect to your products list or dashboard
+        }
     }
 }

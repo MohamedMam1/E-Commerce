@@ -1,0 +1,214 @@
+﻿@using E_Commerce.ViewModels.AdminViewModel.Dashboard
+@using FinalProject.Models
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+@model AdminDashboardVM
+
+<div class="main-wrapper">
+    <main class="page-content">
+
+        <!-- Header -->
+        <div class="page-header">
+            <div>
+                <h1>Dashboard</h1>
+                <p>Welcome to your e-commerce admin dashboard.</p>
+            </div>
+        </div>
+
+        <!-- Stat Cards -->
+        <div class="row g-3 mb-4">
+            <div class="col-xl-3 col-md-6">
+                <div class="card-box">
+                    <div class="stat-card">
+                        <div class="stat-icon blue"><i class="bi bi-currency-dollar"></i></div>
+                        <div class="stat-body">
+                            <div class="label">Total Revenue</div>
+                            <div class="value">@("$" + Model.TotalRevenue.ToString("N2"))</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xl-3 col-md-6">
+                <div class="card-box">
+                    <div class="stat-card">
+                        <div class="stat-icon green"><i class="bi bi-bag-check-fill"></i></div>
+                        <div class="stat-body">
+                            <div class="label">Total Orders</div>
+                            <div class="value">@Model.Totalorders</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xl-3 col-md-6">
+                <div class="card-box">
+                    <div class="stat-card">
+                        <div class="stat-icon amber"><i class="bi bi-people-fill"></i></div>
+                        <div class="stat-body">
+                            <div class="label">Total Users</div>
+                            <div class="value">@Model.TotalUsers</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xl-3 col-md-6">
+                <div class="card-box">
+                    <div class="stat-card">
+                        <div class="stat-icon blue"><i class="bi bi-box-seam-fill"></i></div>
+                        <div class="stat-body">
+                            <div class="label">Total Products</div>
+                            <div class="value">@Model.TotalProducts</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- More Metrics -->
+        <div class="row g-3 mb-4">
+            <div class="col-xl-3 col-md-6">
+                <div class="card-box">
+                    <div class="stat-card">
+                        <div class="stat-icon green"><i class="bi bi-hourglass-split"></i></div>
+                        <div class="stat-body">
+                            <div class="label">Pending Orders</div>
+                            <div class="value">@Model.PendingOrders</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xl-3 col-md-6">
+                <div class="card-box">
+                    <div class="stat-card">
+                        <div class="stat-icon blue"><i class="bi bi-graph-up-arrow"></i></div>
+                        <div class="stat-body">
+                            <div class="label">Avg Order Value</div>
+                            <div class="value">@("$" + Model.AverageOrderValue.ToString("N2"))</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xl-3 col-md-6">
+                <div class="card-box">
+                    <div class="stat-card">
+                        <div class="stat-icon amber"><i class="bi bi-calendar-week"></i></div>
+                        <div class="stat-body">
+                            <div class="label">Orders Last 7 Days</div>
+                            <div class="value">@Model.OrdersLastweek</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xl-3 col-md-6">
+                <div class="card-box">
+                    <div class="stat-card">
+                        <div class="stat-icon blue"><i class="bi bi-lightning-fill"></i></div>
+                        <div class="stat-body">
+                            <div class="label">Active Orders</div>
+                            <div class="value">@Model.ActiveOrders</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tables -->
+        <div class="row g-3">
+            <!-- Orders -->
+            <div class="col-lg-6">
+                <div class="card-box">
+                    <div class="section-hd">
+                        <h5>Recent Orders</h5>
+                        <a href="/admindashboard/orders" class="text-primary" style="font-size:13px;font-weight:600;text-decoration:none">
+                            View All <i class="bi bi-arrow-right"></i>
+                        </a>
+                    </div>
+
+                    @if (Model.Orders.Any())
+                    {
+                        <div class="table-wrap">
+                            <table class="admin-table">
+                                <thead>
+                                    <tr>
+                                        <th>Order ID</th>
+                                        <th>Customer</th>
+                                        <th>Amount</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var order in Model.Orders)
+                                    {
+                                        <tr>
+                                            <td><code>#@order.Id</code></td>
+                                            <td>@order.CustomerName</td>
+                                            <td><strong>@("$" + order.Amount.ToString("N2"))</strong></td>
+                                            <td>
+                                                <span class="badge bg-info">@order.OrderStatus</span>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <!-- Products -->
+            <div class="col-lg-6">
+                <div class="card-box">
+                    <div class="section-hd">
+                        <h5>Top Products</h5>
+                        <a href="/admindashboard/products" class="text-primary" style="font-size:13px;font-weight:600;text-decoration:none">
+                            View All <i class="bi bi-arrow-right"></i>
+                        </a>
+                    </div>
+
+                    @if (Model.Products.Any())
+                    {
+                        <div class="table-wrap">
+                            <table class="admin-table">
+                                <thead>
+                                    <tr>
+                                        <th>Product</th>
+                                        <th>Category</th>
+                                        <th>Price</th>
+                                        <th>Stock</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var product in Model.Products)
+                                    {
+                                        <tr>
+                                            <td><strong>@product.ProductName</strong></td>
+                                            <td>@product.CategoryName</td>
+                                            <td>@("$" + product.Price.ToString("N2"))</td>
+                                            <td>
+                                                @if (product.Stock > 0)
+                                                {
+                                                    <span class="badge bg-success">@product.Stock</span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="badge bg-danger">Out</span>
+                                                }
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+    </main>
+</div>

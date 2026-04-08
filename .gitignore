@@ -1,0 +1,9 @@
+.vs/
+bin/
+obj/
+*.suo
+*.user
+*.db
+*.bin
+DocumentLayout.json
+

@@ -1,0 +1,179 @@
+@using E_Commerce.ViewModels.AdminDashboard
+@using FinalProject.Models
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+@model AdminDashboardDetailVM
+
+
+
+<!-- ── Main Wrapper ─────────────────────────────────────────────────── -->
+<div class="main-wrapper">
+
+    <!-- ── Topbar ───────────────────────────────────────────────────── -->
+    <header class="topbar">
+        <button class="topbar-toggle" onclick="toggleSidebar()">
+            <i class="bi bi-list"></i>
+        </button>
+        <div class="topbar-breadcrumb d-none d-md-flex">
+            <i class="bi bi-house-fill" style="font-size:12px"></i>
+            <i class="bi bi-chevron-right" style="font-size:10px"></i>
+            <span class="current">Products</span>
+            <i class="bi bi-chevron-right" style="font-size:10px"></i>
+            <span class="current">Add Product</span>
+        </div>
+
+        <div class="search-wrap">
+            <i class="bi bi-search"></i>
+            <input type="text" placeholder="Search products…" id="globalSearch" />
+        </div>
+
+        <div class="topbar-actions ms-2">
+            <div class="topbar-btn" title="Notifications">
+                <i class="bi bi-bell"></i>
+                <span class="notif-dot"></span>
+            </div>
+
+            <!-- Profile dropdown -->
+            <div class="dropdown">
+                <a class="topbar-profile dropdown-toggle" href="#" data-bs-toggle="dropdown" aria-expanded="false" style="text-decoration:none">
+                    <div class="t-avatar">A</div>
+                    <span class="t-name d-none d-sm-block">Admin</span>
+                    <i class="bi bi-chevron-down"></i>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end shadow-lg border-0 rounded-3 mt-1" style="min-width:200px;font-size:13px">
+                    <li><h6 class="dropdown-header fw-bold">Admin</h6></li>
+                    <li><a class="dropdown-item py-2" href="#"><i class="bi bi-person me-2 text-primary"></i>My Profile</a></li>
+                    <li><hr class="dropdown-divider my-1"></li>
+                    <li><a class="dropdown-item py-2 text-danger" href="/Account/Logout"><i class="bi bi-box-arrow-right me-2"></i>Sign Out</a></li>
+                </ul>
+            </div>
+        </div>
+    </header>
+
+    <!-- ── Page Content ─────────────────────────────────────────────── -->
+    <main class="page-content">
+        <div class="page-header">
+            <div>
+                <h1>Add New Product</h1>
+                <p>Fill in the details below to add a new product to the catalog.</p>
+            </div>
+            <a href="/admindashboard/products" class="btn btn-outline-secondary">
+                <i class="bi bi-arrow-left"></i> Back to Products
+            </a>
+        </div>
+
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="card-box">
+                    <form method="post" action="/admindashboard/products/add" novalidate>
+                        @Html.AntiForgeryToken()
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-8">
+                                <label class="form-label-custom">Product Name *</label>
+                                <input type="text" id="productName" name="Name" class="form-control-custom" placeholder="e.g. Wireless ANC Headphones" />
+                               <!-- <span asp-validation-for="" class="text-danger"></span>-->
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label-custom">Category *</label>
+                                <div class="d-flex gap-2">
+                                    <select id="productCategoryId" name="CategoryId" class="form-control-custom form-select-custom">
+                                        <option value="">Select category…</option>
+                                        @foreach (var category in Model.Categories)
+                                        {
+                                            <option value="@category.Id">@category.Name</option>
+                                        }
+                                    </select>
+                                    <a href="/admindashboard/categories/add" class="btn btn-outline-primary" title="Add New Category">
+                                        <i class="bi bi-plus-circle"></i>
+                                    </a>
+                                </div>
+                               <!-- <span asp-validation-for="CategoryId" class="text-danger"></span>-->
+                            </div>
+                        </div>
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-4">
+                                <label class="form-label-custom">Price *</label>
+                                <input type="number" id="productPrice" name="Price" class="form-control-custom" placeholder="0.00" min="0" step="0.01" />
+                                <!--<span asp-validation-for="" class="text-danger"></span>-->
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label-custom">Stock Quantity *</label>
+                                <input type="number" id="productQuantity" name="Quantity" class="form-control-custom" placeholder="0" min="0" />
+                               <!-- <span asp-validation-for="" class="text-danger"></span>-->
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label-custom">Availability *</label>
+                                <select id="productIsAvailable" name="IsAvailable" class="form-control-custom form-select-custom">
+                                    <option value="true">Available</option>
+                                    <option value="false">Unavailable</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label-custom">Description</label>
+                            <textarea id="productDescription" name="Description" class="form-control-custom" rows="3" placeholder="Short product description…" style="resize:vertical"></textarea>
+                          <!--  <span asp-validation-for="" class="text-danger"></span>-->
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label-custom">Image URL</label>
+                            <input type="text" id="productImageUrl" name="ImageUrl" class="form-control-custom" placeholder="https://example.com/image.jpg" />
+                           <!-- <span asp-validation-for="" class="text-danger"></span>-->
+                        </div>
+                        <div class="d-flex justify-content-end gap-2">
+                            <a href="/admindashboard/products" class="btn btn-light" style="font-family:var(--font);font-size:13px;font-weight:600;border-radius:9px;padding:8px 18px">
+                                Cancel
+                            </a>
+                            <button type="submit" class="btn-primary-custom">
+                                <i class="bi bi-plus-circle-fill"></i> Add Product
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<div id="notificationContainer" class="notification-container">
+    @if (TempData["StatusMessage"] != null)
+    {
+        <div class="alert alert-@(TempData["StatusType"] ?? "info") alert-dismissible fade show" role="alert">
+            @TempData["StatusMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+</div>
+
+<!-- JavaScript Functions -->
+<script>
+    function toggleNewCategoryInput(selectElement) {
+        const newCategoryRow = document.getElementById('newCategoryRow');
+        if (!newCategoryRow) return;
+        newCategoryRow.style.display = selectElement?.value === 'new-category' ? 'block' : 'none';
+    }
+
+    function showNotification(message, type) {
+        const container = document.getElementById('notificationContainer');
+        if (!container) {
+            console.log(message, type);
+            return;
+        }
+
+        const alert = document.createElement('div');
+        alert.className = `alert alert-${type === 'success' ? 'success' : 'danger'} alert-dismissible fade show`;
+        alert.role = 'alert';
+        alert.innerHTML = `
+            <div>${message}</div>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        `;
+
+        container.appendChild(alert);
+        setTimeout(() => {
+            const bsAlert = bootstrap.Alert.getOrCreateInstance(alert);
+            bsAlert.close();
+        }, 5000);
+    }
+
+
+</script>

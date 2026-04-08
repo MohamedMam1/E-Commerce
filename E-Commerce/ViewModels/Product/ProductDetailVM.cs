@@ -14,5 +14,6 @@ namespace E_Commerce.ViewModels.Product
         public string CategoryName { get; set; }
 
         public List<string> productImages { get; set; }
+        public int Quantity { get; set; }  
     }
 }

@@ -13,5 +13,14 @@ namespace E_Commerce.Interfaces
         Task<bool> ExistsAsync(int id);
         Task<IEnumerable<Product>> SearchByNameorCat(string SearchValue);
         Task<IEnumerable<Product>> FilterAsync(ProductFilterVM filter);
+        IQueryable<Product> GetQueryable();
+        Task<(List<Product> Products, int TotalCount)> SearchAndFilterAsync(
+            string searchTerm,
+            int? categoryId,
+            bool? isAvailable,
+            decimal? minPrice,
+            decimal? maxPrice,
+            int pageNumber = 1,
+            int pageSize = 10);
     }
 }
