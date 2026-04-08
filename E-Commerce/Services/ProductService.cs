@@ -44,7 +44,8 @@ namespace E_Commerce.Services
                 IsAvailable = p.IsAvailable,
                 ImageUrl = p.ImageUrl,
                 CategoryId = p.CategoryId,
-                CategoryName = p.Category?.Name
+                CategoryName = p.Category?.Name,
+                productImages = p.ExtraImages?.Select(img => img.ImageUrl).ToList()
             };
         }
 
@@ -91,6 +92,34 @@ namespace E_Commerce.Services
             return await _repo.ExistsAsync(id);
         }
 
+        public async Task<IEnumerable<ProductListVM>> SearchProducts(string SearchValue)
+        {
+            var products = await _repo.SearchByNameorCat(SearchValue);
+
+            return products.Select(p => new ProductListVM
+            {
+                Id = p.Id,
+                Name = p.Name,
+                Price = p.Price,
+                IsAvailable = p.IsAvailable,
+                ImageUrl = p.ImageUrl,
+                CategoryName = p.Category?.Name
+            });
+        }
+
+        public async Task<IEnumerable<ProductListVM>> FilterProducts(ProductFilterVM filter)
+        {
+            var products = await _repo.FilterAsync(filter);
+
+            return products.Select(p => new ProductListVM
+            {
+                Id = p.Id,
+                Name = p.Name,
+                Price = p.Price,
+                IsAvailable = p.IsAvailable,
+                ImageUrl = p.ImageUrl,
+                CategoryName = p.Category?.Name
+            });
         public async Task<IEnumerable<AdminProductListVM>> GetAdminProductsAsync()
         {
             var products = await _repo.GetAllAsync();

@@ -1,4 +1,5 @@
-﻿using FinalProject.Models;
+﻿using E_Commerce.ViewModels.Product;
+using FinalProject.Models;
 
 namespace E_Commerce.Interfaces
 {
@@ -10,6 +11,8 @@ namespace E_Commerce.Interfaces
         Task UpdateAsync(Product product);
         Task DeleteAsync(Product product);
         Task<bool> ExistsAsync(int id);
+        Task<IEnumerable<Product>> SearchByNameorCat(string SearchValue);
+        Task<IEnumerable<Product>> FilterAsync(ProductFilterVM filter);
         IQueryable<Product> GetQueryable();
         Task<(List<Product> Products, int TotalCount)> SearchAndFilterAsync(
             string searchTerm,

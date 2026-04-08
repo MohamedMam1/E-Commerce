@@ -11,9 +11,34 @@ namespace E_Commerce.Controllers
         {
             _productServce = service;
         }
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            var products = await _productServce.GetAllProductsAsync();
+            return View(products);
+        }
+
+        public async Task<IActionResult> Search(string SearchValue)
+        {
+            if (string.IsNullOrWhiteSpace(SearchValue))
+            {
+                return RedirectToAction(nameof(Index));
+            }
+
+            var products = await _productServce.SearchProducts(SearchValue);
+
+            if (products == null || !products.Any())
+            {
+                return View("Index", new List<ProductListVM>());
+            }
+
+            return View("Index", products);
+        }
+
+        public async Task<IActionResult> Filter(ProductFilterVM filter)
+        {
+            var products = await _productServce.FilterProducts(filter);
+
+            return View("Index", products);
         }
         [HttpPost]
         public async Task<IActionResult> Create(ProductCreateVM model)

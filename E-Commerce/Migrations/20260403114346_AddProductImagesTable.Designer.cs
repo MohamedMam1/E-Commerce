@@ -4,6 +4,7 @@ using FinalProject.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace E_Commerce.Migrations
 {
     [DbContext(typeof(ITiContext))]
-    partial class ITiContextModelSnapshot : ModelSnapshot
+    [Migration("20260403114346_AddProductImagesTable")]
+    partial class AddProductImagesTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -42,86 +45,6 @@ namespace E_Commerce.Migrations
                     b.HasIndex("ProductId");
 
                     b.ToTable("ProductImages");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            ImageUrl = "Product1_Add1.avif",
-                            ProductId = 1
-                        },
-                        new
-                        {
-                            Id = 2,
-                            ImageUrl = "Product1_Add2.avif",
-                            ProductId = 1
-                        },
-                        new
-                        {
-                            Id = 3,
-                            ImageUrl = "Product2_Add1.avif",
-                            ProductId = 2
-                        },
-                        new
-                        {
-                            Id = 4,
-                            ImageUrl = "Product2_Add2.avif",
-                            ProductId = 2
-                        },
-                        new
-                        {
-                            Id = 5,
-                            ImageUrl = "Product3_Add1.avif",
-                            ProductId = 3
-                        },
-                        new
-                        {
-                            Id = 6,
-                            ImageUrl = "Product3_Add2.avif",
-                            ProductId = 3
-                        },
-                        new
-                        {
-                            Id = 7,
-                            ImageUrl = "Product4_Add1.avif",
-                            ProductId = 4
-                        },
-                        new
-                        {
-                            Id = 8,
-                            ImageUrl = "Product4_Add2.avif",
-                            ProductId = 4
-                        },
-                        new
-                        {
-                            Id = 9,
-                            ImageUrl = "Product5_Add1.avif",
-                            ProductId = 5
-                        },
-                        new
-                        {
-                            Id = 10,
-                            ImageUrl = "Product6_Add1.avif",
-                            ProductId = 6
-                        },
-                        new
-                        {
-                            Id = 11,
-                            ImageUrl = "Product6_Add2.avif",
-                            ProductId = 6
-                        },
-                        new
-                        {
-                            Id = 12,
-                            ImageUrl = "Product7_Add1.avif",
-                            ProductId = 7
-                        },
-                        new
-                        {
-                            Id = 13,
-                            ImageUrl = "Product7_Add2.avif",
-                            ProductId = 7
-                        });
                 });
 
             modelBuilder.Entity("FinalProject.Models.Address", b =>
@@ -159,9 +82,6 @@ namespace E_Commerce.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
                     b.Property<string>("Email")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
@@ -198,9 +118,6 @@ namespace E_Commerce.Migrations
 
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
 
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("bit");
@@ -259,38 +176,6 @@ namespace E_Commerce.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Categories");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Description = "Elevate your wardrobe with our premium men's collection, featuring everything from rugged denim to sleek athletic wear.",
-                            Name = "Men"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Description = "Discover the latest trends in women's fashion, from elegant evening wear to comfortable daily essentials.",
-                            Name = "Women"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Description = "Functional meets fashionable. Explore our range of durable backpacks, stylish totes, and professional briefcases.",
-                            Name = "Bag"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Description = "Step out in style with our curated selection of footwear, ranging from high-performance sneakers to classic leather boots.",
-                            Name = "Shoes"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            Description = "Timeless pieces for the modern individual. Precision-engineered watches that make a statement on any wrist.",
-                            Name = "Watches"
-                        });
                 });
 
             modelBuilder.Entity("FinalProject.Models.Order", b =>
@@ -303,12 +188,6 @@ namespace E_Commerce.Migrations
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
-
-                    b.Property<decimal>("TotalAmount")
-                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("UserId")
                         .IsRequired()
@@ -361,9 +240,6 @@ namespace E_Commerce.Migrations
                     b.Property<int>("CategoryId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -382,86 +258,11 @@ namespace E_Commerce.Migrations
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int>("Quantity")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.HasIndex("CategoryId");
 
                     b.ToTable("Products");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            CategoryId = 1,
-                            Description = "This denim jacket features a washed black finish, long sleeves, and a regular fit. It is made from high-quality denim fabric, providing durability and comfort. The jacket includes classic details such as button closures, chest pockets, and side pockets. It is a versatile piece that can be styled in various ways for a trendy and casual look.",
-                            ImageUrl = "Product1_Main.avif",
-                            IsAvailable = true,
-                            Name = "Washed Black Long Sleeves Regular Denim Jacket",
-                            Price = 800m
-                        },
-                        new
-                        {
-                            Id = 2,
-                            CategoryId = 1,
-                            Description = "This long sleeve features a 1/4 zip design, allowing for easy ventilation and a customizable fit. It is made from high-quality sportswear fabric that offers breathability and moisture-wicking properties, keeping you comfortable during physical activities. The sleek black color adds a stylish touch to your athletic wardrobe, making it suitable for both workouts and casual wear.",
-                            ImageUrl = "Product2_Main.avif",
-                            IsAvailable = true,
-                            Name = "sportswear Men's Black 1/4 zip Long sleeve",
-                            Price = 1100m
-                        },
-                        new
-                        {
-                            Id = 3,
-                            CategoryId = 2,
-                            Description = "This sportswear top features long sleeves and is designed for active individuals. It is made from high-quality, moisture-wicking fabric that helps keep you dry and comfortable during workouts. The top has a sleek design with a comfortable fit, making it suitable for various sports and fitness activities. Whether you're hitting the gym or going for a run, this long sleeve sport top is a great choice for performance and style.",
-                            ImageUrl = "Product3_Main.avif",
-                            IsAvailable = true,
-                            Name = "Sportswear - Sport Top Long Sleeves",
-                            Price = 400m
-                        },
-                        new
-                        {
-                            Id = 4,
-                            CategoryId = 2,
-                            Description = "These wide denim jeans from VERO MODA are designed for women who want to make a fashion statement. The jeans feature a wide-leg silhouette that offers a comfortable and relaxed fit. Made from high-quality denim fabric, they provide durability and style. The jeans have a classic five-pocket design and a button and zip closure. They can be dressed up or down, making them a versatile addition to any wardrobe.",
-                            ImageUrl = "Product4_Main.avif",
-                            IsAvailable = true,
-                            Name = "VERO MODA Womens Tessa Wide Denim Jeans",
-                            Price = 900m
-                        },
-                        new
-                        {
-                            Id = 5,
-                            CategoryId = 3,
-                            Description = "This elegant shoulder bag features a sleek and modern design, perfect for adding a touch of sophistication to any outfit. Crafted from high-quality materials, it offers durability and style. The bag includes a spacious main compartment with a secure closure, as well as additional pockets for organizing your essentials. The adjustable shoulder strap allows for comfortable wear, making it an ideal accessory for both casual and formal occasions.",
-                            ImageUrl = "Product5_Main.avif",
-                            IsAvailable = true,
-                            Name = "Elegant shoulder bag with a sleek and modern design",
-                            Price = 300m
-                        },
-                        new
-                        {
-                            Id = 6,
-                            CategoryId = 4,
-                            Description = "These men's textile sports sneakers are designed for both comfort and performance. Made from breathable textile material, they provide excellent ventilation to keep your feet cool during physical activities. The sneakers feature a cushioned sole that offers support and shock absorption, making them ideal for running, training, or casual wear. With a stylish design and durable construction, these sneakers are a great addition to any athletic wardrobe.",
-                            ImageUrl = "Product6_Main.avif",
-                            IsAvailable = true,
-                            Name = "Men Textile Sports Sneakers",
-                            Price = 500m
-                        },
-                        new
-                        {
-                            Id = 7,
-                            CategoryId = 5,
-                            Description = "This men 's Mason round shape wrist watch features a stainless steel case and a sleek silver finish. The analog display offers a classic look, while the 45 mm case size provides a bold and stylish presence on the wrist. The watch is designed for durability and precision, making it suitable for everyday wear or special occasions.",
-                            ImageUrl = "Product7_Main.avif",
-                            IsAvailable = true,
-                            Name = "Men's Mason Round Shape Stainless Steel Analog Wrist Watch 45 mm - Silver - 1791788",
-                            Price = 4000m
-                        });
                 });
 
             modelBuilder.Entity("FinalProject.Models.Wishlist", b =>

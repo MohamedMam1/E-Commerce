@@ -1,3 +1,4 @@
+using E_Commerce.Models;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -38,5 +39,7 @@ namespace FinalProject.Models
         public ICollection<Cart> Carts { get; set; }
         public ICollection<Wishlist> Wishlists { get; set; }
         public ICollection<OrderItem> OrderItems { get; set; }
+
+        public ICollection<ProductImage> ExtraImages { get; set; }
     }
 }
