@@ -22,5 +22,9 @@ namespace E_Commerce.ViewModels.Product
 
         [Required]
         public int CategoryId { get; set; }
+
+        [Required]
+        [Range(0, int.MaxValue, ErrorMessage = "Quantity must be 0 or greater.")]
+        public int Quantity { get; set; }  
     }
 }

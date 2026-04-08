@@ -1,0 +1,93 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin</title>
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
+    <!-- Google Fonts: Public Sans -->
+    <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link href="/css//admin.css" rel="stylesheet"/>
+</head>
+<body>
+    <div>
+        @RenderBody()
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // ── Tab Navigation ────────────────────────────────────────────────
+        function showTab(tabId, linkEl) {
+          // Hide all tabs
+          document.querySelectorAll('.tab-pane-custom').forEach(p => p.classList.remove('active'));
+          // Remove active from all sidebar links
+          document.querySelectorAll('.sidebar-menu a').forEach(a => a.classList.remove('active'));
+
+          // Show target tab
+          const tab = document.getElementById('tab-' + tabId);
+          if (tab) tab.classList.add('active');
+
+          // Mark clicked link active
+          if (linkEl) linkEl.classList.add('active');
+
+          // Update breadcrumb
+          const labels = {
+            dashboard: 'Dashboard', products: 'Product Management',
+            orders: 'Order Tracking', users: 'User Management',
+            analytics: 'Analytics'
+          };
+          const bc = document.getElementById('breadcrumbCurrent');
+          if (bc) bc.textContent = labels[tabId] || tabId;
+
+          // Close sidebar on mobile
+          if (window.innerWidth < 992) toggleSidebar(false);
+
+          return false;
+        }
+
+        // ── Sidebar Toggle ────────────────────────────────────────────────
+        function toggleSidebar(forceClose) {
+          const sidebar  = document.getElementById('sidebar');
+          const overlay  = document.getElementById('sidebarOverlay');
+          const isOpen   = sidebar.classList.contains('open');
+          const shouldOpen = forceClose === false ? false : !isOpen;
+
+          sidebar.classList.toggle('open', shouldOpen);
+          overlay.classList.toggle('open', shouldOpen);
+        }
+
+        // ── Status Select Color Update ────────────────────────────────────
+        document.querySelectorAll('.status-select').forEach(sel => {
+          sel.addEventListener('change', function () {
+            const colors = {
+              pending:   '#92400e', shipped: '#164e63',
+              delivered: '#065f46', cancelled: '#991b1b'
+            };
+            this.style.color = colors[this.value] || '';
+          });
+          // Trigger once on load
+          sel.dispatchEvent(new Event('change'));
+        });
+
+        // ── Upload Zone ───────────────────────────────────────────────────
+        document.querySelectorAll('.upload-zone').forEach(zone => {
+          zone.addEventListener('click', () => {
+            const inp = document.createElement('input');
+            inp.type = 'file'; inp.accept = 'image/*'; inp.multiple = true;
+            inp.onchange = () => {
+              if (inp.files.length) {
+                zone.querySelector('span').textContent = `${inp.files.length} file(s) selected`;
+              }
+            };
+            inp.click();
+          });
+        });
+    </script>
+</body>
+</html>
