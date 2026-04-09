@@ -23,16 +23,16 @@
             <span class="current" id="breadcrumbCurrent">Dashboard</span>
         </div>
 
-        <div class="search-wrap">
+@*         <div class="search-wrap">
             <i class="bi bi-search"></i>
             <input type="text" placeholder="Search products, orders…" id="globalSearch" />
-        </div>
+        </div> 
 
         <div class="topbar-actions ms-2">
             <div class="topbar-btn" title="Notifications">
                 <i class="bi bi-bell"></i>
                 <span class="notif-dot"></span>
-            </div>
+            </div>*@
 
             <!-- Profile dropdown -->
             <div class="dropdown">
@@ -75,6 +75,13 @@
                 <a href="/admin/products"
                    class="@(currentAction == "Products" ? "active" : "")">
                     <i class="bi bi-box-seam-fill"></i> Products
+                </a>
+            </li>
+
+            <li>
+                <a href="/admin/categories"
+                   class="@(currentAction == "Categories" ? "active" : "")">
+                    <i class="bi bi-tags-fill"></i> Categories
                 </a>
             </li>
 

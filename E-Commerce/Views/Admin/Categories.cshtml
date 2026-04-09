@@ -1,0 +1,133 @@
+﻿@using FinalProject.Models
+@using E_Commerce.Models
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+@Html.AntiForgeryToken()
+
+<div class="main-wrapper">
+
+    <!-- ── Page Content ─────────────────────────────────────────────── -->
+    <main class="page-content">
+        <div class="page-header">
+            <div>
+                <h1>Category Management</h1>
+                <p>Manage your product categories.</p>
+            </div>
+            <div class="d-flex gap-2">
+                <a href="/admindashboard/categories/add" class="btn-primary-custom">
+                    <i class="bi bi-plus-lg"></i> Add Category
+                </a>
+            </div>
+        </div>
+
+        <div class="card-box">
+            <!-- Filters Row -->
+            <div class="d-flex align-items-center gap-2 mb-3 flex-wrap" id="categoryFilters">
+                <input type="text" id="categorySearch" placeholder="Search categories…" style="border:1.5px solid var(--border);border-radius:8px;padding:6px 12px;font-size:13px;font-family:var(--font);width:200px" />
+                <button class="btn-primary-custom" onclick="loadCategories(1)" style="padding:6px 16px;font-size:13px">
+                    <i class="bi bi-search"></i> Search
+                </button>
+                <button type="button" class="btn btn-outline-secondary" onclick="resetCategories()" style="padding:6px 16px;font-size:13px">
+                    <i class="bi bi-x-lg"></i> Reset
+                </button>
+            </div>
+            <div id="categoriesTableContainer"></div>
+        </div>
+    </main>
+</div>
+
+<div id="notificationContainer" class="notification-container">
+    @if (TempData["StatusMessage"] != null)
+    {
+        <div class="alert alert-@(TempData["StatusType"] ?? "info") alert-dismissible fade show" role="alert">
+            @TempData["StatusMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+</div>
+
+<!-- JavaScript Functions -->
+<script>
+    function loadCategories(pageNumber) {
+        const searchTerm = document.getElementById('categorySearch')?.value || '';
+
+        const url = new URL('/Admin/GetCategoriesTable', window.location.origin);
+        if (searchTerm) url.searchParams.append('searchTerm', searchTerm);
+        url.searchParams.append('page', pageNumber);
+
+        fetch(url)
+            .then(response => response.text())
+            .then(html => {
+                document.getElementById('categoriesTableContainer').innerHTML = html;
+            })
+            .catch(error => {
+                console.error('Error loading categories:', error);
+                document.getElementById('categoriesTableContainer').innerHTML = '<p class="text-danger">Error loading categories</p>';
+            });
+    }
+
+    function showNotification(message, type) {
+        const container = document.getElementById('notificationContainer');
+        if (!container) {
+            console.log(message, type);
+            return;
+        }
+
+        const alert = document.createElement('div');
+        alert.className = `alert alert-${type === 'success' ? 'success' : 'danger'} alert-dismissible fade show`;
+        alert.role = 'alert';
+        alert.innerHTML = `
+            <div>${message}</div>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        `;
+
+        container.appendChild(alert);
+        setTimeout(() => {
+            const bsAlert = bootstrap.Alert.getOrCreateInstance(alert);
+            bsAlert.close();
+        }, 5000);
+    }
+
+    function deleteCategory(categoryId) {
+        const token = document.querySelector('input[name="__RequestVerificationToken"]')?.value || '';
+
+        fetch('/admindashboard/categories/delete/' + categoryId, {
+            method: 'POST',
+            headers: {
+                'RequestVerificationToken': token,
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: `__RequestVerificationToken=${encodeURIComponent(token)}`
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                loadCategories(1);
+                showNotification('Category deleted successfully', 'success');
+            } else {
+                showNotification(data.message || 'Error deleting category', 'danger');
+            }
+        })
+        .catch(() => showNotification('Error deleting category', 'danger'));
+    }
+
+    function confirmDeleteCategory(categoryId) {
+        const message = "Deleting this category will also delete all products inside it. Are you sure you want to continue?";
+        if (confirm(message)) {
+            deleteCategory(categoryId);
+        }
+    }
+
+    function resetCategories() {
+        const searchInput = document.getElementById('categorySearch');
+        if (searchInput) searchInput.value = '';
+        loadCategories(1);
+    }
+
+    // Load initial data
+    document.addEventListener('DOMContentLoaded', function() {
+        loadCategories(1);
+    });
+</script>
