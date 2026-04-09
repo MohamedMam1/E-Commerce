@@ -32,7 +32,6 @@ namespace E_Commerce
             builder.Services.AddScoped<IUserRepository, UserRepository>();
             builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<IOrderService, OrderService>();
-            builder.Services.AddScoped<IAdminService, AdminService>();
             builder.Services.AddScoped<ICartRepository, CartRepository>();
             builder.Services.AddScoped<ICartService, CartService>();
             builder.Services.AddScoped<IWishlistRepository, WishlistRepository>();
