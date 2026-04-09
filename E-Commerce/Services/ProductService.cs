@@ -1,8 +1,10 @@
 ﻿using E_Commerce.Interfaces;
+using E_Commerce.Models;
 using E_Commerce.ViewModels.AdminDashboard;
 using E_Commerce.ViewModels.AdminViewModel.Product;
 using E_Commerce.ViewModels.Product;
 using FinalProject.Models;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 
 namespace E_Commerce.Services
@@ -10,10 +12,12 @@ namespace E_Commerce.Services
     public class ProductService : IProductService
     {
         private readonly IProductRepository _repo;
+        private readonly IWebHostEnvironment _webHostEnvironment;
 
-        public ProductService(IProductRepository repo)
+        public ProductService(IProductRepository repo, IWebHostEnvironment webHostEnvironment)
         {
             _repo = repo;
+            _webHostEnvironment = webHostEnvironment;
         }
 
         public async Task<IEnumerable<ProductListVM>> GetAllProductsAsync()
@@ -48,22 +52,61 @@ namespace E_Commerce.Services
             };
         }
 
+        public async Task<ProductEditVM> GetProductEditVMAsync(int id)
+        {
+            var p = await _repo.GetByIdAsync(id);
+            if (p == null) return null;
+
+            return new ProductEditVM
+            {
+                Id = p.Id,
+                Name = p.Name,
+                Description = p.Description,
+                Price = p.Price,
+                Quantity = p.Quantity,
+                CategoryId = p.CategoryId,
+                ExistingMainImageUrl = p.ImageUrl,
+                ExistingExtraImageUrls = p.ExtraImages?
+                    .Select(ei => ei.ImageUrl)
+                    .ToList() ?? new List<string>()
+            };
+        }
+
         public async Task AddProductAsync(ProductCreateVM model)
         {
+            // Save main image
+            var mainImageUrl = await SaveImageAsync(model.MainImage);
+
             var product = new Product
             {
                 Name = model.Name,
                 Description = model.Description,
                 Price = model.Price,
-                ImageUrl = model.ImageUrl,
-                IsAvailable = model.IsAvailable,
-                CategoryId = model.CategoryId
+                Quantity = model.Quantity,
+                CategoryId = model.CategoryId,
+                ImageUrl = mainImageUrl,
+                CreatedAt = DateTime.UtcNow
             };
+
+            // Save extra images
+            var extraImages = new List<ProductImage>();
+            var extraFiles = new[] { model.ExtraImage1, model.ExtraImage2, model.ExtraImage3 };
+
+            foreach (var file in extraFiles)
+            {
+                if (file != null && file.Length > 0)
+                {
+                    var url = await SaveImageAsync(file);
+                    extraImages.Add(new ProductImage { ImageUrl = url });
+                }
+            }
+
+            product.ExtraImages = extraImages;
 
             await _repo.AddAsync(product);
         }
 
-        public async Task UpdateProductAsync(ProductUpdateVM model)
+        public async Task UpdateProductAsync(ProductEditVM model)
         {
             var product = await _repo.GetByIdAsync(model.Id);
             if (product == null) throw new Exception("Product not found");
@@ -71,9 +114,39 @@ namespace E_Commerce.Services
             product.Name = model.Name;
             product.Description = model.Description;
             product.Price = model.Price;
-            product.ImageUrl = model.ImageUrl;
-            product.IsAvailable = model.IsAvailable;
+            product.Quantity = model.Quantity;
             product.CategoryId = model.CategoryId;
+
+            // Replace main image only if a new one is uploaded
+            if (model.MainImage != null && model.MainImage.Length > 0)
+            {
+                DeleteImageFile(product.ImageUrl);
+                product.ImageUrl = await SaveImageAsync(model.MainImage);
+            }
+
+            // Replace extra images only if any new ones are uploaded
+            var extraFiles = new[] { model.ExtraImage1, model.ExtraImage2, model.ExtraImage3 }
+                .Where(f => f != null && f.Length > 0)
+                .ToList();
+
+            if (extraFiles.Any())
+            {
+                // Delete old extra images from disk
+                if (product.ExtraImages != null)
+                    foreach (var ei in product.ExtraImages)
+                        DeleteImageFile(ei.ImageUrl);
+
+                // Remove old records from DB
+                await _repo.DeleteExtraImagesAsync(product.Id);
+
+                // Save new ones
+                product.ExtraImages = new List<ProductImage>();
+                foreach (var file in extraFiles)
+                {
+                    var url = await SaveImageAsync(file);
+                    product.ExtraImages.Add(new ProductImage { ImageUrl = url });
+                }
+            }
 
             await _repo.UpdateAsync(product);
         }
@@ -94,53 +167,7 @@ namespace E_Commerce.Services
         public async Task<IEnumerable<AdminProductListVM>> GetAdminProductsAsync()
         {
             var products = await _repo.GetAllAsync();
-            return products
-                .Select(p => new AdminProductListVM
-                {
-                    Id = p.Id,
-                    Name = p.Name,
-                    CategoryName = p.Category?.Name,
-                    ImageUrl = p.ImageUrl,
-                    Price = p.Price,
-                    Quantity = p.Quantity,
-                    IsAvailable = p.IsAvailable
-                })
-                .ToList(); 
-        }
-
-        public async Task<PaginatedResultVM<AdminProductListVM>> GetFilteredProductsAsync(string searchTerm, int? categoryId, bool? isAvailable, int pageNumber = 1, int pageSize = 10)
-        {
-            var query = _repo.GetQueryable()
-                .Include(p => p.Category)
-                .AsQueryable();
-
-            // Apply filters
-            if (!string.IsNullOrWhiteSpace(searchTerm))
-            {
-                query = query.Where(p => p.Name.Contains(searchTerm));
-            }
-
-            if (categoryId.HasValue)
-            {
-                query = query.Where(p => p.CategoryId == categoryId.Value);
-            }
-
-            if (isAvailable.HasValue)
-            {
-                query = query.Where(p => p.IsAvailable == isAvailable.Value);
-            }
-
-            // Get total count
-            var totalCount = await query.CountAsync();
-
-            // Apply pagination
-            var products = await query
-                .Skip((pageNumber - 1) * pageSize)
-                .Take(pageSize)
-                .ToListAsync();
-
-            // Map to view model
-            var productVMs = products.Select(p => new AdminProductListVM
+            return products.Select(p => new AdminProductListVM
             {
                 Id = p.Id,
                 Name = p.Name,
@@ -150,8 +177,45 @@ namespace E_Commerce.Services
                 Quantity = p.Quantity,
                 IsAvailable = p.IsAvailable
             }).ToList();
+        }
 
-            var totalPages = (int)Math.Ceiling(totalCount / (double)pageSize);
+        public async Task<PaginatedResultVM<AdminProductListVM>> GetFilteredProductsAsync(string searchTerm, int? categoryId, bool? isAvailable,int pageNumber = 1, int pageSize = 10)
+        {
+            var query = _repo.GetQueryable()
+                .Include(p => p.Category)
+                .AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(searchTerm))
+                query = query.Where(p => p.Name.Contains(searchTerm));
+
+            if (categoryId.HasValue)
+                query = query.Where(p => p.CategoryId == categoryId.Value);
+
+            if (isAvailable.HasValue)
+            {
+                if (isAvailable.Value)
+                    query = query.Where(p => p.Quantity > 0);
+                else
+                    query = query.Where(p => p.Quantity == 0);
+            }
+
+            var totalCount = await query.CountAsync();
+
+            var products = await query
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            var productVMs = products.Select(p => new AdminProductListVM
+            {
+                Id = p.Id,
+                Name = p.Name,
+                CategoryName = p.Category?.Name,
+                ImageUrl = p.ImageUrl,
+                Price = p.Price,
+                Quantity = p.Quantity,
+                IsAvailable = p.Quantity > 0
+            }).ToList();
 
             return new PaginatedResultVM<AdminProductListVM>
             {
@@ -159,8 +223,33 @@ namespace E_Commerce.Services
                 TotalCount = totalCount,
                 PageNumber = pageNumber,
                 PageSize = pageSize,
-                TotalPages = totalPages
+                TotalPages = (int)Math.Ceiling(totalCount / (double)pageSize)
             };
+        }
+
+        // ── Private Helpers ───────────────────────────────────────────────
+
+        private async Task<string> SaveImageAsync(IFormFile file)
+        {
+            var uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "images", "products");
+            Directory.CreateDirectory(uploadsFolder);
+
+            var uniqueFileName = $"{Guid.NewGuid()}_{Path.GetFileName(file.FileName)}";
+            var filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+            using var stream = new FileStream(filePath, FileMode.Create);
+            await file.CopyToAsync(stream);
+
+            return $"/images/products/{uniqueFileName}";
+        }
+
+        private void DeleteImageFile(string imageUrl)
+        {
+            if (string.IsNullOrEmpty(imageUrl)) return;
+
+            var filePath = Path.Combine(_webHostEnvironment.WebRootPath, imageUrl.TrimStart('/'));
+            if (File.Exists(filePath))
+                File.Delete(filePath);
         }
     }
 }

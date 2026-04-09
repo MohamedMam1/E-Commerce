@@ -8,11 +8,14 @@ namespace E_Commerce.Interfaces
     {
         Task<IEnumerable<ProductListVM>> GetAllProductsAsync();
         Task<ProductDetailVM> GetProductByIdAsync(int id);
+        Task<ProductEditVM> GetProductEditVMAsync(int id);  
         Task AddProductAsync(ProductCreateVM model);
-        Task UpdateProductAsync(ProductUpdateVM model);
+        Task UpdateProductAsync(ProductEditVM model);
         Task DeleteProductAsync(int id);
         Task<bool> ProductExistsAsync(int id);
         Task<IEnumerable<AdminProductListVM>> GetAdminProductsAsync();
-        Task<PaginatedResultVM<AdminProductListVM>> GetFilteredProductsAsync(string searchTerm, int? categoryId, bool? isAvailable, int pageNumber = 1, int pageSize = 10);
+        Task<PaginatedResultVM<AdminProductListVM>> GetFilteredProductsAsync(
+            string searchTerm, int? categoryId, bool? isAvailable,
+            int pageNumber = 1, int pageSize = 10);
     }
 }

@@ -11,6 +11,8 @@ namespace E_Commerce.Interfaces
         Task DeleteAsync(Product product);
         Task<bool> ExistsAsync(int id);
         IQueryable<Product> GetQueryable();
+        Task DeleteExtraImagesAsync(int productId);
+
         Task<(List<Product> Products, int TotalCount)> SearchAndFilterAsync(
             string searchTerm,
             int? categoryId,

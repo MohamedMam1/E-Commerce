@@ -79,10 +79,10 @@
                                 <div class="d-flex gap-2">
                                     <select id="productCategoryId" name="CategoryId" class="form-control-custom form-select-custom">
                                         <option value="">Select category…</option>
-                                        @foreach (var category in Model.Categories)
+                                      @*   @foreach (var category in Model.Categories)
                                         {
                                             <option value="@category.Id">@category.Name</option>
-                                        }
+                                        } *@
                                     </select>
                                     <a href="/admindashboard/categories/add" class="btn btn-outline-primary" title="Add New Category">
                                         <i class="bi bi-plus-circle"></i>

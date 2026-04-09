@@ -12,8 +12,9 @@ namespace FinalProject.Models
         public string Name { get; set; }
 
         public string Description { get; set; }
+        public bool IsDeleted { get; set; } = false; 
 
-        // Navigation
+
         public ICollection<Product> Products { get; set; }
     }
 }

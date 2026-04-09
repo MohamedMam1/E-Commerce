@@ -2,7 +2,6 @@
 using FinalProject.Context;
 using FinalProject.Models;
 using Microsoft.EntityFrameworkCore;
-using System;
 
 namespace E_Commerce.Repositories
 {
@@ -18,19 +17,24 @@ namespace E_Commerce.Repositories
         public async Task<IEnumerable<Product>> GetAllAsync()
         {
             return await _context.Products
+                .Where(p => !p.IsDeleted)
                 .Include(p => p.Category)
+                .Include(p => p.ExtraImages)
                 .ToListAsync();
         }
 
         public async Task<Product> GetByIdAsync(int id)
         {
             return await _context.Products
+                .Where(p => !p.IsDeleted)
                 .Include(p => p.Category)
+                .Include(p => p.ExtraImages)
                 .FirstOrDefaultAsync(p => p.Id == id);
         }
 
         public async Task AddAsync(Product product)
         {
+            product.IsDeleted = false;
             _context.Products.Add(product);
             await _context.SaveChangesAsync();
         }
@@ -43,63 +47,58 @@ namespace E_Commerce.Repositories
 
         public async Task DeleteAsync(Product product)
         {
-            _context.Products.Remove(product);
+            product.IsDeleted = true;
+            _context.Products.Update(product);
             await _context.SaveChangesAsync();
         }
 
         public async Task<bool> ExistsAsync(int id)
         {
-            return await _context.Products.AnyAsync(p => p.Id == id);
+            return await _context.Products
+                .AnyAsync(p => p.Id == id && !p.IsDeleted);
         }
 
         public IQueryable<Product> GetQueryable()
         {
-            return _context.Products.AsQueryable();
+            return _context.Products
+                .Where(p => !p.IsDeleted)
+                .AsQueryable();
         }
 
-        public async Task<(List<Product> Products, int TotalCount)> SearchAndFilterAsync(
-            string searchTerm, 
-            int? categoryId, 
-            bool? isAvailable, 
-            decimal? minPrice, 
-            decimal? maxPrice,
-            int pageNumber = 1,
-            int pageSize = 10)
+        // Delete extra images by product id before re-adding
+        public async Task DeleteExtraImagesAsync(int productId)
+        {
+            var extras = _context.ProductImages.Where(pi => pi.ProductId == productId);
+            _context.ProductImages.RemoveRange(extras);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task<(List<Product> Products, int TotalCount)> SearchAndFilterAsync(string searchTerm,int? categoryId,bool? isAvailable,decimal? minPrice,decimal? maxPrice,int pageNumber = 1,int pageSize = 10)
         {
             var query = _context.Products
+                .Where(p => !p.IsDeleted)
                 .Include(p => p.Category)
                 .AsQueryable();
 
-            // Search by name or description
             if (!string.IsNullOrEmpty(searchTerm))
-            {
-                query = query.Where(p => 
-                    p.Name.Contains(searchTerm) || 
-                    p.Description.Contains(searchTerm));
-            }
+                query = query.Where(p => p.Name.Contains(searchTerm) || p.Description.Contains(searchTerm));
 
-            // Filter by category
             if (categoryId.HasValue)
-            {
                 query = query.Where(p => p.CategoryId == categoryId);
-            }
 
-            // Filter by availability
             if (isAvailable.HasValue)
             {
-                query = query.Where(p => p.IsAvailable == isAvailable);
+                if (isAvailable.Value)
+                    query = query.Where(p => p.Quantity > 0);
+                else
+                    query = query.Where(p => p.Quantity == 0);
             }
 
-            // Filter by price range
             if (minPrice.HasValue)
-            {
                 query = query.Where(p => p.Price >= minPrice);
-            }
 
             if (maxPrice.HasValue)
-            {
                 query = query.Where(p => p.Price <= maxPrice);
-            }
 
             var totalCount = await query.CountAsync();
 
@@ -108,7 +107,6 @@ namespace E_Commerce.Repositories
                 .Skip((pageNumber - 1) * pageSize)
                 .Take(pageSize)
                 .ToListAsync();
-
             return (products, totalCount);
         }
     }

@@ -10,6 +10,8 @@
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
+@Html.AntiForgeryToken()
+
 <!-- ── Sidebar Overlay ───────────────────────────────────────────────── -->
 
 
@@ -24,10 +26,7 @@
                 <p>Manage your product catalog and inventory.</p>
             </div>
             <div class="d-flex gap-2">
-                <a href="/admindashboard/categories/add" class="btn btn-outline-primary">
-                    <i class="bi bi-plus-circle"></i> Add Category
-                </a>
-                <a href="/admindashboard/products/add" class="btn-primary-custom">
+                <a asp-controller="Product" asp-action="Add" class="btn-primary-custom">
                     <i class="bi bi-plus-lg"></i> Add Product
                 </a>
             </div>
@@ -92,25 +91,9 @@
             });
     }
 
-    function editProduct(productId) {
-        console.log('Edit product:', productId);
-    }
 
-    function deleteProduct(productId) {
-        if (!confirm('Are you sure you want to delete this product?')) return;
 
-        fetch('/admindashboard/products/delete/' + productId, { method: 'POST' })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    loadProducts(1);
-                    showNotification('Product deleted successfully', 'success');
-                } else {
-                    showNotification(data.message || 'Error deleting product', 'danger');
-                }
-            })
-            .catch(() => showNotification('Error deleting product', 'danger'));
-    }
+
 
     function showNotification(message, type) {
         const container = document.getElementById('notificationContainer');
@@ -140,9 +123,39 @@
         sidebar?.classList.toggle('active');
         overlay?.classList.toggle('active');
     }
+          function deleteProduct(productId) {
+        const token = document.querySelector('input[name="__RequestVerificationToken"]')?.value || '';
+
+        fetch('/admindashboard/products/delete/' + productId, {
+            method: 'POST',
+            headers: {
+                'RequestVerificationToken': token,
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: `__RequestVerificationToken=${encodeURIComponent(token)}`
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                loadProducts(1);
+                showNotification('Product deleted successfully', 'success');
+            } else {
+                showNotification(data.message || 'Error deleting product', 'danger');
+            }
+        })
+        .catch(() => showNotification('Error deleting product', 'danger'));
+    }
 
     // Load initial data
     document.addEventListener('DOMContentLoaded', function() {
         loadProducts(1);
     });
+          function confirmDelete(productId) {
+            if (confirm("Are you sure you want to delete this product?")) {
+                deleteProduct(productId);
+            }
+        }
+
+      
 </script>
+
