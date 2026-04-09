@@ -22,6 +22,7 @@
                 <div class="card-box">
                     <form method="post" action="/admindashboard/categories/edit" novalidate>
                         @Html.AntiForgeryToken()
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
                         <input asp-for="Id" type="hidden" />
 
                         <div class="row g-3 mb-3">
@@ -64,3 +65,9 @@
         </div>
     }
 </div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

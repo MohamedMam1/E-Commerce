@@ -2,6 +2,7 @@
 using FinalProject.Context;
 using FinalProject.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
 namespace E_Commerce.Repositories
 {
@@ -13,7 +14,10 @@ namespace E_Commerce.Repositories
         {
             _context = context;
         }
-
+        public async Task<bool> IsNameExists(string name)
+        {
+            return await _context.Categories.AnyAsync(c => c.Name.ToLower() == name.Trim().ToLower());
+        }
         public async Task<IEnumerable<Category>> GetAllAsync()
         {
             return await _context.Categories

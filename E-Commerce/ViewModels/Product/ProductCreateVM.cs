@@ -28,8 +28,13 @@ namespace E_Commerce.ViewModels.Product
         [Required(ErrorMessage = "Main image is required.")]
         public IFormFile MainImage { get; set; }
 
+        [Required(ErrorMessage = "Extra image is required.")]
         public IFormFile? ExtraImage1 { get; set; }
+
+        [Required(ErrorMessage = "Extra image is required.")]
         public IFormFile? ExtraImage2 { get; set; }
+
+        [Required(ErrorMessage = "Extra image is required.")]
         public IFormFile? ExtraImage3 { get; set; }
 
         public List<SelectListItem> Categories { get; set; } = new();

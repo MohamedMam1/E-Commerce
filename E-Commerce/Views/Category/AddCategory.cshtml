@@ -28,6 +28,7 @@
                 <div class="card-box">
                     <form method="post" action="/admindashboard/categories/add" novalidate>
                         @Html.AntiForgeryToken()
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
                         <div class="row g-3 mb-3">
                             <div class="col-12">
                                 <label class="form-label-custom">Category Name *</label>
@@ -67,3 +68,8 @@
     }
 </div>
 
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
