@@ -1,6 +1,8 @@
-﻿using FinalProject.Models;
+﻿using E_Commerce.Models;
+using FinalProject.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Permissions;
 
 namespace FinalProject.Context
 {
@@ -17,7 +19,8 @@ namespace FinalProject.Context
         public DbSet<Wishlist> Wishlists { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderItem> OrderItems { get; set; }
-
+        public DbSet<ProductImage> ProductImages { get; set; }
+        
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
