@@ -1,12 +1,12 @@
-﻿// ViewModels/Product/ProductCreateVM.cs
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
 using System.ComponentModel.DataAnnotations;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace E_Commerce.ViewModels.Product
 {
-    public class ProductCreateVM
+    public class ProductEditVM
     {
+        public int Id { get; set; }
+
         [Required(ErrorMessage = "Name is required.")]
         public string Name { get; set; }
 
@@ -22,16 +22,14 @@ namespace E_Commerce.ViewModels.Product
 
         [Required(ErrorMessage = "Please select a category.")]
         public int CategoryId { get; set; }
-
-        public bool IsAvailable { get; set; }
-
-        [Required(ErrorMessage = "Main image is required.")]
-        public IFormFile MainImage { get; set; }
-
+        public string? ExistingMainImageUrl { get; set; }
+        public List<string> ExistingExtraImageUrls { get; set; } = new();
+        public IFormFile? MainImage { get; set; }
         public IFormFile? ExtraImage1 { get; set; }
         public IFormFile? ExtraImage2 { get; set; }
         public IFormFile? ExtraImage3 { get; set; }
 
+        // Populated by controller
         public List<SelectListItem> Categories { get; set; } = new();
     }
 }
