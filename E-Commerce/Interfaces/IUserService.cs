@@ -9,6 +9,7 @@ namespace E_Commerce.Interfaces
         Task<List<UserAddressVM>> GetUserAddressesAsync(string UserId);
         Task UpdateUserAddressesAsync(string UserId, List<UserAddressVM> Addresses, string? NewAddressLine);
         Task<List<UserDashBoardVM>> GetUsersWithRolesAsync();
+        Task<bool> IsEmailExists(string email);
 
     }
 }
