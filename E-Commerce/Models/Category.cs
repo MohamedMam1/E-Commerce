@@ -14,7 +14,6 @@ namespace FinalProject.Models
         public string Description { get; set; }
         public bool IsDeleted { get; set; } = false; 
 
-
         public ICollection<Product> Products { get; set; }
     }
 }

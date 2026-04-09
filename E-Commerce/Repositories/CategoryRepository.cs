@@ -18,13 +18,23 @@ namespace E_Commerce.Repositories
         {
             return await _context.Categories
                 .Where(c => !c.IsDeleted)
+                .Include(c => c.Products)
                 .ToListAsync();
         }
 
         public async Task<Category> GetByIdAsync(int id)
         {
             return await _context.Categories
+                .Include(c => c.Products)
                 .FirstOrDefaultAsync(c => c.Id == id && !c.IsDeleted);
+        }
+
+        public IQueryable<Category> GetQueryable()
+        {
+            return _context.Categories
+                .Where(c => !c.IsDeleted)
+                .Include(c => c.Products)
+                .AsQueryable();
         }
 
         public async Task AddAsync(Category category)

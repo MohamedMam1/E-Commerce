@@ -1,4 +1,5 @@
-﻿using E_Commerce.ViewModels.Category;
+﻿using E_Commerce.ViewModels.AdminDashboard;
+using E_Commerce.ViewModels.Category;
 
 namespace E_Commerce.Interfaces
 {
@@ -10,5 +11,6 @@ namespace E_Commerce.Interfaces
         Task UpdateCategoryAsync(CategoryEditVM model);
         Task DeleteCategoryAsync(int id);
         Task<bool> CategoryExistsAsync(int id);
+        Task<PaginatedResultVM<CategoryListVM>> GetFilteredCategoriesAsync(string searchTerm, int pageNumber = 1, int pageSize = 10);
     }
 }
