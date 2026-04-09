@@ -24,6 +24,7 @@
 									</a>
 								</div>
 							</div>
+
 							@foreach (var img in Model.productImages)
 							{
 								<div class="item-slick3" data-thumb="/images/productImages/@img">
@@ -102,24 +103,33 @@
 										<i class="fs-16 zmdi zmdi-minus"></i>
 									</div>
 
-									<input class="mtext-104 cl3 txt-center num-product" type="number" name="num-product" value="1">
+									<input id="quantityInput" class="mtext-104 cl3 txt-center num-product" type="number" name="quantity" value="1" min="1">
 
 									<div class="btn-num-product-up cl8 hov-btn3 trans-04 flex-c-m">
 										<i class="fs-16 zmdi zmdi-plus"></i>
 									</div>
 								</div>
 
-								<button class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04 js-addcart-detail">
+								<button type="button"
+										id="addToCartBtn"
+										data-product-id="@Model.Id"
+										class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04 js-addcart-detail">
 									Add to cart
 								</button>
 							</div>
 						</div>
 					</div>
+
 					<div class="flex-w flex-m p-l-100 p-t-40 respon7">
 						<div class="flex-m bor9 p-r-10 m-r-11">
-							<a href="#" class="fs-14 cl3 hov-cl1 trans-04 lh-10 p-lr-5 p-tb-2 js-addwish-detail tooltip100" data-tooltip="Add to Wishlist">
+							<button type="button"
+									id="toggleWishlistBtn"
+									data-product-id="@Model.Id"
+									class="fs-14 cl3 hov-cl1 trans-04 lh-10 p-lr-5 p-tb-2 js-addwish-detail tooltip100"
+									data-tooltip="Add to Wishlist"
+									style="background:none;border:none;">
 								<i class="zmdi zmdi-favorite"></i>
-							</a>
+							</button>
 						</div>
 
 						<a href="#" class="fs-14 cl3 hov-cl1 trans-04 lh-10 p-lr-5 p-tb-2 m-r-8 tooltip100" data-tooltip="Facebook">
@@ -145,5 +155,64 @@
 	</div>
 </section>
 
+@section Scripts {
+	<script>
+		$(function () {
 
+			$('#addToCartBtn').on('click', function () {
+				const productId = $(this).data('product-id');
+				const quantity = parseInt($('#quantityInput').val()) || 1;
 
+				$.ajax({
+					url: '@Url.Action("AddToCart", "Cart")',
+					type: 'POST',
+					data: { productId: productId, quantity: quantity },
+					success: function () {
+						updateBadge('#cartIcon', quantity);
+						updateBadge('#cartIconMobile', quantity);
+
+						if (typeof swal === "function") {
+							swal("Success", "Item added to cart!", "success");
+						}
+					},
+					error: function () {
+						if (typeof swal === "function") {
+							swal("Error", "Could not add item to cart.", "error");
+						}
+					}
+				});
+			});
+
+			$('#toggleWishlistBtn').on('click', function () {
+				const productId = $(this).data('product-id');
+
+				$.ajax({
+					url: '@Url.Action("ToggleWishlist", "Wishlist")',
+					type: 'POST',
+					data: { productId: productId },
+					success: function () {
+						updateBadge('#wishlistIcon', 1);
+						updateBadge('#wishlistIconMobile', 1);
+
+						if (typeof swal === "function") {
+							swal("Success", "Wishlist updated!", "success");
+						}
+					},
+					error: function () {
+						if (typeof swal === "function") {
+							swal("Error", "Could not update wishlist.", "error");
+						}
+					}
+				});
+			});
+
+			function updateBadge(selector, amount) {
+				const el = document.querySelector(selector);
+				if (!el) return;
+
+				let current = parseInt(el.getAttribute('data-notify')) || 0;
+				el.setAttribute('data-notify', current + amount);
+			}
+		});
+	</script>
+}

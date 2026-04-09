@@ -107,7 +107,7 @@ namespace E_Commerce.Services
             });
         }
 
-        public async Task<IEnumerable<ProductListVM>> FilterProducts(ProductFilterVM filter)
+        public async Task<IEnumerable<ProductListVM>> FilterProducts(E_Commerce.ViewModels.Product.ProductFilterVM filter)
         {
             var products = await _repo.FilterAsync(filter);
 
@@ -120,6 +120,8 @@ namespace E_Commerce.Services
                 ImageUrl = p.ImageUrl,
                 CategoryName = p.Category?.Name
             });
+        }
+
         public async Task<IEnumerable<AdminProductListVM>> GetAdminProductsAsync()
         {
             var products = await _repo.GetAllAsync();
@@ -134,7 +136,7 @@ namespace E_Commerce.Services
                     Quantity = p.Quantity,
                     IsAvailable = p.IsAvailable
                 })
-                .ToList(); 
+                .ToList();
         }
 
         public async Task<PaginatedResultVM<AdminProductListVM>> GetFilteredProductsAsync(string searchTerm, int? categoryId, bool? isAvailable, int pageNumber = 1, int pageSize = 10)
@@ -143,7 +145,6 @@ namespace E_Commerce.Services
                 .Include(p => p.Category)
                 .AsQueryable();
 
-            // Apply filters
             if (!string.IsNullOrWhiteSpace(searchTerm))
             {
                 query = query.Where(p => p.Name.Contains(searchTerm));
@@ -159,16 +160,13 @@ namespace E_Commerce.Services
                 query = query.Where(p => p.IsAvailable == isAvailable.Value);
             }
 
-            // Get total count
             var totalCount = await query.CountAsync();
 
-            // Apply pagination
             var products = await query
                 .Skip((pageNumber - 1) * pageSize)
                 .Take(pageSize)
                 .ToListAsync();
 
-            // Map to view model
             var productVMs = products.Select(p => new AdminProductListVM
             {
                 Id = p.Id,

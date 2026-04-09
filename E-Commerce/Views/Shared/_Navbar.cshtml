@@ -1,7 +1,18 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@using System.Security.Claims
+@using E_Commerce.Interfaces
+@inject ICartService CartService
+@inject IWishlistService WishlistService
+
 @{
+    var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+    var cartCount = 0;
+    var wishlistCount = 0;
+
+    if (!string.IsNullOrEmpty(userId))
+    {
+        cartCount = await CartService.GetCartItemCountAsync(userId);
+        wishlistCount = await WishlistService.GetWishlistItemCountAsync(userId);
+    }
 }
 
 <header>
@@ -17,41 +28,38 @@
 			<nav class="limiter-menu-desktop container">
 
 				<!-- Logo desktop -->
-				<a href="#" class="logo">
+				<a asp-controller="Home" asp-action="Index" class="logo">
 					<img src="~/images/icons/logo-01.png" alt="IMG-LOGO">
 				</a>
 
 				<!-- Menu desktop -->
 				<div class="menu-desktop">
 					<ul class="main-menu">
+					
 						<li class="active-menu">
-							<a href="@Url.Action("Index", "Home")">Home</a>
-							<ul class="sub-menu">
-								<li><a href="@Url.Action("Index", "Home")">Homepage 1</a></li>
-								<li><a href="~/htmls/home-02.html">Homepage 2</a></li>
-								<li><a href="~/htmls/home-03.html">Homepage 3</a></li>
-							</ul>
-						</li>
+    <a asp-controller="Home" asp-action="Index">Home</a>
+</li>
+						
 
 						<li>
-							<a asp-action="Index" asp-controller="Product">Shop</a>
+							<a asp-controller="Product" asp-action="Index">Shop</a>
 						</li>
 
 						<li class="label1" data-label1="hot">
-							<a href="~/htmls/shoping-cart.html">Features</a>
+							<a asp-controller="Cart" asp-action="Index">Features</a>
 						</li>
 
-						<li>
-							<a href="~/htmls/blog.html">Blog</a>
-						</li>
+					<li>
+    <a asp-controller="Home" asp-action="Blog">Blog</a>
+</li>
 
-						<li>
-							<a href="~/htmls/about.html">About</a>
-						</li>
+<li>
+    <a asp-controller="Home" asp-action="About">About</a>
+</li>
 
-						<li>
-							<a href="~/htmls/contact.html">Contact</a>
-						</li>
+<li>
+    <a asp-controller="Home" asp-action="Contact">Contact</a>
+</li>
 					</ul>
 				</div>
 
@@ -64,12 +72,18 @@
 					</div>
 
 					<!-- Cart -->
-					<div class="icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11 icon-header-noti js-show-cart" data-notify="2">
+					<a id="cartIcon"
+					   asp-controller="Cart" asp-action="Index"
+					   class="dis-block icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11 icon-header-noti"
+					   data-notify="@cartCount">
 						<i class="zmdi zmdi-shopping-cart"></i>
-					</div>
+					</a>
 
 					<!-- Wishlist -->
-					<a href="#" class="dis-block icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11 icon-header-noti" data-notify="0">
+					<a id="wishlistIcon"
+					   asp-controller="Wishlist" asp-action="Index"
+					   class="dis-block icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11 icon-header-noti"
+					   data-notify="@wishlistCount">
 						<i class="zmdi zmdi-favorite-outline"></i>
 					</a>
 
@@ -84,8 +98,13 @@
 
 							<ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
 								<li>
-									<a class="dropdown-item" asp-controller="Account" asp-action="Dashboard">
+									<a class="dropdown-item" asp-controller="UserDashboard" asp-action="Index">
 										Dashboard
+									</a>
+								</li>
+								<li>
+									<a class="dropdown-item" asp-controller="UserDashboard" asp-action="Orders">
+										Orders
 									</a>
 								</li>
 								<li>
@@ -113,7 +132,7 @@
 	<div class="wrap-header-mobile">
 		<!-- Logo moblie -->
 		<div class="logo-mobile">
-			<a href="index.html"><img src="~/images/icons/logo-01.png" alt="IMG-LOGO"></a>
+			<a asp-controller="Home" asp-action="Index"><img src="~/images/icons/logo-01.png" alt="IMG-LOGO"></a>
 		</div>
 
 		<!-- Icon header -->
@@ -122,11 +141,17 @@
 				<i class="zmdi zmdi-search"></i>
 			</div>
 
-			<div class="icon-header-item cl2 hov-cl1 trans-04 p-r-11 p-l-10 icon-header-noti js-show-cart" data-notify="2">
+			<a id="cartIconMobile"
+			   asp-controller="Cart" asp-action="Index"
+			   class="dis-block icon-header-item cl2 hov-cl1 trans-04 p-r-11 p-l-10 icon-header-noti"
+			   data-notify="@cartCount">
 				<i class="zmdi zmdi-shopping-cart"></i>
-			</div>
+			</a>
 
-			<a href="#" class="dis-block icon-header-item cl2 hov-cl1 trans-04 p-r-11 p-l-10 icon-header-noti" data-notify="0">
+			<a id="wishlistIconMobile"
+			   asp-controller="Wishlist" asp-action="Index"
+			   class="dis-block icon-header-item cl2 hov-cl1 trans-04 p-r-11 p-l-10 icon-header-noti"
+			   data-notify="@wishlistCount">
 				<i class="zmdi zmdi-favorite-outline"></i>
 			</a>
 		</div>
@@ -138,7 +163,6 @@
 			</span>
 		</div>
 	</div>
-
 
 	<!-- Menu Mobile -->
 	<div class="menu-mobile">
@@ -155,9 +179,18 @@
 						Help & FAQs
 					</a>
 
-					<a href="#" class="flex-c-m p-lr-10 trans-04">
-						My Account
-					</a>
+					@if (User.Identity.IsAuthenticated)
+					{
+						<a asp-controller="UserDashboard" asp-action="Index" class="flex-c-m p-lr-10 trans-04">
+							My Account
+						</a>
+					}
+					else
+					{
+						<a asp-controller="Account" asp-action="Login" class="flex-c-m p-lr-10 trans-04">
+							My Account
+						</a>
+					}
 
 					<a href="#" class="flex-c-m p-lr-10 trans-04">
 						EN
@@ -172,11 +205,11 @@
 
 		<ul class="main-menu-m">
 			<li>
-				<a href="index.html">Home</a>
+				<a asp-controller="Home" asp-action="Index">Home</a>
 				<ul class="sub-menu-m">
-					<li><a href="index.html">Homepage 1</a></li>
-					<li><a href="home-02.html">Homepage 2</a></li>
-					<li><a href="home-03.html">Homepage 3</a></li>
+					<li><a asp-controller="Home" asp-action="Index">Homepage 1</a></li>
+					<li><a asp-controller="Home" asp-action="Index">Homepage 2</a></li>
+					<li><a asp-controller="Home" asp-action="Index">Homepage 3</a></li>
 				</ul>
 				<span class="arrow-main-menu-m">
 					<i class="fa fa-angle-right" aria-hidden="true"></i>
@@ -184,24 +217,24 @@
 			</li>
 
 			<li>
-				<a href="product.html">Shop</a>
+				<a asp-controller="Product" asp-action="Index">Shop</a>
 			</li>
 
 			<li>
-				<a href="shoping-cart.html" class="label1 rs1" data-label1="hot">Features</a>
+				<a asp-controller="Cart" asp-action="Index" class="label1 rs1" data-label1="hot">Features</a>
 			</li>
 
-			<li>
-				<a href="blog.html">Blog</a>
-			</li>
+		     <li>
+    <a asp-controller="Home" asp-action="Blog">Blog</a>
+</li>
 
-			<li>
-				<a href="about.html">About</a>
-			</li>
+<li>
+    <a asp-controller="Home" asp-action="About">About</a>
+</li>
 
-			<li>
-				<a href="contact.html">Contact</a>
-			</li>
+<li>
+    <a asp-controller="Home" asp-action="Contact">Contact</a>
+</li>
 		</ul>
 	</div>
 
@@ -212,11 +245,11 @@
 				<img src="~/images/icons/icon-close2.png" alt="CLOSE">
 			</button>
 
-			<form class="wrap-search-header flex-w p-l-15">
-				<button class="flex-c-m trans-04">
+			<form asp-controller="Product" asp-action="Search" method="get" class="wrap-search-header flex-w p-l-15">
+				<button type="submit" class="flex-c-m trans-04">
 					<i class="zmdi zmdi-search"></i>
 				</button>
-				<input class="plh3" type="text" name="search" placeholder="Search...">
+				<input class="plh3" type="text" name="SearchValue" placeholder="Search...">
 			</form>
 		</div>
 	</div>

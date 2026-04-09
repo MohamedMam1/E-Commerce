@@ -23,23 +23,23 @@ namespace E_Commerce.Controllers
             return View(wishlistVm);
         }
 
-       
+
         [HttpPost]
         public async Task<IActionResult> ToggleWishlist(int productId)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             await _wishlistService.ToggleWishlistItemAsync(userId, productId);
-            
-            return Json(new { success = true, message = "Wishlist updated!" });
+
+            return RedirectToAction("Index", "Wishlist");
         }
 
-        
+
         [HttpPost]
         public async Task<IActionResult> RemoveFromWishlist(int productId)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             await _wishlistService.RemoveItemFromWishlistAsync(userId, productId);
-            
+
             return RedirectToAction(nameof(Index));
         }
     }

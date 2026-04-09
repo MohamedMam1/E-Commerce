@@ -7,7 +7,7 @@
 <!-- breadcrumb -->
 <div class="container">
     <div class="bread-crumb flex-w p-l-25 p-r-15 p-t-30 p-lr-0-lg">
-        <a href="/" class="stext-109 cl8 hov-cl1 trans-04">
+        <a asp-controller="Home" asp-action="Index" class="stext-109 cl8 hov-cl1 trans-04">
             Home
             <i class="fa fa-angle-right m-l-9 m-r-10" aria-hidden="true"></i>
         </a>
@@ -35,14 +35,14 @@
                                 <th class="column-6">Remove</th>
                             </tr>
 
-                            @if(Model.Items.Any())
+                            @if (Model.Items.Any())
                             {
-                                foreach(var item in Model.Items)
+                                foreach (var item in Model.Items)
                                 {
                                     <tr class="table_row">
                                         <td class="column-1">
                                             <div class="how-itemcart1">
-                                                <img src="@item.ImageUrl" alt="IMG">
+                                              <img src="~/images/productImages/@item.ImageUrl" alt="IMG">
                                             </div>
                                         </td>
                                         <td class="column-2">@item.ProductName</td>
@@ -79,7 +79,7 @@
                         </table>
                     </div>
 
-                    @if(Model.Items.Any())
+                    @if (Model.Items.Any())
                     {
                         <div class="flex-w flex-sb-m bor15 p-t-18 p-b-15 p-lr-40 p-lr-15-sm">
                             <form asp-action="ClearCart" asp-controller="Cart" method="post">
@@ -128,7 +128,7 @@
 
                     @if (Model.Items.Any())
                     {
-                        <a href="/Checkout/Index" class="flex-c-m stext-101 cl0 size-116 bg3 bor14 hov-btn3 p-lr-15 trans-04 pointer">
+                        <a asp-controller="Payment" asp-action="Checkout" class="flex-c-m stext-101 cl0 size-116 bg3 bor14 hov-btn3 p-lr-15 trans-04 pointer">
                             Proceed to Checkout
                         </a>
                     }
@@ -142,14 +142,14 @@
     <script>
         function updateQuantity(productId, newQuantity) {
             if (newQuantity < 0) return;
-            
+
             $.ajax({
-                url: '/Cart/UpdateQuantity',
+                url: '@Url.Action("UpdateQuantity", "Cart")',
                 type: 'POST',
                 data: { productId: productId, quantity: newQuantity },
                 success: function (result) {
                     if (result.success) {
-                        location.reload(); // Reload to reflect changes in UI and totals
+                        location.reload();
                     }
                 }
             });

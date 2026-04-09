@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace E_Commerce.Controllers
 {
-   
+
     public class CartController : Controller
     {
         private readonly ICartService _cartService;
@@ -16,7 +16,7 @@ namespace E_Commerce.Controllers
             _cartService = cartService;
         }
 
-       
+
         public async Task<IActionResult> Index()
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -24,44 +24,44 @@ namespace E_Commerce.Controllers
             return View(cartVm);
         }
 
-        
+
         [HttpPost]
         public async Task<IActionResult> AddToCart(int productId, int quantity = 1)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             await _cartService.AddItemToCartAsync(userId, productId, quantity);
-            
-            return Json(new { success = true, message = "Item added to cart!" });
+
+            return RedirectToAction("Index", "Cart");
         }
 
-      
+
         [HttpPost]
         public async Task<IActionResult> UpdateQuantity(int productId, int quantity)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             await _cartService.UpdateCartItemQuantityAsync(userId, productId, quantity);
-            
+
             return Json(new { success = true, message = "Quantity updated." });
         }
 
-        
+
         [HttpPost]
         public async Task<IActionResult> RemoveFromCart(int productId)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             await _cartService.RemoveItemFromCartAsync(userId, productId);
-            
-            
+
+
             return RedirectToAction(nameof(Index));
         }
 
-       
+
         [HttpPost]
         public async Task<IActionResult> ClearCart()
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             await _cartService.ClearCartAsync(userId);
-            
+
             return RedirectToAction(nameof(Index));
         }
     }

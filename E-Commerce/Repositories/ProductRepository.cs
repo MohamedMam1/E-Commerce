@@ -3,7 +3,6 @@ using E_Commerce.ViewModels.Product;
 using FinalProject.Context;
 using FinalProject.Models;
 using Microsoft.EntityFrameworkCore;
-using System;
 
 namespace E_Commerce.Repositories
 {
@@ -26,7 +25,8 @@ namespace E_Commerce.Repositories
         public async Task<Product> GetByIdAsync(int id)
         {
             return await _context.Products
-                .Include(p => p.Category).Include(p => p.ExtraImages)
+                .Include(p => p.Category)
+                .Include(p => p.ExtraImages)
                 .FirstOrDefaultAsync(p => p.Id == id);
         }
 
@@ -69,19 +69,6 @@ namespace E_Commerce.Repositories
         }
 
         public async Task<IEnumerable<Product>> FilterAsync(ProductFilterVM filter)
-        public IQueryable<Product> GetQueryable()
-        {
-            return _context.Products.AsQueryable();
-        }
-
-        public async Task<(List<Product> Products, int TotalCount)> SearchAndFilterAsync(
-            string searchTerm, 
-            int? categoryId, 
-            bool? isAvailable, 
-            decimal? minPrice, 
-            decimal? maxPrice,
-            int pageNumber = 1,
-            int pageSize = 10)
         {
             var query = _context.Products
                 .Include(p => p.Category)
@@ -111,41 +98,59 @@ namespace E_Commerce.Repositories
             }
 
             return await query.ToListAsync();
-            // Search by name or description
+        }
+
+        public IQueryable<Product> GetQueryable()
+        {
+            return _context.Products
+                .Include(p => p.Category)
+                .AsQueryable();
+        }
+
+        public async Task<(List<Product> Products, int TotalCount)> SearchAndFilterAsync(
+            string searchTerm,
+            int? categoryId,
+            bool? isAvailable,
+            decimal? minPrice,
+            decimal? maxPrice,
+            int pageNumber = 1,
+            int pageSize = 10)
+        {
+            var query = _context.Products
+                .Include(p => p.Category)
+                .AsQueryable();
+
             if (!string.IsNullOrEmpty(searchTerm))
             {
-                query = query.Where(p => 
-                    p.Name.Contains(searchTerm) || 
+                query = query.Where(p =>
+                    p.Name.Contains(searchTerm) ||
                     p.Description.Contains(searchTerm));
             }
 
-            // Filter by category
             if (categoryId.HasValue)
             {
-                query = query.Where(p => p.CategoryId == categoryId);
+                query = query.Where(p => p.CategoryId == categoryId.Value);
             }
 
-            // Filter by availability
             if (isAvailable.HasValue)
             {
-                query = query.Where(p => p.IsAvailable == isAvailable);
+                query = query.Where(p => p.IsAvailable == isAvailable.Value);
             }
 
-            // Filter by price range
             if (minPrice.HasValue)
             {
-                query = query.Where(p => p.Price >= minPrice);
+                query = query.Where(p => p.Price >= minPrice.Value);
             }
 
             if (maxPrice.HasValue)
             {
-                query = query.Where(p => p.Price <= maxPrice);
+                query = query.Where(p => p.Price <= maxPrice.Value);
             }
 
             var totalCount = await query.CountAsync();
 
             var products = await query
-                .OrderByDescending(p => p.CreatedAt)
+                .OrderBy(p => p.Id)
                 .Skip((pageNumber - 1) * pageSize)
                 .Take(pageSize)
                 .ToListAsync();

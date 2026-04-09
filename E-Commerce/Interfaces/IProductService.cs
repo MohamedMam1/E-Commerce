@@ -4,7 +4,7 @@ using E_Commerce.ViewModels.Product;
 
 namespace E_Commerce.Interfaces
 {
-    public interface IProductService 
+    public interface IProductService
     {
         Task<IEnumerable<ProductListVM>> GetAllProductsAsync();
         Task<ProductDetailVM> GetProductByIdAsync(int id);
@@ -13,7 +13,7 @@ namespace E_Commerce.Interfaces
         Task DeleteProductAsync(int id);
         Task<bool> ProductExistsAsync(int id);
         Task<IEnumerable<ProductListVM>> SearchProducts(string SearchValue);
-        Task<IEnumerable<ProductListVM>> FilterProducts(ProductFilterVM filter);
+        Task<IEnumerable<ProductListVM>> FilterProducts(E_Commerce.ViewModels.Product.ProductFilterVM filter);
         Task<IEnumerable<AdminProductListVM>> GetAdminProductsAsync();
         Task<PaginatedResultVM<AdminProductListVM>> GetFilteredProductsAsync(string searchTerm, int? categoryId, bool? isAvailable, int pageNumber = 1, int pageSize = 10);
     }

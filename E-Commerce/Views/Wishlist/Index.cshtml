@@ -7,7 +7,7 @@
 <!-- breadcrumb -->
 <div class="container">
     <div class="bread-crumb flex-w p-l-25 p-r-15 p-t-30 p-lr-0-lg">
-        <a href="/" class="stext-109 cl8 hov-cl1 trans-04">
+        <a asp-controller="Home" asp-action="Index" class="stext-109 cl8 hov-cl1 trans-04">
             Home
             <i class="fa fa-angle-right m-l-9 m-r-10" aria-hidden="true"></i>
         </a>
@@ -34,20 +34,26 @@
                                 <th class="column-5 text-center">Action</th>
                             </tr>
 
-                            @if(Model.Items.Any())
+                            @if (Model.Items.Any())
                             {
-                                foreach(var item in Model.Items)
+                                foreach (var item in Model.Items)
                                 {
                                     <tr class="table_row">
                                         <td class="column-1">
-                                            <div class="how-itemcart1">
-                                                <img src="@item.ImageUrl" alt="IMG">
-                                            </div>
+                                            <a asp-controller="ProductDetail" asp-action="Index" asp-route-id="@item.ProductId">
+                                                <div class="how-itemcart1">
+                                                    <img src="~/images/productImages/@item.ImageUrl" alt="IMG">
+                                                </div>
+                                            </a>
                                         </td>
-                                        <td class="column-2">@item.ProductName</td>
+                                        <td class="column-2">
+                                            <a asp-controller="ProductDetail" asp-action="Index" asp-route-id="@item.ProductId" class="stext-104 cl4 hov-cl1 trans-04">
+                                                @item.ProductName
+                                            </a>
+                                        </td>
                                         <td class="column-3">$ @item.Price.ToString("0.00")</td>
                                         <td class="column-4">
-                                            @if(item.IsAvailable)
+                                            @if (item.IsAvailable)
                                             {
                                                 <span class="badge bg-success text-white p-2">In Stock</span>
                                             }
@@ -58,7 +64,7 @@
                                         </td>
                                         <td class="column-5 text-center">
                                             <div class="d-flex justify-content-center align-items-center">
-                                                @if(item.IsAvailable)
+                                                @if (item.IsAvailable)
                                                 {
                                                     <button onclick="addToCart(@item.ProductId)" class="flex-c-m stext-101 cl0 size-111 bg1 bor1 hov-btn1 p-lr-15 trans-04 m-r-10">
                                                         Add to Cart
@@ -91,7 +97,7 @@
     <script>
         function addToCart(productId) {
             $.ajax({
-                url: '/Cart/AddToCart',
+                url: '@Url.Action("AddToCart", "Cart")',
                 type: 'POST',
                 data: { productId: productId, quantity: 1 },
                 success: function (result) {
