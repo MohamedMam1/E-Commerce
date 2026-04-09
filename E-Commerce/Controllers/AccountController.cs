@@ -1,4 +1,5 @@
-﻿using E_Commerce.ViewModels;
+﻿using E_Commerce.Interfaces;
+using E_Commerce.ViewModels;
 using FinalProject.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -10,11 +11,16 @@ namespace E_Commerce.Controllers
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly IUserService _userService;
 
-        public AccountController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
+        public AccountController(
+            UserManager<ApplicationUser> userManager,
+            SignInManager<ApplicationUser> signInManager,
+            IUserService userService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _userService = userService;
         }
 
         [HttpGet]
@@ -42,7 +48,7 @@ namespace E_Commerce.Controllers
 
                 if (result.Succeeded)
                 {
-                    await _signInManager.SignInAsync(appUser, isPersistent: false);
+                    //await _signInManager.SignInAsync(appUser, isPersistent: false);
                     return RedirectToAction("Login", "Account");
                 }
 
@@ -86,6 +92,13 @@ namespace E_Commerce.Controllers
         {
             await _signInManager.SignOutAsync();
             return RedirectToAction("Index", "Home");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> IsEmailExistsAsync(string email)
+        {
+            var exists = await _userService.IsEmailExists(email);
+            return Json(!exists);
         }
     }
 }

@@ -68,5 +68,11 @@ namespace E_Commerce.Repositories
             return usersWithRoles;
         }
 
+        public async Task<bool> IsEmailExists(string email)
+        {
+            email = email.Trim().ToUpper();
+            return await _context.Users.AnyAsync(u => u.NormalizedEmail == email);
+        }
+
     }
 }
