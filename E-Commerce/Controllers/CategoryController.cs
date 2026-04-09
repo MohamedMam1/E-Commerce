@@ -2,6 +2,7 @@ using E_Commerce.Interfaces;
 using E_Commerce.ViewModels.Category;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace E_Commerce.Controllers
 {
@@ -78,5 +79,12 @@ namespace E_Commerce.Controllers
             await _categoryService.DeleteCategoryAsync(id);
             return Json(new { success = true });
         }
+
+        public async Task<IActionResult> IsNameUnique(string name)
+        {
+            var exists = await _categoryService.IsNameExistsAsync(name);
+            return Json(!exists);
+        }
+
     }
 }

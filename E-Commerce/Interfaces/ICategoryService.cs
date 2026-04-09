@@ -8,6 +8,7 @@ namespace E_Commerce.Interfaces
         Task<IEnumerable<CategoryListVM>> GetAllCategoriesAsync();
         Task<CategoryDetailVM> GetCategoryByIdAsync(int id);
         Task AddCategoryAsync(CategoryCreateVM model);
+        Task<bool> IsNameExistsAsync(string name);
         Task UpdateCategoryAsync(CategoryEditVM model);
         Task DeleteCategoryAsync(int id);
         Task<bool> CategoryExistsAsync(int id);

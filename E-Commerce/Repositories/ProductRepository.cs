@@ -17,7 +17,7 @@ namespace E_Commerce.Repositories
         public async Task<IEnumerable<Product>> GetAllAsync()
         {
             return await _context.Products
-                .Where(p => !p.IsDeleted)
+                .Where(p => !p.IsDeleted && !p.Category.IsDeleted)
                 .Include(p => p.Category)
                 .Include(p => p.ExtraImages)
                 .ToListAsync();
@@ -26,7 +26,7 @@ namespace E_Commerce.Repositories
         public async Task<Product> GetByIdAsync(int id)
         {
             return await _context.Products
-                .Where(p => !p.IsDeleted)
+                .Where(p => !p.IsDeleted && !p.Category.IsDeleted)
                 .Include(p => p.Category)
                 .Include(p => p.ExtraImages)
                 .FirstOrDefaultAsync(p => p.Id == id);
@@ -55,17 +55,16 @@ namespace E_Commerce.Repositories
         public async Task<bool> ExistsAsync(int id)
         {
             return await _context.Products
-                .AnyAsync(p => p.Id == id && !p.IsDeleted);
+                .AnyAsync(p => p.Id == id && !p.IsDeleted && !p.Category.IsDeleted);
         }
 
         public IQueryable<Product> GetQueryable()
         {
             return _context.Products
-                .Where(p => !p.IsDeleted)
+                .Where(p => !p.IsDeleted && !p.Category.IsDeleted)
                 .AsQueryable();
         }
 
-        // Delete extra images by product id before re-adding
         public async Task DeleteExtraImagesAsync(int productId)
         {
             var extras = _context.ProductImages.Where(pi => pi.ProductId == productId);
@@ -76,7 +75,7 @@ namespace E_Commerce.Repositories
         public async Task<(List<Product> Products, int TotalCount)> SearchAndFilterAsync(string searchTerm,int? categoryId,bool? isAvailable,decimal? minPrice,decimal? maxPrice,int pageNumber = 1,int pageSize = 10)
         {
             var query = _context.Products
-                .Where(p => !p.IsDeleted)
+                .Where(p => !p.IsDeleted && !p.Category.IsDeleted)
                 .Include(p => p.Category)
                 .AsQueryable();
 

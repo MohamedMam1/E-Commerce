@@ -10,6 +10,7 @@ namespace E_Commerce.Interfaces
         Task UpdateAsync(Category category);
         Task DeleteAsync(Category category);
         Task<bool> ExistsAsync(int id);
+        Task<bool> IsNameExists(string name);
         IQueryable<Category> GetQueryable();
     }
 }

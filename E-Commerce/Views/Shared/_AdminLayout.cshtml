@@ -14,16 +14,14 @@
 </head>
 <body>
     <header class="topbar">
-        <button class="topbar-toggle" onclick="toggleSidebar()">
-            <i class="bi bi-list"></i>
-        </button>
+
         <div class="topbar-breadcrumb d-none d-md-flex">
             <i class="bi bi-house-fill" style="font-size:12px"></i>
             <i class="bi bi-chevron-right" style="font-size:10px"></i>
             <span class="current" id="breadcrumbCurrent">Dashboard</span>
         </div>
 
-@*         <div class="search-wrap">
+    @*     <div class="search-wrap">
             <i class="bi bi-search"></i>
             <input type="text" placeholder="Search products, orders…" id="globalSearch" />
         </div> 
@@ -32,15 +30,16 @@
             <div class="topbar-btn" title="Notifications">
                 <i class="bi bi-bell"></i>
                 <span class="notif-dot"></span>
-            </div>*@
+            </div> *@
 
             <!-- Profile dropdown -->
-            <div class="dropdown">
+            <div class="dropdown ms-auto">
                 <a class="topbar-profile dropdown-toggle" href="#" data-bs-toggle="dropdown" aria-expanded="false" style="text-decoration:none">
                     <div class="t-avatar">A</div>
                     <span class="t-name d-none d-sm-block">Admin</span>
                     <i class="bi bi-chevron-down"></i>
                 </a>
+
                 <ul class="dropdown-menu dropdown-menu-end shadow-lg border-0 rounded-3 mt-1" style="min-width:200px;font-size:13px">
                     <li><h6 class="dropdown-header fw-bold">Admin</h6></li>
                     <li><a class="dropdown-item py-2" href="#"><i class="bi bi-person me-2 text-primary"></i>My Profile</a></li>

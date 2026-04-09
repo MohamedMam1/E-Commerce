@@ -1,6 +1,6 @@
 ﻿using E_Commerce.Interfaces;
-using E_Commerce.ViewModels.AdminDashboard;
 using E_Commerce.ViewModels.Category;
+using E_Commerce.ViewModels.AdminDashboard;
 using FinalProject.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,21 +15,28 @@ namespace E_Commerce.Services
             _repo = repo;
         }
 
+        // 🔹 Get all categories (optimized)
         public async Task<IEnumerable<CategoryListVM>> GetAllCategoriesAsync()
         {
-            var categories = await _repo.GetAllAsync();
+            var categories = await _repo.GetQueryable()
+                .Include(c => c.Products)
+                .ToListAsync();
+
             return categories.Select(c => new CategoryListVM
             {
                 Id = c.Id,
                 Name = c.Name,
                 Description = c.Description,
-                ProductCount = c.Products?.Count(p => !p.IsDeleted) ?? 0
+                ProductCount = c.Products.Count(p => !p.IsDeleted)
             });
         }
 
+        // 🔹 Get category by id
         public async Task<CategoryDetailVM> GetCategoryByIdAsync(int id)
         {
-            var c = await _repo.GetByIdAsync(id);
+            var c = await _repo.GetQueryable()
+                .FirstOrDefaultAsync(x => x.Id == id);
+
             if (c == null) return null;
 
             return new CategoryDetailVM
@@ -40,6 +47,7 @@ namespace E_Commerce.Services
             };
         }
 
+        // 🔹 Add category
         public async Task AddCategoryAsync(CategoryCreateVM model)
         {
             var category = new Category
@@ -51,10 +59,14 @@ namespace E_Commerce.Services
             await _repo.AddAsync(category);
         }
 
+        // 🔹 Update category
         public async Task UpdateCategoryAsync(CategoryEditVM model)
         {
-            var category = await _repo.GetByIdAsync(model.Id);
-            if (category == null) throw new Exception("Category not found");
+            var category = await _repo.GetQueryable()
+                .FirstOrDefaultAsync(c => c.Id == model.Id);
+
+            if (category == null)
+                throw new KeyNotFoundException("Category not found");
 
             category.Name = model.Name;
             category.Description = model.Description;
@@ -64,8 +76,12 @@ namespace E_Commerce.Services
 
         public async Task DeleteCategoryAsync(int id)
         {
-            var category = await _repo.GetByIdAsync(id);
-            if (category == null) throw new Exception("Category not found");
+            var category = await _repo.GetQueryable()
+                .Include(c => c.Products)
+                .FirstOrDefaultAsync(c => c.Id == id);
+
+            if (category == null)
+                throw new KeyNotFoundException("Category not found");
 
             if (category.Products != null)
             {
@@ -83,33 +99,43 @@ namespace E_Commerce.Services
             return await _repo.ExistsAsync(id);
         }
 
-        public async Task<PaginatedResultVM<CategoryListVM>> GetFilteredCategoriesAsync(string searchTerm, int pageNumber = 1, int pageSize = 10)
+        public async Task<bool> IsNameExistsAsync(string name)
+        {
+            return await _repo.IsNameExists(name);
+        }
+
+        public async Task<PaginatedResultVM<CategoryListVM>> GetFilteredCategoriesAsync(
+            string searchTerm,
+            int pageNumber = 1,
+            int pageSize = 10)
         {
             var query = _repo.GetQueryable();
 
             if (!string.IsNullOrWhiteSpace(searchTerm))
             {
-                query = query.Where(c => c.Name.Contains(searchTerm) || c.Description.Contains(searchTerm));
+                query = query.Where(c =>
+                    c.Name.Contains(searchTerm) ||
+                    (c.Description != null && c.Description.Contains(searchTerm)));
             }
 
             var totalCount = await query.CountAsync();
+
             var categories = await query
                 .OrderBy(c => c.Name)
                 .Skip((pageNumber - 1) * pageSize)
                 .Take(pageSize)
+                .Select(c => new CategoryListVM
+                {
+                    Id = c.Id,
+                    Name = c.Name,
+                    Description = c.Description,
+                    ProductCount = c.Products.Count(p => !p.IsDeleted)
+                })
                 .ToListAsync();
-
-            var categoryVMs = categories.Select(c => new CategoryListVM
-            {
-                Id = c.Id,
-                Name = c.Name,
-                Description = c.Description,
-                ProductCount = c.Products?.Count(p => !p.IsDeleted) ?? 0
-            }).ToList();
 
             return new PaginatedResultVM<CategoryListVM>
             {
-                Data = categoryVMs,
+                Data = categories,
                 TotalCount = totalCount,
                 PageNumber = pageNumber,
                 PageSize = pageSize,
