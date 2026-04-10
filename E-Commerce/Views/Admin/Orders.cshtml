@@ -6,8 +6,6 @@
 <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
 
 <!-- ── Sidebar ──────────────────────────────────────────────────────── -->
-
-
 <!-- ── Main Wrapper ─────────────────────────────────────────────────── -->
 <div class="main-wrapper">
 
@@ -22,10 +20,7 @@
             <span class="current">Orders</span>
         </div>
 
-        <div class="search-wrap">
-            <i class="bi bi-search"></i>
-            <input type="text" placeholder="Search orders…" id="globalSearch" />
-        </div>
+
 
         <div class="topbar-actions ms-2">
             <div class="topbar-btn" title="Notifications">
@@ -72,6 +67,7 @@
                         <option value="Processing">Processing</option>
                         <option value="Completed">Completed</option>
                         <option value="Cancelled">Cancelled</option>
+                        <option value="Failed">Failed</option>
                     </select>
                 </div>
                 <div class="col-md-2">
@@ -105,13 +101,13 @@
 
 <!-- JavaScript Functions -->
 <script>
-    function loadOrders(pageNumber) {
+    function loadOrders(pageNumber = 1) {
         const searchTerm = document.getElementById('orderSearch')?.value || '';
         const status = document.getElementById('orderStatus')?.value || '';
         const dateFrom = document.getElementById('orderDateFrom')?.value || '';
         const dateTo = document.getElementById('orderDateTo')?.value || '';
 
-        const url = new URL('/admindashboard/orders/table', window.location.origin);
+        const url = new URL('/Admin/OrdersTable', window.location.origin);
         url.searchParams.append('searchTerm', searchTerm);
         if (status) url.searchParams.append('status', status);
         if (dateFrom) url.searchParams.append('dateFrom', dateFrom);
@@ -130,27 +126,33 @@
             });
     }
 
-    function viewOrderDetails(orderId) {
-        alert('View order details: ' + orderId);
+       function viewOrderDetails(orderId) {
+        window.location.href = '/Admin/OrderDetails/' + orderId;
     }
 
-    function updateOrderStatus(orderId, newStatus) {
-        fetch('/admindashboard/orders/status/' + orderId, {
+
+        function updateOrderStatus(orderId, newStatus) {
+        fetch('/Admin/UpdateOrderStatus', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ status: newStatus })
+            body: JSON.stringify({ orderId: orderId, status: newStatus })
         })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    loadOrders(1);
-                    showNotification('Order status updated', 'success');
-                } else {
-                    showNotification(data.message || 'Error updating order', 'danger');
-                }
-            });
+        .then(response => {
+            if (!response.ok) {
+                throw new Error("Request failed");
+            }
+            return response.json();
+        })
+        .then(data => {
+            alert("Order status updated successfully");
+            loadOrders();
+        })
+        .catch(error => {
+            console.error("Error:", error);
+            alert("Something went wrong while updating order status");
+        });
     }
 
     function showNotification(message, type) {
