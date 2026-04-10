@@ -1,62 +1,101 @@
 ﻿@model E_Commerce.ViewModels.AdminDashboard.AdminOrderDetailsVM
 
 @{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
     ViewData["Title"] = "Order Details";
 }
 
-<h2>Order Details</h2>
+<!-- ── Sidebar Overlay ───────────────────────────────────────────────── -->
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
 
-<div class="mb-4">
-    <p><strong>Order ID:</strong> @Model.OrderId</p>
-    <p><strong>Order Date:</strong> @Model.OrderDate.ToString("dd MMM yyyy")</p>
-    <p><strong>Status:</strong> @Model.Status</p>
-    <p><strong>Total Amount:</strong> $@Model.TotalAmount</p>
-</div>
+<!-- ── Main Wrapper ─────────────────────────────────────────────────── -->
+<div class="main-wrapper">
 
-<div class="mb-4">
-    <h4>Customer Info</h4>
-    <p><strong>User ID:</strong> @Model.UserId</p>
-    <p><strong>Name:</strong> @(string.IsNullOrWhiteSpace(Model.UserName) ? "Unknown User" : Model.UserName)</p>
-    <p><strong>Email:</strong> @Model.UserEmail</p>
-</div>
+    <!-- ── Page Content ─────────────────────────────────────────────── -->
+    <main class="page-content">
+        <div class="page-header position-relative">
+            <div>
+                <h1>Order Details</h1>
+                <p>View detailed information about this order.</p>
+            </div>
+            <a href="/Admin/Orders" class="btn btn-light position-absolute end-0 top-0" style="border:1.5px solid var(--border);">
+                <i class="bi bi-arrow-left"></i> Back to Orders
+            </a>
+        </div>
 
-<div>
-    <h4>Order Items</h4>
+        <div class="card-box">
+            <div class="row">
+                <div class="col-md-6">
+                    <h4>Order Information</h4>
+                    <p><strong>Order ID:</strong> #@Model.OrderId</p>
+                    <p><strong>Order Date:</strong> @Model.OrderDate.ToString("dd MMM yyyy, hh:mm tt")</p>
+                    <p><strong>Status:</strong>
+                        @switch (Model.Status)
+                        {
+                            case FinalProject.Models.OrderStatus.Pending:
+                                <span class="badge bg-warning">Pending</span>
+                                break;
+                            case FinalProject.Models.OrderStatus.Processing:
+                                <span class="badge bg-info">Processing</span>
+                                break;
+                            case FinalProject.Models.OrderStatus.Completed:
+                                <span class="badge bg-success">Completed</span>
+                                break;
+                            case FinalProject.Models.OrderStatus.Cancelled:
+                                <span class="badge bg-danger">Cancelled</span>
+                                break;
+                        }
+                    </p>
+                    <p><strong>Total Amount:</strong> @Model.TotalAmount.ToString("F2") LE</p>
+                </div>
+                <div class="col-md-6">
+                    <h4>Customer Information</h4>
+                    <p><strong>User ID:</strong> @Model.UserId</p>
+                    <p><strong>Name:</strong> @(string.IsNullOrWhiteSpace(Model.UserName) ? "Unknown User" : Model.UserName)</p>
+                    <p><strong>Email:</strong> <a href="mailto:@Model.UserEmail">@Model.UserEmail</a></p>
+                </div>
+            </div>
 
-    @if (Model.Items == null || !Model.Items.Any())
-    {
-        <p>No items found for this order.</p>
-    }
-    else
-    {
-        <table class="table table-bordered">
-            <thead>
-                <tr>
-                    <th>Product</th>
-                    <th>Quantity</th>
-                    <th>Unit Price</th>
-                    <th>Subtotal</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model.Items)
+            <div class="mt-4">
+                <h4>Order Items</h4>
+                @if (Model.Items == null || !Model.Items.Any())
                 {
-                    <tr>
-                        <td>
-                            <div class="d-flex align-items-center gap-2">
-                                <img src="@item.ProductImage"
-                                     alt="Product Image"
-                                     style="width:50px; height:50px; object-fit:cover; border-radius:5px;" />
-
-                                <span>@item.ProductName</span>
-                            </div>
-                        </td>
-                        <td>@item.Quantity</td>
-                        <td>$@item.UnitPrice</td>
-                        <td>$@item.SubTotal</td>
-                    </tr>
+                    <p>No items found for this order.</p>
                 }
-            </tbody>
-        </table>
-    }
+                else
+                {
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle">
+                            <thead class="table-header-sticky">
+                                <tr>
+                                    <th>Product</th>
+                                    <th>Quantity</th>
+                                    <th>Unit Price</th>
+                                    <th>Subtotal</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model.Items)
+                                {
+                                    <tr>
+                                        <td>
+                                            <div class="d-flex align-items-center gap-2">
+                                                <img src="@item.ProductImage"
+                                                     alt="Product Image"
+                                                     style="width:50px; height:50px; object-fit:cover; border-radius:5px;" />
+                                                <span>@item.ProductName</span>
+                                            </div>
+                                        </td>
+                                        <td>@item.Quantity</td>
+                                        <td>@item.UnitPrice.ToString("F2") LE</td>
+                                        <td>@item.SubTotal.ToString("F2") LE</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                }
+            </div>
+        </div>
+    </main>
 </div>

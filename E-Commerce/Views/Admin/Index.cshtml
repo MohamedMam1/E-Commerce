@@ -24,7 +24,7 @@
                         <div class="stat-icon blue"><i class="bi bi-currency-dollar"></i></div>
                         <div class="stat-body">
                             <div class="label">Total Revenue</div>
-                            <div class="value">@("$" + Model.TotalRevenue.ToString("N2"))</div>
+                            <div class="value">@(Model.TotalRevenue.ToString("N2") + " LE")</div>
                         </div>
                     </div>
                 </div>
@@ -87,7 +87,7 @@
                         <div class="stat-icon blue"><i class="bi bi-graph-up-arrow"></i></div>
                         <div class="stat-body">
                             <div class="label">Avg Order Value</div>
-                            <div class="value">@("$" + Model.AverageOrderValue.ToString("N2"))</div>
+                            <div class="value">@(Model.AverageOrderValue.ToString("N2") + " LE")</div>
                         </div>
                     </div>
                 </div>
@@ -125,7 +125,7 @@
                 <div class="card-box">
                     <div class="section-hd">
                         <h5>Recent Orders</h5>
-                        <a href="/admindashboard/orders" class="text-primary" style="font-size:13px;font-weight:600;text-decoration:none">
+                        <a href="/Admin/Orders" class="text-primary" style="font-size:13px;font-weight:600;text-decoration:none">
                             View All <i class="bi bi-arrow-right"></i>
                         </a>
                     </div>
@@ -148,9 +148,28 @@
                                         <tr>
                                             <td><code>#@order.Id</code></td>
                                             <td>@order.CustomerName</td>
-                                            <td><strong>@("$" + order.Amount.ToString("N2"))</strong></td>
+                                            <td><strong>@(order.Amount.ToString("N2") + " LE")</strong></td>
                                             <td>
-                                                <span class="badge bg-info">@order.OrderStatus</span>
+                                                @if (order.OrderStatus.ToString() == "Pending")
+                                                {
+                                                    <span class="badge bg-warning">Pending</span>
+                                                }
+                                                else if (order.OrderStatus.ToString() == "Processing")
+                                                {
+                                                    <span class="badge bg-info">Processing</span>
+                                                }
+                                                else if (order.OrderStatus.ToString() == "Completed")
+                                                {
+                                                    <span class="badge bg-success">Completed</span>
+                                                }
+                                                else if (order.OrderStatus.ToString() == "Cancelled")
+                                                {
+                                                    <span class="badge bg-danger">Cancelled</span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="badge bg-secondary">@order.OrderStatus</span>
+                                                }
                                             </td>
                                         </tr>
                                     }
@@ -166,7 +185,7 @@
                 <div class="card-box">
                     <div class="section-hd">
                         <h5>Top Products</h5>
-                        <a href="/admindashboard/products" class="text-primary" style="font-size:13px;font-weight:600;text-decoration:none">
+                        <a href="/Admin/Products" class="text-primary" style="font-size:13px;font-weight:600;text-decoration:none">
                             View All <i class="bi bi-arrow-right"></i>
                         </a>
                     </div>
@@ -189,7 +208,7 @@
                                         <tr>
                                             <td><strong>@product.ProductName</strong></td>
                                             <td>@product.CategoryName</td>
-                                            <td>@("$" + product.Price.ToString("N2"))</td>
+                                            <td>@(product.Price.ToString("N2") + " LE")</td>
                                             <td>
                                                 @if (product.Stock > 0)
                                                 {

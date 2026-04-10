@@ -9,41 +9,6 @@
 <!-- ── Main Wrapper ─────────────────────────────────────────────────── -->
 <div class="main-wrapper">
 
-    <!-- ── Topbar ───────────────────────────────────────────────────── -->
-    <header class="topbar">
-        <button class="topbar-toggle" onclick="toggleSidebar()">
-            <i class="bi bi-list"></i>
-        </button>
-        <div class="topbar-breadcrumb d-none d-md-flex">
-            <i class="bi bi-house-fill" style="font-size:12px"></i>
-            <i class="bi bi-chevron-right" style="font-size:10px"></i>
-            <span class="current">Orders</span>
-        </div>
-
-
-
-        <div class="topbar-actions ms-2">
-            <div class="topbar-btn" title="Notifications">
-                <i class="bi bi-bell"></i>
-                <span class="notif-dot"></span>
-            </div>
-
-            <!-- Profile dropdown -->
-            <div class="dropdown">
-                <a class="topbar-profile dropdown-toggle" href="#" data-bs-toggle="dropdown" aria-expanded="false" style="text-decoration:none">
-                    <div class="t-avatar">A</div>
-                    <span class="t-name d-none d-sm-block">Admin</span>
-                    <i class="bi bi-chevron-down"></i>
-                </a>
-                <ul class="dropdown-menu dropdown-menu-end shadow-lg border-0 rounded-3 mt-1" style="min-width:200px;font-size:13px">
-                    <li><h6 class="dropdown-header fw-bold">Admin</h6></li>
-                    <li><a class="dropdown-item py-2" href="#"><i class="bi bi-person me-2 text-primary"></i>My Profile</a></li>
-                    <li><hr class="dropdown-divider my-1"></li>
-                    <li><a class="dropdown-item py-2 text-danger" href="/Account/Logout"><i class="bi bi-box-arrow-right me-2"></i>Sign Out</a></li>
-                </ul>
-            </div>
-        </div>
-    </header>
 
     <!-- ── Page Content ─────────────────────────────────────────────── -->
     <main class="page-content">
@@ -56,31 +21,24 @@
 
         <div class="card-box">
             <!-- Filters Row -->
-            <div class="row g-2 mb-3" id="orderFilters">
-                <div class="col-md-3">
-                    <input type="text" id="orderSearch" placeholder="Search by customer…" style="border:1.5px solid var(--border);border-radius:8px;padding:6px 12px;font-size:13px;font-family:var(--font);width:100%" />
-                </div>
-                <div class="col-md-2">
-                    <select id="orderStatus" style="font-family:var(--font);font-size:12.5px;border-radius:8px;border:1.5px solid var(--border);padding:6px 12px;width:100%">
-                        <option value="">All Status</option>
-                        <option value="Pending">Pending</option>
-                        <option value="Processing">Processing</option>
-                        <option value="Completed">Completed</option>
-                        <option value="Cancelled">Cancelled</option>
-                        <option value="Failed">Failed</option>
-                    </select>
-                </div>
-                <div class="col-md-2">
-                    <input type="date" id="orderDateFrom" style="border:1.5px solid var(--border);border-radius:8px;padding:6px 12px;font-size:13px;font-family:var(--font);width:100%" />
-                </div>
-                <div class="col-md-2">
-                    <input type="date" id="orderDateTo" style="border:1.5px solid var(--border);border-radius:8px;padding:6px 12px;font-size:13px;font-family:var(--font);width:100%" />
-                </div>
-                <div class="col-md-3">
-                    <button class="btn-primary-custom" onclick="loadOrders(1)" style="padding:6px 16px;font-size:13px;width:100%">
-                        <i class="bi bi-search"></i> Filter Orders
-                    </button>
-                </div>
+            <div class="d-flex align-items-center gap-2 mb-3 flex-wrap" id="orderFilters">
+                <input type="text" id="orderSearch" placeholder="Search by customer…" style="border:1.5px solid var(--border);border-radius:8px;padding:6px 12px;font-size:13px;font-family:var(--font);width:200px" />
+                <select id="orderStatus" style="width:auto;font-family:var(--font);font-size:12.5px;border-radius:8px;border:1.5px solid var(--border);padding:6px 12px">
+                    <option value="">All Status</option>
+                    <option value="Pending">Pending</option>
+                    <option value="Processing">Processing</option>
+                    <option value="Completed">Completed</option>
+                    <option value="Cancelled">Cancelled</option>
+
+                </select>
+                <input type="date" id="orderDateFrom" style="border:1.5px solid var(--border);border-radius:8px;padding:6px 12px;font-size:13px;font-family:var(--font);width:auto" />
+                <input type="date" id="orderDateTo" style="border:1.5px solid var(--border);border-radius:8px;padding:6px 12px;font-size:13px;font-family:var(--font);width:auto" />
+                <button class="btn-primary-custom" onclick="loadOrders(1)" style="padding:6px 16px;font-size:13px">
+                    <i class="bi bi-search"></i> Search
+                </button>
+                <button type="button" class="btn btn-outline-secondary" onclick="resetOrdersFilters()" style="padding:6px 16px;font-size:13px">
+                    <i class="bi bi-x-lg"></i> Reset
+                </button>
             </div>
 
             <!-- Orders Table Container (AJAX Loaded) -->
@@ -126,18 +84,26 @@
             });
     }
 
+    function resetOrdersFilters() {
+        document.getElementById('orderSearch').value = '';
+        document.getElementById('orderStatus').value = '';
+        document.getElementById('orderDateFrom').value = '';
+        document.getElementById('orderDateTo').value = '';
+        loadOrders(1);
+    }
+
        function viewOrderDetails(orderId) {
         window.location.href = '/Admin/OrderDetails/' + orderId;
     }
 
 
         function updateOrderStatus(orderId, newStatus) {
-        fetch('/Admin/UpdateOrderStatus', {
+        fetch('/Admin/UpdateOrderStatus/' + orderId, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ orderId: orderId, status: newStatus })
+            body: JSON.stringify({ status: newStatus })
         })
         .then(response => {
             if (!response.ok) {
@@ -146,7 +112,6 @@
             return response.json();
         })
         .then(data => {
-            alert("Order status updated successfully");
             loadOrders();
         })
         .catch(error => {
@@ -182,6 +147,72 @@
         const overlay = document.getElementById('sidebarOverlay');
         sidebar?.classList.toggle('active');
         overlay?.classList.toggle('active');
+    }
+
+    function toggleSelectAll() {
+        const selectAllCheckbox = document.getElementById('selectAllOrders');
+        const checkboxes = document.querySelectorAll('.order-checkbox');
+        checkboxes.forEach(checkbox => {
+            checkbox.checked = selectAllCheckbox.checked;
+        });
+        updateBulkButton();
+    }
+
+    function updateBulkButton() {
+        const checkboxes = document.querySelectorAll('.order-checkbox:checked');
+        const bulkBtn = document.getElementById('bulkUpdateBtn');
+        bulkBtn.disabled = checkboxes.length === 0;
+    }
+
+    function bulkUpdateStatus() {
+        const selectedStatus = document.getElementById('bulkStatusSelect').value;
+        if (!selectedStatus) {
+            alert('Please select a status to apply.');
+            return;
+        }
+
+        const selectedOrders = Array.from(document.querySelectorAll('.order-checkbox:checked')).map(cb => parseInt(cb.value));
+        if (selectedOrders.length === 0) {
+            alert('Please select at least one order.');
+            return;
+        }
+
+        if (!confirm(`Update ${selectedOrders.length} order(s) to ${selectedStatus} status?`)) {
+            return;
+        }
+
+        let completed = 0;
+        const total = selectedOrders.length;
+
+        selectedOrders.forEach(orderId => {
+            fetch('/Admin/UpdateOrderStatus/' + orderId, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ status: selectedStatus })
+            })
+            .then(response => response.json())
+            .then(data => {
+                completed++;
+                if (completed === total) {
+                    loadOrders();
+                    showNotification(`${total} order(s) updated successfully.`, 'success');
+                    // Reset selections
+                    document.getElementById('selectAllOrders').checked = false;
+                    document.getElementById('bulkStatusSelect').value = '';
+                    toggleSelectAll();
+                }
+            })
+            .catch(error => {
+                console.error('Error updating order:', error);
+                completed++;
+                if (completed === total) {
+                    loadOrders();
+                    showNotification('Some orders may not have been updated.', 'warning');
+                }
+            });
+        });
     }
 
     // Load initial data

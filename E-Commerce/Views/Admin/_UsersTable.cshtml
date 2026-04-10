@@ -62,7 +62,7 @@
                         <td>
                             <div class="action-buttons">
                                 <div class="dropdown d-inline">
-                                    <button class="btn-icon dropdown-toggle" type="button" title="More Options" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <button class="btn-icon dropdown-toggle" type="button" title="More Options" data-bs-toggle="dropdown" aria-expanded="false" style="padding: 2px 4px; font-size: 12px;">
                                         <i class="bi bi-three-dots-vertical"></i>
                                     </button>
                                     <ul class="dropdown-menu dropdown-menu-end">
@@ -74,12 +74,6 @@
                                         <li>
                                             <a class="dropdown-item" href="javascript:void(0)" onclick="editUserStatus('@user.User.Id', '@(user.User.Status.ToString() == "Active" ? "Banned" : "Active")'); return false;">
                                                 @(user.User.Status.ToString() == "Active" ? "Ban User" : "Unban User")
-                                            </a>
-                                        </li>
-                                        <li><hr class="dropdown-divider"></li>
-                                        <li>
-                                            <a class="dropdown-item text-danger" href="javascript:void(0)" onclick="deleteUser('@user.User.Id'); return false;">
-                                                Delete User
                                             </a>
                                         </li>
                                     </ul>

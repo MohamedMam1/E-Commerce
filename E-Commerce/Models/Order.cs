@@ -32,7 +32,6 @@ namespace FinalProject.Models
         Pending,
         Processing,
         Completed,
-        Cancelled,
-        Failed
+        Cancelled
     }
 }
