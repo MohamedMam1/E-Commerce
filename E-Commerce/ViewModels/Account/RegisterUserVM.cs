@@ -1,6 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel.DataAnnotations;
 
-namespace E_Commerce.ViewModels
+namespace E_Commerce.ViewModels.Account
 {
     public class RegisterUserVM
     {
@@ -11,6 +12,7 @@ namespace E_Commerce.ViewModels
         [Required(ErrorMessage = "Email is required")]
         [EmailAddress(ErrorMessage = "Invalid email format")]
         [StringLength(100, MinimumLength = 5, ErrorMessage = "Email must be between 5 and 100 characters")]
+        [Remote("IsEmailExistsAsync", "Account",ErrorMessage ="This email already exists")]
         public string Email { get; set; }
 
         [Required(ErrorMessage = "Password is required")]

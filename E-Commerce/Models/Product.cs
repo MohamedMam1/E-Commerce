@@ -18,13 +18,15 @@ namespace FinalProject.Models
         public decimal Price { get; set; }
 
         public string ImageUrl { get; set; }
-
-        [Required]
-        public bool IsAvailable { get; set; }
-
         [Required]
         [Range(0, int.MaxValue, ErrorMessage = "Quantity must be 0 or greater.")]
         public int Quantity { get; set; }
+
+        public bool IsAvailable => Quantity > 0;
+
+        public ICollection<ProductImage> ExtraImages { get; set; }
+
+        public bool IsDeleted { get; set; } = false;
 
         [Required]
         public int CategoryId { get; set; }

@@ -1,0 +1,75 @@
+﻿@using E_Commerce.ViewModels.Category
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+@model CategoryCreateVM
+
+
+
+<!-- ── Main Wrapper ─────────────────────────────────────────────────── -->
+<div class="main-wrapper">
+
+
+
+    <!-- ── Page Content ─────────────────────────────────────────────── -->
+    <main class="page-content">
+        <div class="page-header">
+            <div>
+                <h1>Add New Category</h1>
+                <p>Create a new product category for organizing your catalog.</p>
+            </div>
+            <a href="/admin/categories" class="btn btn-outline-secondary">
+                <i class="bi bi-arrow-left"></i> Back to Categories
+            </a>
+        </div>
+
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="card-box">
+                    <form method="post" action="/admindashboard/categories/add" novalidate>
+                        @Html.AntiForgeryToken()
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+                        <div class="row g-3 mb-3">
+                            <div class="col-12">
+                                <label class="form-label-custom">Category Name *</label>
+                                <input asp-for="Name" class="form-control-custom" placeholder="e.g. Electronics, Clothing, Books" maxlength="100" />
+                                <span asp-validation-for="Name" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="row g-3 mb-3">
+                            <div class="col-12">
+                                <label class="form-label-custom">Description</label>
+                                <textarea asp-for="Description" class="form-control-custom" rows="4" placeholder="Optional category description"></textarea>
+                                <span asp-validation-for="Description" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-end gap-2">
+                            <a href="/admin/categories" class="btn btn-light" style="font-family:var(--font);font-size:13px;font-weight:600;border-radius:9px;padding:8px 18px">
+                                Cancel
+                            </a>
+                            <button type="submit" class="btn-primary-custom">
+                                <i class="bi bi-plus-circle-fill"></i> Add Category
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<div id="notificationContainer" class="notification-container">
+    @if (TempData["StatusMessage"] != null)
+    {
+        <div class="alert alert-@(TempData["StatusType"] ?? "info") alert-dismissible fade show" role="alert">
+            @TempData["StatusMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

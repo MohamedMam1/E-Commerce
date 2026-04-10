@@ -1,6 +1,8 @@
 @using E_Commerce.ViewModels.AdminDashboard
 @model PaginatedResultVM<E_Commerce.ViewModels.AdminViewModel.Product.AdminProductListVM>
 
+@Html.AntiForgeryToken()
+
 @if (Model.Data.Any())
 {
     <div class="table-responsive">
@@ -20,7 +22,7 @@
             <tbody>
                 @foreach (var product in Model.Data)
                 {
-                    <tr>
+                    <tr id="product-row-@product.Id">
                         <td>@product.Id</td>
                         <td>
                             @if (!string.IsNullOrEmpty(product.ImageUrl))
@@ -43,10 +45,13 @@
                         </td>
                         <td>
                             <div class="btn-group" role="group">
-                                <a href="/AdminDashboard/Products/Edit/@product.Id" class="btn btn-sm btn-outline-primary">
+                                <a asp-controller="Product"
+                                   asp-action="Edit"
+                                   asp-route-id="@product.Id"
+                                   class="btn btn-sm btn-outline-primary">
                                     <i class="bi bi-pencil"></i> Edit
                                 </a>
-                                <button type="button" class="btn btn-sm btn-outline-danger" onclick="deleteProduct(@product.Id)">
+                                <button type="button" class="btn btn-sm btn-outline-danger" onclick="confirmDelete(@product.Id)">
                                     <i class="bi bi-trash"></i> Delete
                                 </button>
                             </div>
@@ -57,7 +62,6 @@
         </table>
     </div>
 
-    <!-- Pagination -->
     @if (Model.TotalPages > 1)
     {
         <nav aria-label="Product pagination">
@@ -110,8 +114,6 @@
             </ul>
         </nav>
     }
-
-
 }
 else
 {
@@ -121,3 +123,4 @@ else
         <p class="text-muted">Try adjusting your search criteria or add some products.</p>
     </div>
 }
+

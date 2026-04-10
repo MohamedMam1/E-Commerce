@@ -1,0 +1,204 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@model E_Commerce.ViewModels.Product.ProductEditVM
+
+@{
+    ViewData["Title"] = "Edit Product";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+<div class="main-wrapper">
+
+<div class="container-fluid py-4">
+
+    <div class="card shadow-sm border-0 rounded-4">
+        <div class="card-body p-4">
+
+            <h4 class="mb-4 fw-bold">Edit Product</h4>
+
+            <form asp-action="Edit" method="post" enctype="multipart/form-data">
+                @Html.AntiForgeryToken()
+
+                <input type="hidden" asp-for="Id" />
+
+                <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                <!-- Basic Info -->
+                <div class="row g-3">
+
+                    <!-- Name -->
+                    <div class="col-md-6">
+                        <div class="form-floating">
+                            <input asp-for="Name" class="form-control" placeholder="Product Name" />
+                            <label>Product Name</label>
+                            <span asp-validation-for="Name" class="text-danger small"></span>
+                        </div>
+                    </div>
+
+                    <!-- Category -->
+                    <div class="col-md-6">
+                        <div class="form-floating">
+                            <select asp-for="CategoryId" asp-items="Model.Categories" class="form-select">
+                                <option value="">Select Category</option>
+                            </select>
+                            <label>Category</label>
+                            <span asp-validation-for="CategoryId" class="text-danger small"></span>
+                        </div>
+                    </div>
+
+                    <!-- Price -->
+                    <div class="col-md-6">
+                        <div class="form-floating">
+                            <input asp-for="Price" class="form-control" placeholder="Price" />
+                            <label>Price</label>
+                            <span asp-validation-for="Price" class="text-danger small"></span>
+                        </div>
+                    </div>
+
+                    <!-- Quantity -->
+                    <div class="col-md-6">
+                        <div class="form-floating">
+                            <input asp-for="Quantity" class="form-control" placeholder="Quantity" />
+                            <label>Quantity</label>
+                            <span asp-validation-for="Quantity" class="text-danger small"></span>
+                        </div>
+                    </div>
+
+     
+
+                    <!-- Description -->
+                    <div class="col-12">
+                        <div class="form-floating">
+                            <textarea asp-for="Description" class="form-control"
+                                      placeholder="Description"
+                                      style="height:120px"></textarea>
+                            <label>Description</label>
+                            <span asp-validation-for="Description" class="text-danger small"></span>
+                        </div>
+                    </div>
+
+                </div>
+
+                <hr class="my-4" />
+
+                <!-- Images -->
+                <div class="row g-4">
+
+                    <!-- Main Image -->
+                    <div class="col-md-6">
+                        <label class="form-label fw-semibold">Main Image</label>
+
+                        @if (!string.IsNullOrEmpty(Model.ExistingMainImageUrl))
+                        {
+                            <div class="mb-2">
+                                <img src="@Model.ExistingMainImageUrl"
+                                     class="rounded border"
+                                     style="width:120px;height:120px;object-fit:cover;" />
+                            </div>
+                        }
+                        else
+                        {
+                            <p class="text-muted small">No main image</p>
+                        }
+
+                        <input asp-for="MainImage" type="file" class="form-control"
+                               accept="image/*"
+                               onchange="previewImage(this, 'mainPreview')" />
+
+                        <img id="mainPreview" class="mt-2 rounded d-none border"
+                             style="width:120px;height:120px;object-fit:cover;" />
+                    </div>
+
+                    <!-- Extra Images -->
+                    <div class="col-md-6">
+                        <label class="form-label fw-semibold">Extra Images</label>
+
+                        <div class="d-flex flex-wrap gap-2 mb-2">
+                            @if (Model.ExistingExtraImageUrls != null && Model.ExistingExtraImageUrls.Any())
+                            {
+                                foreach (var img in Model.ExistingExtraImageUrls)
+                                {
+                                    <img src="@img"
+                                         class="rounded border"
+                                         style="width:70px;height:70px;object-fit:cover;" />
+                                }
+                            }
+                            else
+                            {
+                                <p class="text-muted small">No extra images</p>
+                            }
+                        </div>
+
+                        <!-- Upload new -->
+                        <div class="mb-2">
+                            <input asp-for="ExtraImage1" type="file" class="form-control"
+                                   accept="image/*"
+                                   onchange="previewImage(this, 'extraPreview1')" />
+                            <img id="extraPreview1" class="mt-1 rounded d-none border"
+                                 style="width:70px;height:70px;object-fit:cover;" />
+                        </div>
+
+                        <div class="mb-2">
+                            <input asp-for="ExtraImage2" type="file" class="form-control"
+                                   accept="image/*"
+                                   onchange="previewImage(this, 'extraPreview2')" />
+                            <img id="extraPreview2" class="mt-1 rounded d-none border"
+                                 style="width:70px;height:70px;object-fit:cover;" />
+                        </div>
+
+                        <div class="mb-2">
+                            <input asp-for="ExtraImage3" type="file" class="form-control"
+                                   accept="image/*"
+                                   onchange="previewImage(this, 'extraPreview3')" />
+                            <img id="extraPreview3" class="mt-1 rounded d-none border"
+                                 style="width:70px;height:70px;object-fit:cover;" />
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <hr class="my-4" />
+
+                <!-- Buttons -->
+                <div class="d-flex justify-content-end gap-2">
+                        <a asp-action="products" asp-controller="Admin" class="btn btn-light border px-4">Cancel</a>
+                    <button type="submit" class="btn btn-primary px-4">
+                        Update Product
+                    </button>
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+
+</div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+        function previewImage(input, previewId) {
+            const preview = document.getElementById(previewId);
+
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+
+                reader.onload = function (e) {
+                    preview.src = e.target.result;
+                    preview.classList.remove('d-none');
+                };
+
+                reader.readAsDataURL(input.files[0]);
+            } else {
+                preview.classList.add('d-none');
+            }
+        }
+    </script>
+}

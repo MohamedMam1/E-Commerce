@@ -52,5 +52,10 @@ namespace E_Commerce.Services
         {
             return await _userRepository.GetUsersWithRolesAsync(searchTerm, status, role, pageNumber, pageSize);
         }
+
+        public async Task<bool> IsEmailExists(string email)
+        {
+            return await _userRepository.IsEmailExists(email);
+        }
     }
 }

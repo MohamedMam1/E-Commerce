@@ -9,5 +9,6 @@ namespace E_Commerce.Interfaces
         Task<List<UserAddressVM>> GetUserAddressesAsync(string UserId);
         Task UpdateUserAddressesAsync(string UserId, List<UserAddressVM> Addresses, string? NewAddressLine);
         Task<UserPaginationVM> GetUsersWithRolesAsync(string? searchTerm, string? status, string? role, int pageNumber, int pageSize);
+
     }
 }

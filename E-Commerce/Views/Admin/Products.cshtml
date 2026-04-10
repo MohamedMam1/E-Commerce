@@ -10,6 +10,8 @@
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
+@Html.AntiForgeryToken()
+
 <!-- ── Sidebar Overlay ───────────────────────────────────────────────── -->
 
 
@@ -24,10 +26,7 @@
                 <p>Manage your product catalog and inventory.</p>
             </div>
             <div class="d-flex gap-2">
-                <a href="/admindashboard/categories/add" class="btn btn-outline-primary">
-                    <i class="bi bi-plus-circle"></i> Add Category
-                </a>
-                <a href="/admindashboard/products/add" class="btn-primary-custom">
+                <a asp-controller="Product" asp-action="Add" class="btn-primary-custom">
                     <i class="bi bi-plus-lg"></i> Add Product
                 </a>
             </div>
@@ -52,6 +51,9 @@
                 <button class="btn-primary-custom" onclick="loadProducts(1)" style="padding:6px 16px;font-size:13px">
                     <i class="bi bi-search"></i> Search
                 </button>
+                <button type="button" class="btn btn-outline-secondary" onclick="resetProducts()" style="padding:6px 16px;font-size:13px">
+                    <i class="bi bi-x-lg"></i> Reset
+                </button>
             </div>
             <div id="productsTableContainer"></div>
         </div>
@@ -75,7 +77,7 @@
         const categoryId = document.getElementById('productCategoryFilter')?.value || '';
         const isAvailable = document.getElementById('productIsAvailable')?.value || '';
 
-        const url = new URL('/Admin/GetTable', window.location.origin);
+        const url = new URL('/Admin/GetProductsTable', window.location.origin);
         if (searchTerm) url.searchParams.append('searchTerm', searchTerm);
         if (categoryId) url.searchParams.append('categoryId', categoryId);
         if (isAvailable) url.searchParams.append('isAvailable', isAvailable);
@@ -92,25 +94,21 @@
             });
     }
 
-    function editProduct(productId) {
-        console.log('Edit product:', productId);
+    function resetProducts() {
+        const searchInput = document.getElementById('productSearch');
+        const categorySelect = document.getElementById('productCategoryFilter');
+        const statusSelect = document.getElementById('productIsAvailable');
+
+        if (searchInput) searchInput.value = '';
+        if (categorySelect) categorySelect.value = '';
+        if (statusSelect) statusSelect.value = '';
+
+        loadProducts(1);
     }
 
-    function deleteProduct(productId) {
-        if (!confirm('Are you sure you want to delete this product?')) return;
 
-        fetch('/admindashboard/products/delete/' + productId, { method: 'POST' })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    loadProducts(1);
-                    showNotification('Product deleted successfully', 'success');
-                } else {
-                    showNotification(data.message || 'Error deleting product', 'danger');
-                }
-            })
-            .catch(() => showNotification('Error deleting product', 'danger'));
-    }
+
+
 
     function showNotification(message, type) {
         const container = document.getElementById('notificationContainer');
@@ -140,9 +138,39 @@
         sidebar?.classList.toggle('active');
         overlay?.classList.toggle('active');
     }
+          function deleteProduct(productId) {
+        const token = document.querySelector('input[name="__RequestVerificationToken"]')?.value || '';
+
+        fetch('/admindashboard/products/delete/' + productId, {
+            method: 'POST',
+            headers: {
+                'RequestVerificationToken': token,
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: `__RequestVerificationToken=${encodeURIComponent(token)}`
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                loadProducts(1);
+                showNotification('Product deleted successfully', 'success');
+            } else {
+                showNotification(data.message || 'Error deleting product', 'danger');
+            }
+        })
+        .catch(() => showNotification('Error deleting product', 'danger'));
+    }
 
     // Load initial data
     document.addEventListener('DOMContentLoaded', function() {
         loadProducts(1);
     });
+          function confirmDelete(productId) {
+            if (confirm("Are you sure you want to delete this product?")) {
+                deleteProduct(productId);
+            }
+        }
+
+      
 </script>
+

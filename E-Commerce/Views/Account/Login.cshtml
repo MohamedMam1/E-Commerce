@@ -1,4 +1,4 @@
-﻿@model E_Commerce.ViewModels.LoginUserVM
+﻿@model E_Commerce.ViewModels.Account.LoginUserVM
 
 @{
     ViewData["Title"] = "Login";
@@ -29,6 +29,13 @@
                                 <input asp-for="Password" type="password" id="Password" class="form-control form-control-lg" />
                                 <label class="form-label" for="Password">Password</label>
                                 <span asp-validation-for="Password" class="text-danger"></span>
+                            </div>
+
+                            <!-- Forgot Password Link -->
+                            <div class="text-end mb-3">
+                                <a asp-action="ForgotPassword" asp-controller="Account" class="text-decoration-none fw-bold" style="color: #508bfc; font-size: 0.9rem;">
+                                    Forgot password?
+                                </a>
                             </div>
 
                             <!-- Remember Me -->

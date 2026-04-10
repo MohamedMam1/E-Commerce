@@ -14,6 +14,8 @@ namespace E_Commerce.Interfaces
         Task<IEnumerable<Product>> SearchByNameorCat(string SearchValue);
         Task<IEnumerable<Product>> FilterAsync(ProductFilterVM filter);
         IQueryable<Product> GetQueryable();
+        Task DeleteExtraImagesAsync(int productId);
+
         Task<(List<Product> Products, int TotalCount)> SearchAndFilterAsync(
             string searchTerm,
             int? categoryId,
