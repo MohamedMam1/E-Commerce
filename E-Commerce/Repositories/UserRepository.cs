@@ -70,8 +70,8 @@ namespace E_Commerce.Repositories
 
         public async Task<bool> IsEmailExists(string email)
         {
-            email = email.Trim().ToUpper();
-            return await _context.Users.AnyAsync(u => u.NormalizedEmail == email);
+            email = email.Trim().ToLower();
+            return await _context.Users.AnyAsync(u => u.Email.ToLower() == email);
         }
 
     }

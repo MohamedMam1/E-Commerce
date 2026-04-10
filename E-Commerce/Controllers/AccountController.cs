@@ -141,9 +141,9 @@ namespace E_Commerce.Controllers
 
 
         [HttpGet]
-        public async Task<IActionResult> IsEmailExistsAsync(string email)
+        public async Task<IActionResult> IsEmailExistsAsync(string Email)
         {
-            var exists = await _userService.IsEmailExists(email);
+            var exists = await _userService.IsEmailExists(Email);
             return Json(!exists);
         }
 

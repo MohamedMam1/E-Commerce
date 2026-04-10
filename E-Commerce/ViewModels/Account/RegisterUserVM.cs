@@ -12,7 +12,7 @@ namespace E_Commerce.ViewModels.Account
         [Required(ErrorMessage = "Email is required")]
         [EmailAddress(ErrorMessage = "Invalid email format")]
         [StringLength(100, MinimumLength = 5, ErrorMessage = "Email must be between 5 and 100 characters")]
-        [Remote("IsEmailExistsAsync", "Account",ErrorMessage ="This email already exists")]
+        [Remote(action: "IsEmailExistsAsync", controller: "Account", ErrorMessage = "Email already exists")]
         public string Email { get; set; }
 
         [Required(ErrorMessage = "Password is required")]

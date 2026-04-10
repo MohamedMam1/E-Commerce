@@ -65,11 +65,6 @@ namespace E_Commerce.Services
                 Products = topProducts
             };
         }
-        public async Task<List<Category>> GetCategoriesAsync()
-        {
-            return await _context.Categories
-                .OrderBy(c => c.Name)
-                .ToListAsync();
-        }
+
     }
 }

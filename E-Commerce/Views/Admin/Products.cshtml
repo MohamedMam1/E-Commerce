@@ -4,6 +4,7 @@
 @{
 }
 @using E_Commerce.ViewModels.AdminViewModel.Product
+@using E_Commerce.ViewModels.Category
 @using FinalProject.Models
 @using E_Commerce.Models
 @{
@@ -38,7 +39,7 @@
                 <input type="text" id="productSearch" placeholder="Search products…" style="border:1.5px solid var(--border);border-radius:8px;padding:6px 12px;font-size:13px;font-family:var(--font);width:200px" />
                 <select id="productCategoryFilter" style="width:auto;font-family:var(--font);font-size:12.5px;border-radius:8px;border:1.5px solid var(--border);padding:6px 12px">
                     <option value="">All Categories</option>
-                    @foreach (var category in ViewBag.Categories as List<Category>)
+                    @foreach (var category in ViewBag.Categories)
                     {
                         <option value="@category.Id">@category.Name</option>
                     }

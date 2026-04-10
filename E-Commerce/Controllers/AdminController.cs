@@ -33,7 +33,7 @@ namespace E_Commerce.Controllers
 
         public async Task<IActionResult> Products()
         {
-            var categories = await _adminDashboardService.GetCategoriesAsync();
+            var categories = await _categoryService.GetAllCategoriesAsync();
             ViewBag.Categories = categories;
             return View();
         }

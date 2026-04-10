@@ -29,6 +29,7 @@ namespace E_Commerce.Repositories
         public async Task<Category> GetByIdAsync(int id)
         {
             return await _context.Categories
+                .Where(c => !c.IsDeleted)
                 .Include(c => c.Products)
                 .FirstOrDefaultAsync(c => c.Id == id && !c.IsDeleted);
         }
