@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 
-namespace E_Commerce.ViewModels
+namespace E_Commerce.ViewModels.Account
 {
     public class RegisterUserVM
     {
