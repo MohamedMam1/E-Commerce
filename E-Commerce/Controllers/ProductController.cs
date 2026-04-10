@@ -22,9 +22,12 @@ namespace E_Commerce.Controllers
             _webHostEnvironment = webHostEnvironment;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            var result = await _productServce.GetFilteredProductsForCustomerAsync(searchTerm: null,categoryName:null ,categoryId: null,isAvailable: null,minPrice: null,
+                maxPrice: null,sortBy: null,pageNumber: 1,pageSize: 12);
+
+            return View(result);
         }
 
         [Authorize(Roles = "Admin")]
@@ -106,6 +109,23 @@ namespace E_Commerce.Controllers
                 Value = c.Id.ToString(),
                 Text = c.Name
             }).ToList();
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetFilteredProducts(string searchTerm, string categoryName, int? categoryId, bool? isAvailable,decimal? minPrice, decimal? maxPrice, string sortBy,int pageNumber = 1, int pageSize = 12)
+        {
+            var result = await _productServce.GetFilteredProductsForCustomerAsync(searchTerm,categoryName,categoryId,isAvailable,minPrice,maxPrice,sortBy,pageNumber,pageSize);
+
+            return Json(new
+            {
+                products = result.Data,
+                totalCount = result.TotalCount,
+                pageNumber = result.PageNumber,
+                pageSize = result.PageSize,
+                totalPages = result.TotalPages,
+                hasPrevious = result.HasPrevious,
+                hasNext = result.HasNext
+            });
         }
     }
 }
