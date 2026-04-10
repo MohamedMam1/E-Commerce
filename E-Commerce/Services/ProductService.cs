@@ -48,7 +48,8 @@ namespace E_Commerce.Services
                 IsAvailable = p.IsAvailable,
                 ImageUrl = p.ImageUrl,
                 CategoryId = p.CategoryId,
-                CategoryName = p.Category?.Name
+                CategoryName = p.Category?.Name,
+                productImages = p.ExtraImages?.Select(img => img.ImageUrl).ToList()
             };
         }
 
@@ -250,6 +251,74 @@ namespace E_Commerce.Services
             var filePath = Path.Combine(_webHostEnvironment.WebRootPath, imageUrl.TrimStart('/'));
             if (File.Exists(filePath))
                 File.Delete(filePath);
+        }
+
+
+
+        public async Task<PaginatedResultVM<ProductListVM>> GetFilteredProductsForCustomerAsync(string searchTerm,string categoryName,int? categoryId,bool? isAvailable,
+               decimal? minPrice,decimal? maxPrice,string sortBy,int pageNumber = 1,int pageSize = 12)
+        {
+            var query = _repo.GetQueryable()
+                .Include(p => p.Category)
+                .AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(searchTerm))
+                query = query.Where(p => p.Name.Contains(searchTerm) ||
+                                         p.Description.Contains(searchTerm));
+
+            if (!string.IsNullOrWhiteSpace(categoryName))
+                query = query.Where(p => p.Category != null && p.Category.Name == categoryName);
+
+            if (categoryId.HasValue)
+                query = query.Where(p => p.CategoryId == categoryId.Value);
+
+            if (isAvailable.HasValue)
+            {
+                if (isAvailable.Value)
+                    query = query.Where(p => p.Quantity > 0);
+                else
+                    query = query.Where(p => p.Quantity == 0);
+            }
+
+            if (minPrice.HasValue)
+                query = query.Where(p => p.Price >= minPrice.Value);
+
+            if (maxPrice.HasValue)
+                query = query.Where(p => p.Price <= maxPrice.Value);
+
+            query = sortBy switch
+            {
+                "price_asc" => query.OrderBy(p => p.Price),
+                "price_desc" => query.OrderByDescending(p => p.Price),
+                _ => query.OrderByDescending(p => p.CreatedAt)
+            };
+
+            var totalCount = await query.CountAsync();
+
+            var products = await query
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            var productVMs = products.Select(p => new ProductListVM
+            {
+                Id = p.Id,
+                Name = p.Name,
+                CategoryName = p.Category?.Name,
+                ImageUrl = p.ImageUrl,
+                Price = p.Price,
+                Quantity = p.Quantity,
+                IsAvailable = p.Quantity > 0
+            }).ToList();
+
+            return new PaginatedResultVM<ProductListVM>
+            {
+                Data = productVMs,
+                TotalCount = totalCount,
+                PageNumber = pageNumber,
+                PageSize = pageSize,
+                TotalPages = (int)Math.Ceiling(totalCount / (double)pageSize)
+            };
         }
     }
 }
