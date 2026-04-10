@@ -1,0 +1,33 @@
+@{
+    ViewData["Title"] = "Error";
+}
+
+<section class="vh-100" style="background-color: #508bfc;">
+    <div class="container py-5 h-100">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+                <div class="card shadow-2-strong" style="border-radius: 1rem;">
+                    <div class="card-body p-5 text-center">
+                        <div class="mb-4">
+                            <div class="rounded-circle d-inline-flex align-items-center justify-content-center mb-3"
+                                 style="width:72px;height:72px;background-color:#f8d7da;">
+                                <i class="fas fa-exclamation-circle fa-2x" style="color:#dc3545;"></i>
+                            </div>
+                        </div>
+                        <h3 class="mb-2">Verification Failed</h3>
+                        <p class="text-muted mb-4">We couldn't verify your email. The verification link may have expired or is invalid.</p>
+                        
+                        <div class="d-grid gap-2">
+                            <a asp-action="Login" asp-controller="Account" class="btn btn-primary btn-lg">
+                                Back to Login
+                            </a>
+                            <a asp-action="Register" asp-controller="Account" class="btn btn-outline-primary btn-lg">
+                                Register Again
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

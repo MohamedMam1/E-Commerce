@@ -1,0 +1,176 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@using E_Commerce.ViewModels.AdminViewModel.Product
+@using FinalProject.Models
+@using E_Commerce.Models
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+@Html.AntiForgeryToken()
+
+<!-- ── Sidebar Overlay ───────────────────────────────────────────────── -->
+
+
+<!-- ── Main Wrapper ─────────────────────────────────────────────────── -->
+<div class="main-wrapper">
+
+    <!-- ── Page Content ─────────────────────────────────────────────── -->
+    <main class="page-content">
+        <div class="page-header">
+            <div>
+                <h1>Product Management</h1>
+                <p>Manage your product catalog and inventory.</p>
+            </div>
+            <div class="d-flex gap-2">
+                <a asp-controller="Product" asp-action="Add" class="btn-primary-custom">
+                    <i class="bi bi-plus-lg"></i> Add Product
+                </a>
+            </div>
+        </div>
+
+        <div class="card-box">
+            <!-- Filters Row -->
+            <div class="d-flex align-items-center gap-2 mb-3 flex-wrap" id="productFilters">
+                <input type="text" id="productSearch" placeholder="Search products…" style="border:1.5px solid var(--border);border-radius:8px;padding:6px 12px;font-size:13px;font-family:var(--font);width:200px" />
+                <select id="productCategoryFilter" style="width:auto;font-family:var(--font);font-size:12.5px;border-radius:8px;border:1.5px solid var(--border);padding:6px 12px">
+                    <option value="">All Categories</option>
+                    @foreach (var category in ViewBag.Categories as List<Category>)
+                    {
+                        <option value="@category.Id">@category.Name</option>
+                    }
+                </select>
+                <select id="productIsAvailable" style="width:auto;font-family:var(--font);font-size:12.5px;border-radius:8px;border:1.5px solid var(--border);padding:6px 12px">
+                    <option value="">All Status</option>
+                    <option value="true">Available</option>
+                    <option value="false">Unavailable</option>
+                </select>
+                <button class="btn-primary-custom" onclick="loadProducts(1)" style="padding:6px 16px;font-size:13px">
+                    <i class="bi bi-search"></i> Search
+                </button>
+                <button type="button" class="btn btn-outline-secondary" onclick="resetProducts()" style="padding:6px 16px;font-size:13px">
+                    <i class="bi bi-x-lg"></i> Reset
+                </button>
+            </div>
+            <div id="productsTableContainer"></div>
+        </div>
+    </main>
+</div>
+
+<div id="notificationContainer" class="notification-container">
+    @if (TempData["StatusMessage"] != null)
+    {
+        <div class="alert alert-@(TempData["StatusType"] ?? "info") alert-dismissible fade show" role="alert">
+            @TempData["StatusMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+</div>
+
+<!-- JavaScript Functions -->
+<script>
+    function loadProducts(pageNumber) {
+        const searchTerm = document.getElementById('productSearch')?.value || '';
+        const categoryId = document.getElementById('productCategoryFilter')?.value || '';
+        const isAvailable = document.getElementById('productIsAvailable')?.value || '';
+
+        const url = new URL('/Admin/GetProductsTable', window.location.origin);
+        if (searchTerm) url.searchParams.append('searchTerm', searchTerm);
+        if (categoryId) url.searchParams.append('categoryId', categoryId);
+        if (isAvailable) url.searchParams.append('isAvailable', isAvailable);
+        url.searchParams.append('page', pageNumber);
+
+        fetch(url)
+            .then(response => response.text())
+            .then(html => {
+                document.getElementById('productsTableContainer').innerHTML = html;
+            })
+            .catch(error => {
+                console.error('Error loading products:', error);
+                document.getElementById('productsTableContainer').innerHTML = '<p class="text-danger">Error loading products</p>';
+            });
+    }
+
+    function resetProducts() {
+        const searchInput = document.getElementById('productSearch');
+        const categorySelect = document.getElementById('productCategoryFilter');
+        const statusSelect = document.getElementById('productIsAvailable');
+
+        if (searchInput) searchInput.value = '';
+        if (categorySelect) categorySelect.value = '';
+        if (statusSelect) statusSelect.value = '';
+
+        loadProducts(1);
+    }
+
+
+
+
+
+    function showNotification(message, type) {
+        const container = document.getElementById('notificationContainer');
+        if (!container) {
+            console.log(message, type);
+            return;
+        }
+
+        const alert = document.createElement('div');
+        alert.className = `alert alert-${type === 'success' ? 'success' : 'danger'} alert-dismissible fade show`;
+        alert.role = 'alert';
+        alert.innerHTML = `
+            <div>${message}</div>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        `;
+
+        container.appendChild(alert);
+        setTimeout(() => {
+            const bsAlert = bootstrap.Alert.getOrCreateInstance(alert);
+            bsAlert.close();
+        }, 5000);
+    }
+
+    function toggleSidebar() {
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('sidebarOverlay');
+        sidebar?.classList.toggle('active');
+        overlay?.classList.toggle('active');
+    }
+          function deleteProduct(productId) {
+        const token = document.querySelector('input[name="__RequestVerificationToken"]')?.value || '';
+
+        fetch('/admindashboard/products/delete/' + productId, {
+            method: 'POST',
+            headers: {
+                'RequestVerificationToken': token,
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: `__RequestVerificationToken=${encodeURIComponent(token)}`
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                loadProducts(1);
+                showNotification('Product deleted successfully', 'success');
+            } else {
+                showNotification(data.message || 'Error deleting product', 'danger');
+            }
+        })
+        .catch(() => showNotification('Error deleting product', 'danger'));
+    }
+
+    // Load initial data
+    document.addEventListener('DOMContentLoaded', function() {
+        loadProducts(1);
+    });
+          function confirmDelete(productId) {
+            if (confirm("Are you sure you want to delete this product?")) {
+                deleteProduct(productId);
+            }
+        }
+
+      
+</script>
+

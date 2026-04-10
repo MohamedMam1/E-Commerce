@@ -1,0 +1,171 @@
+@using E_Commerce.ViewModels.AdminDashboard
+@model AssignRoleVM
+
+<!-- ── Sidebar Overlay ───────────────────────────────────────────────── -->
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+
+<!-- ── Sidebar ──────────────────────────────────────────────────────── -->
+<aside class="sidebar" id="sidebar">
+
+    <!-- Brand -->
+    <a class="sidebar-brand" href="#">
+        <div class="brand-icon"><i class="bi bi-lightning-charge-fill"></i></div>
+        <div>
+            <div class="brand-name">NexAdmin</div>
+            <span class="brand-tag">E-Commerce Platform</span>
+        </div>
+    </a>
+
+    <!-- Main Navigation -->
+    <div class="sidebar-section">Main</div>
+    <ul class="sidebar-menu">
+        <li>
+            <a href="/admindashboard">
+                <i class="bi bi-grid-1x2-fill"></i> Dashboard
+            </a>
+        </li>
+        <li>
+            <a href="/admindashboard/products">
+                <i class="bi bi-box-seam-fill"></i> Products
+            </a>
+        </li>
+        <li>
+            <a href="/admindashboard/orders">
+                <i class="bi bi-receipt-cutoff"></i> Orders
+            </a>
+        </li>
+        <li>
+            <a href="/admindashboard/users" class="active">
+                <i class="bi bi-people-fill"></i> Users
+            </a>
+        </li>
+    </ul>
+</aside>
+
+<!-- ── Main Wrapper ─────────────────────────────────────────────────── -->
+<div class="main-wrapper">
+
+    <!-- ── Topbar ───────────────────────────────────────────────────── -->
+    <header class="topbar">
+        <button class="topbar-toggle" onclick="toggleSidebar()">
+            <i class="bi bi-list"></i>
+        </button>
+        <div class="topbar-breadcrumb d-none d-md-flex">
+            <i class="bi bi-house-fill" style="font-size:12px"></i>
+            <i class="bi bi-chevron-right" style="font-size:10px"></i>
+            <span class="current">Users</span>
+            <i class="bi bi-chevron-right" style="font-size:10px"></i>
+            <span class="current">Assign Role</span>
+        </div>
+
+        <div class="search-wrap">
+            <i class="bi bi-search"></i>
+            <input type="text" placeholder="Search users…" id="globalSearch" />
+        </div>
+
+        <div class="topbar-actions ms-2">
+            <div class="topbar-btn" title="Notifications">
+                <i class="bi bi-bell"></i>
+                <span class="notif-dot"></span>
+            </div>
+
+            <!-- Profile dropdown -->
+            <div class="dropdown">
+                <a class="topbar-profile dropdown-toggle" href="#" data-bs-toggle="dropdown" aria-expanded="false" style="text-decoration:none">
+                    <div class="t-avatar">A</div>
+                    <span class="t-name d-none d-sm-block">Admin</span>
+                    <i class="bi bi-chevron-down"></i>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end shadow-lg border-0 rounded-3 mt-1" style="min-width:200px;font-size:13px">
+                    <li><h6 class="dropdown-header fw-bold">Admin</h6></li>
+                    <li><a class="dropdown-item py-2" href="#"><i class="bi bi-person me-2 text-primary"></i>My Profile</a></li>
+                    <li><hr class="dropdown-divider my-1"></li>
+                    <li><a class="dropdown-item py-2 text-danger" href="/Account/Logout"><i class="bi bi-box-arrow-right me-2"></i>Sign Out</a></li>
+                </ul>
+            </div>
+        </div>
+    </header>
+
+    <!-- ── Page Content ─────────────────────────────────────────────── -->
+    <main class="page-content">
+        <div class="page-header">
+            <div>
+                <h1>Assign Role to User</h1>
+                <p>Assign a new role to <strong>@Model.UserName</strong>.</p>
+            </div>
+            <a href="/admindashboard/users" class="btn btn-outline-secondary">
+                <i class="bi bi-arrow-left"></i> Back to Users
+            </a>
+        </div>
+
+        <div class="row justify-content-center">
+            <div class="col-lg-6">
+                <div class="card-box">
+                    <form method="post" novalidate>
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="UserId" value="@Model.UserId" />
+
+                        <div class="mb-3">
+                            <label class="form-label-custom">User</label>
+                            <input type="text" class="form-control-custom" value="@Model.UserName" readonly />
+                        </div>
+
+                        @if (Model.CurrentRoles.Any())
+                        {
+                            <div class="mb-3">
+                                <label class="form-label-custom">Current Roles</label>
+                                <div class="d-flex flex-wrap gap-2">
+                                    @foreach (var role in Model.CurrentRoles)
+                                    {
+                                        <span class="badge bg-primary">@role</span>
+                                    }
+                                </div>
+                            </div>
+                        }
+
+                        <div class="mb-3">
+                            <label class="form-label-custom">Select Role to Assign *</label>
+                            <select name="RoleName" class="form-control-custom form-select-custom">
+                                <option value="">Choose a role</option>
+                                @foreach (var role in Model.AvailableRoles)
+                                {
+                                    <option value="@role">@role</option>
+                                }
+                            </select>
+                            <span asp-validation-for="RoleName" class="text-danger"></span>
+                        </div>
+
+                        <div class="d-flex justify-content-end gap-2">
+                            <a href="/admindashboard/users" class="btn btn-light" style="font-family:var(--font);font-size:13px;font-weight:600;border-radius:9px;padding:8px 18px">
+                                Cancel
+                            </a>
+                            <button type="submit" class="btn-primary-custom">
+                                <i class="bi bi-person-plus-fill"></i> Assign Role
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<div id="notificationContainer" class="notification-container">
+    @if (TempData["StatusMessage"] != null)
+    {
+        <div class="alert alert-@(TempData["StatusType"] ?? "info") alert-dismissible fade show" role="alert">
+            @TempData["StatusMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+</div>
+
+<!-- JavaScript Functions -->
+<script>
+    function toggleSidebar() {
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('sidebarOverlay');
+        sidebar?.classList.toggle('active');
+        overlay?.classList.toggle('active');
+    }
+</script>
