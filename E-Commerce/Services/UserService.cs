@@ -57,5 +57,9 @@ namespace E_Commerce.Services
         {
             return await _userRepository.IsEmailExists(email);
         }
+        public async Task<UserPaginationVM> GetUsersWithRolesAsync(string? searchTerm, string? status, string? role, int pageNumber, int pageSize)
+        {
+            return await _userRepository.GetUsersWithRolesAsync(searchTerm, status, role, pageNumber, pageSize);
+        }
     }
 }

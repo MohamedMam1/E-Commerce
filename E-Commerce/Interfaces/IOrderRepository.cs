@@ -21,5 +21,8 @@ namespace E_Commerce.Interfaces
             decimal? maxAmount,
             int pageNumber = 1,
             int pageSize = 10);
+
+        Task<bool> UpdateOrderStatusAsync(int OrderId, OrderStatus NewStatus);
+        Task<Order?> GetOrderDetailsForAdminAsync(int orderId);
     }
 }
