@@ -11,5 +11,7 @@ namespace E_Commerce.ViewModels.AdminDashboard
         public List<AdminOrderSummaryVM> Orders { get; set; } = new List<AdminOrderSummaryVM>();
         public List<AddCategoryVM> Categories { get; set; } = new List<AddCategoryVM>();
         public List<string> Roles { get; set; } = new List<string>();
+        public UserPaginationVM UserPagination { get; set; } = new UserPaginationVM();
+
     }
 }

@@ -25,7 +25,7 @@
                         <td class="px-3"><span class="badge-id">#@order.OrderId</span></td>
                         <td>
                             <div class="customer-info">
-                                <div class="customer-avatar">@order.UserName.Substring(0, 1)</div>
+                                <div class="customer-avatar">@(!string.IsNullOrWhiteSpace(order.UserName) ? order.UserName.Substring(0, 1).ToUpper() : "?")</div>
                                 <div>
                                     <div class="customer-name">@order.UserName</div>
                                 </div>
@@ -74,23 +74,28 @@
                                     </button>
                                     <ul class="dropdown-menu dropdown-menu-end">
                                         <li>
-                                            <a class="dropdown-item" href="#" onclick="updateOrderStatus(@order.OrderId, '@OrderStatus.Pending')">
+                                            <a class="dropdown-item" href="javascript:void(0)" onclick="updateOrderStatus(@order.OrderId, '@OrderStatus.Pending'); return false;">
                                                 Mark as Pending
                                             </a>
                                         </li>
                                         <li>
-                                            <a class="dropdown-item" href="#" onclick="updateOrderStatus(@order.OrderId, '@OrderStatus.Processing')">
+                                            <a class="dropdown-item" href="javascript:void(0)" onclick="updateOrderStatus(@order.OrderId, '@OrderStatus.Processing'); return false;">
                                                 Mark as Processing
                                             </a>
                                         </li>
                                         <li>
-                                            <a class="dropdown-item" href="#" onclick="updateOrderStatus(@order.OrderId, '@OrderStatus.Completed')">
+                                            <a class="dropdown-item" href="javascript:void(0)" onclick="updateOrderStatus(@order.OrderId, '@OrderStatus.Completed'); return false;">
                                                 Mark as Completed
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" href="javascript:void(0)" onclick="updateOrderStatus(@order.OrderId, '@OrderStatus.Failed'); return false;">
+                                                Mark as Failed
                                             </a>
                                         </li>
                                         <li><hr class="dropdown-divider"></li>
                                         <li>
-                                            <a class="dropdown-item text-danger" href="#" onclick="updateOrderStatus(@order.OrderId, '@OrderStatus.Cancelled')">
+                                            <a class="dropdown-item text-danger" href="javascript:void(0)" onclick="updateOrderStatus(@order.OrderId, '@OrderStatus.Cancelled'); return false;">
                                                 Cancel Order
                                             </a>
                                         </li>
@@ -177,9 +182,9 @@
         text-decoration: none;
     }
 
-    .email-link:hover {
-        text-decoration: underline;
-    }
+        .email-link:hover {
+            text-decoration: underline;
+        }
 
     .order-date {
         font-weight: 600;
@@ -212,9 +217,9 @@
         font-size: 18px;
     }
 
-    .btn-icon:hover {
-        background-color: #f0f0f0;
-    }
+        .btn-icon:hover {
+            background-color: #f0f0f0;
+        }
 
     .dropdown-menu {
         border-radius: 8px;
@@ -229,10 +234,10 @@
         transition: all 0.2s;
     }
 
-    .dropdown-item:hover {
-        background-color: #f5f5f5;
-        color: #0066cc;
-    }
+        .dropdown-item:hover {
+            background-color: #f5f5f5;
+            color: #0066cc;
+        }
 
     .empty-state {
         text-align: center;
@@ -240,11 +245,11 @@
         color: #999;
     }
 
-    .empty-state i {
-        font-size: 48px;
-        display: block;
-        margin-bottom: 16px;
-    }
+        .empty-state i {
+            font-size: 48px;
+            display: block;
+            margin-bottom: 16px;
+        }
 
     .pagination-wrapper {
         display: flex;
@@ -270,9 +275,9 @@
         transition: all 0.2s;
     }
 
-    .page-item button:hover {
-        background-color: #f0f0f0;
-    }
+        .page-item button:hover {
+            background-color: #f0f0f0;
+        }
 
     .page-item.active button {
         background-color: #0066cc;

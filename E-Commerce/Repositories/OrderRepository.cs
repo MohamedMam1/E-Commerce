@@ -146,5 +146,29 @@ namespace E_Commerce.Repositories
 
             return (orders, totalCount);
         }
+
+        public async Task<bool> UpdateOrderStatusAsync(int OrderId, OrderStatus NewStatus)
+        {
+            Order? Order = await _context.Orders.FirstOrDefaultAsync(O => O.Id == OrderId);
+
+            if (Order == null)
+            {
+                return false;
+            }
+
+            Order.Status = NewStatus;
+            await _context.SaveChangesAsync();
+
+            return true;
+        }
+        public async Task<Order?> GetOrderDetailsForAdminAsync(int orderId)
+        {
+            return await _context.Orders
+                .Where(O => O.Id == orderId)
+                .Include(O => O.User)
+                .Include(O => O.OrderItems)
+                .ThenInclude(OI => OI.Product)
+                .FirstOrDefaultAsync();
+        }
     }
 }
