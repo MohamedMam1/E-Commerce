@@ -60,7 +60,6 @@ namespace E_Commerce.Controllers
             {
                 var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
 
-                // 🔥 encode token
                 var encodedToken = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(token));
 
                 var link = Url.Action("VerifyEmail", "Account",
