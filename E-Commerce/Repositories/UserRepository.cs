@@ -1,18 +1,21 @@
 ﻿using E_Commerce.Interfaces;
+using E_Commerce.ViewModels.AdminDashboard;
 using FinalProject.Context;
 using FinalProject.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using E_Commerce.ViewModels.AdminDashboard;
 
 namespace E_Commerce.Repositories
 {
     public class UserRepository : IUserRepository
     {
         private readonly ITiContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public UserRepository(ITiContext Context)
+        public UserRepository(ITiContext Context, UserManager<ApplicationUser> userManager)
         {
             _context = Context;
+            _userManager = userManager;
         }
 
         public async Task<ApplicationUser?> GetUserWithAddressesAsync(string UserId)
@@ -41,32 +44,70 @@ namespace E_Commerce.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task<List<UserDashBoardVM>> GetUsersWithRolesAsync()
+        public async Task<UserPaginationVM> GetUsersWithRolesAsync(string? searchTerm, string? status, string? role, int pageNumber, int pageSize)
         {
-            var usersWithRoles = await (
-                from user in _context.Users
-                join userRole in _context.UserRoles
-                    on user.Id equals userRole.UserId into userRolesGroup
-                from userRole in userRolesGroup.DefaultIfEmpty()
+            IQueryable<ApplicationUser> Query = _userManager.Users;
 
-                join role in _context.Roles
-                    on userRole.RoleId equals role.Id into rolesGroup
-                from role in rolesGroup.DefaultIfEmpty()
+            if (!string.IsNullOrWhiteSpace(searchTerm))
+            {
+                string SearchTerm = searchTerm.Trim().ToLower();
 
-                group role by user into g
+                Query = Query.Where(U =>
+                    (U.FullName != null && U.FullName.ToLower().Contains(SearchTerm)) ||
+                    (U.Email != null && U.Email.ToLower().Contains(SearchTerm)) ||
+                    (U.UserName != null && U.UserName.ToLower().Contains(SearchTerm)));
+            }
 
-                select new UserDashBoardVM
+            if (!string.IsNullOrWhiteSpace(status))
+            {
+                if (status == "Active")
                 {
-                    User = g.Key,
-                    Roles = g
-                        .Where(r => r != null)
-                        .Select(r => r.Name)
-                        .ToList()
+                    Query = Query.Where(U => U.Status == UserStatus.Active);
                 }
-            ).ToListAsync();
+                else if (status == "Banned")
+                {
+                    Query = Query.Where(U => U.Status == UserStatus.Banned);
+                }
+            }
 
-            return usersWithRoles;
+            List<ApplicationUser> Users = await Query
+                .OrderByDescending(U => U.CreatedAt)
+                .ToListAsync();
+
+            List<UserDashBoardVM> Result = new List<UserDashBoardVM>();
+
+            foreach (ApplicationUser User in Users)
+            {
+                IList<string> Roles = await _userManager.GetRolesAsync(User);
+
+                Result.Add(new UserDashBoardVM
+                {
+                    User = User,
+                    Roles = Roles.ToList()
+                });
+            }
+
+            if (!string.IsNullOrWhiteSpace(role))
+            {
+                Result = Result
+                    .Where(U => U.Roles.Any(R => R == role))
+                    .ToList();
+            }
+
+            int TotalCount = Result.Count;
+
+            Result = Result
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
+
+            return new UserPaginationVM
+            {
+                Users = Result,
+                CurrentPage = pageNumber,
+                PageSize = pageSize,
+                TotalCount = TotalCount
+            };
         }
-
     }
 }

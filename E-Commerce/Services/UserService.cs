@@ -48,9 +48,9 @@ namespace E_Commerce.Services
 
             await _userRepository.UpdateUserAddressesAsync(User, UpdatedAddresses, NewAddressLine);
         }
-        public async Task<List<UserDashBoardVM>> GetUsersWithRolesAsync()
+        public async Task<UserPaginationVM> GetUsersWithRolesAsync(string? searchTerm, string? status, string? role, int pageNumber, int pageSize)
         {
-            return await _userRepository.GetUsersWithRolesAsync();
+            return await _userRepository.GetUsersWithRolesAsync(searchTerm, status, role, pageNumber, pageSize);
         }
     }
 }

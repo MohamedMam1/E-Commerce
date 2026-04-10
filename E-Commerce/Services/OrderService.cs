@@ -1,4 +1,5 @@
 ﻿using E_Commerce.Interfaces;
+using E_Commerce.ViewModels.AdminDashboard;
 using E_Commerce.ViewModels.UserDashboard;
 using FinalProject.Models;
 using System.Linq.Expressions;
@@ -33,7 +34,7 @@ namespace E_Commerce.Services
             return Result;
         }
 
- 
+
 
         public async Task<List<UserOrderSummaryVM>> GetAllOrdersByUserIdAsync(string UserId)
         {
@@ -67,7 +68,7 @@ namespace E_Commerce.Services
             {
                 OrderId = Order.Id,
                 OrderDate = Order.CreatedAt,
-                TotalPrice = Order.OrderItems != null ? Order.OrderItems.Sum(OI => OI.Quantity * OI.Price): 0,
+                TotalPrice = Order.OrderItems != null ? Order.OrderItems.Sum(OI => OI.Quantity * OI.Price) : 0,
                 Items = Order.OrderItems != null
                     ? Order.OrderItems.Select(OI => new UserOrderItemDetailsVM
                     {
@@ -84,9 +85,9 @@ namespace E_Commerce.Services
             return Result;
         }
 
-        public Task<Order> GetByIdAsync(object id)
+        public async Task<Order> GetByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            return await _orderRepository.GetByIdAsync(id);
         }
 
         public Task<IEnumerable<Order>> GetAllAsync()
@@ -122,5 +123,96 @@ namespace E_Commerce.Services
         {
             throw new NotImplementedException();
         }
+        public async Task<PaginatedResultVM<AdminOrderSummaryVM>> GetFilteredOrdersForAdminAsync(string? SearchTerm, string? Status, DateTime? DateFrom, DateTime? DateTo, int PageNumber, int PageSize)
+        {
+            OrderStatus? ParsedStatus = null;
+
+            if (!string.IsNullOrWhiteSpace(Status) &&
+                Enum.TryParse<OrderStatus>(Status, true, out var TempStatus))
+            {
+                ParsedStatus = TempStatus;
+            }
+
+            var Result = await _orderRepository.SearchAndFilterAsync(
+                SearchTerm,
+                ParsedStatus,
+                DateFrom,
+                DateTo,
+                null,
+                null,
+                PageNumber,
+                PageSize);
+
+            List<AdminOrderSummaryVM> OrdersVm = Result.Orders
+                .Select(O => new AdminOrderSummaryVM
+                {
+                    OrderId = O.Id,
+                    UserName = O.User != null ? O.User.FullName : string.Empty,
+                    UserEmail = O.User != null ? O.User.Email : string.Empty,
+                    OrderDate = O.CreatedAt,
+                    TotalAmount = O.TotalAmount,
+                    ItemsCount = O.OrderItems != null ? O.OrderItems.Count : 0,
+                    Status = O.Status
+                })
+                .ToList();
+
+            return new PaginatedResultVM<AdminOrderSummaryVM>
+            {
+                Data = OrdersVm,
+                TotalCount = Result.TotalCount,
+                PageNumber = PageNumber,
+                PageSize = PageSize,
+                TotalPages = (int)Math.Ceiling((double)Result.TotalCount / PageSize)
+            };
+        }
+
+        public async Task<bool> UpdateOrderStatusAsync(int OrderId, string NewStatus)
+        {
+            if (!Enum.TryParse<OrderStatus>(NewStatus, true, out var ParsedStatus))
+            {
+                return false;
+            }
+
+            return await _orderRepository.UpdateOrderStatusAsync(OrderId, ParsedStatus);
+        }
+        public async Task<AdminOrderDetailsVM?> GetOrderDetailsForAdminAsync(int orderId)
+        {
+            Order? order = await _orderRepository.GetOrderDetailsForAdminAsync(orderId);
+
+            if (order == null)
+            {
+                return null;
+            }
+
+            AdminOrderDetailsVM result = new AdminOrderDetailsVM
+            {
+                OrderId = order.Id,
+                OrderDate = order.CreatedAt,
+                TotalAmount = order.TotalAmount,
+                Status = order.Status,
+                UserId = order.UserId,
+                UserName = order.User != null ? order.User.FullName : string.Empty,
+                UserEmail = order.User != null ? order.User.Email : string.Empty,
+                Items = order.OrderItems != null
+                    ? order.OrderItems.Select(OI => new AdminOrderItemDetailsVM
+                    {
+                        ProductId = OI.ProductId,
+                        ProductName = OI.Product != null ? OI.Product.Name : string.Empty,
+                        ProductImage = OI.Product != null ? OI.Product.ImageUrl : string.Empty,
+                        Quantity = OI.Quantity,
+                        UnitPrice = OI.Price,
+                        SubTotal = OI.Quantity * OI.Price
+                    }).ToList()
+                    : new List<AdminOrderItemDetailsVM>()
+            };
+
+            return result;
+        }
+
+        public Task<Order> GetByIdAsync(object id)
+        {
+            throw new NotImplementedException();
+        }
     }
+
 }
