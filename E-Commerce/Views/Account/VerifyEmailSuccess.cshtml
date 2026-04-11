@@ -15,8 +15,9 @@
                             </div>
                         </div>
                         <h3 class="mb-2">Email Verified!</h3>
-                        <p class="text-muted mb-4">Your email has been successfully confirmed. You can now log in to your account.</p>
-                        
+                        <p class="text-muted mb-2">Your email has been successfully confirmed.</p>
+                        <p class="text-muted small mb-4">Redirecting you to login in <span id="countdown">2</span> seconds...</p>
+
                         <a asp-action="Login" asp-controller="Account" class="btn btn-primary btn-lg btn-block">
                             Go to Login
                         </a>
@@ -26,3 +27,18 @@
         </div>
     </div>
 </section>
+
+@section Scripts {
+    <script>
+        var seconds = 2;
+        var countdownEl = document.getElementById('countdown');
+        var interval = setInterval(function () {
+            seconds--;
+            if (countdownEl) countdownEl.textContent = seconds;
+            if (seconds <= 0) {
+                clearInterval(interval);
+                window.location.href = '@Url.Action("Login", "Account")';
+            }
+        }, 1000);
+    </script>
+}

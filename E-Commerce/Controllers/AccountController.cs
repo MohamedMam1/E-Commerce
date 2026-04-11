@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
-using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages;
 using System.Text;
 
 namespace E_Commerce.Controllers
@@ -58,22 +57,7 @@ namespace E_Commerce.Controllers
 
             if (result.Succeeded)
             {
-                var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-
-                // 🔥 encode token
-                var encodedToken = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(token));
-
-                var link = Url.Action("VerifyEmail", "Account",
-                    new { userId = user.Id, token = encodedToken },
-                    Request.Scheme);
-
-                await _emailSender.SendEmailAsync(
-                    user.Email,
-                    "Confirm your email",
-                    $"<h3>Click below to confirm:</h3>" +
-                    $"<a href='{link}'>Confirm Email</a>"
-                );
-
+                await SendVerificationEmailAsync(user);
                 return RedirectToAction("EmailSent");
             }
 
@@ -89,11 +73,14 @@ namespace E_Commerce.Controllers
         {
             if (userId == null || token == null)
                 return BadRequest();
+
             var user = await _userManager.FindByIdAsync(userId);
             if (user == null)
                 return NotFound();
+
             var decodedToken = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(token));
             var result = await _userManager.ConfirmEmailAsync(user, decodedToken);
+
             if (result.Succeeded)
                 return View("VerifyEmailSuccess");
 
@@ -117,6 +104,18 @@ namespace E_Commerce.Controllers
             if (!ModelState.IsValid)
                 return View(model);
 
+            var user = await _userManager.FindByEmailAsync(model.Email.Trim());
+
+            if (user != null)
+            {
+                if (!await _userManager.IsEmailConfirmedAsync(user))
+                {
+                    TempData["UnverifiedEmail"] = user.Email;
+                    ModelState.AddModelError("", "Email verification is required. Please verify your email before login.");
+                    return View(model);
+                }
+            }
+
             var result = await _signInManager.PasswordSignInAsync(
                 model.Email.Trim(),
                 model.Password,
@@ -127,7 +126,7 @@ namespace E_Commerce.Controllers
             if (result.Succeeded)
                 return RedirectToAction("Index", "Home");
 
-            ModelState.AddModelError("", "Invalid email or password");
+            ModelState.AddModelError("", "Invalid email or password.");
             return View(model);
         }
 
@@ -141,10 +140,49 @@ namespace E_Commerce.Controllers
 
 
         [HttpGet]
-        public async Task<IActionResult> IsEmailExistsAsync(string Email)
+        [ResponseCache(NoStore = true, Duration = 0)]
+        public async Task<IActionResult> IsEmailExistsAsync(string email)
         {
-            var exists = await _userService.IsEmailExists(Email);
+            if (string.IsNullOrWhiteSpace(email))
+                return Json(false);
+
+            var exists = await _userService.IsEmailExists(email);
             return Json(!exists);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ResendVerificationEmail(string email)
+        {
+            if (string.IsNullOrWhiteSpace(email))
+            {
+                TempData["ResendError"] = "Email is required.";
+                return RedirectToAction("Login");
+            }
+
+            var user = await _userManager.FindByEmailAsync(email.Trim());
+
+            if (user == null)
+            {
+                TempData["ResendError"] = "No account found with that email.";
+                return RedirectToAction("Login");
+            }
+
+            if (await _userManager.IsEmailConfirmedAsync(user))
+            {
+                return RedirectToAction("Login");
+            }
+
+            await SendVerificationEmailAsync(user);
+
+            TempData["Message"] = "Verification email sent successfully. Please check your inbox.";
+            return RedirectToAction("EmailSent");
+        }
+
+        [HttpGet]
+        public IActionResult EmailSent()
+        {
+            return View();
         }
 
 
@@ -166,8 +204,14 @@ namespace E_Commerce.Controllers
             if (user == null)
                 return RedirectToAction("EmailSent");
 
-            var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+            if (!await _userManager.IsEmailConfirmedAsync(user))
+            {
+                ModelState.AddModelError("", "Email must be verified first. Please verify your email before resetting your password.");
+                TempData["UnverifiedEmail"] = user.Email;
+                return View(model);
+            }
 
+            var token = await _userManager.GeneratePasswordResetTokenAsync(user);
             var encodedToken = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(token));
 
             var link = Url.Action("ResetPassword", "Account",
@@ -231,10 +275,22 @@ namespace E_Commerce.Controllers
         }
 
 
-        [HttpGet]
-        public IActionResult EmailSent()
+
+        private async Task SendVerificationEmailAsync(ApplicationUser user)
         {
-            return View();
+            var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+            var encodedToken = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(token));
+
+            var link = Url.Action("VerifyEmail", "Account",
+                new { userId = user.Id, token = encodedToken },
+                Request.Scheme);
+
+            await _emailSender.SendEmailAsync(
+                user.Email,
+                "Confirm your email",
+                $"<h3>Click below to confirm your email:</h3>" +
+                $"<a href='{link}'>Confirm Email</a>"
+            );
         }
     }
 }
