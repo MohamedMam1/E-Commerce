@@ -5,6 +5,10 @@
         public List<CartItemVM> CartItems { get; set; }
         public decimal TotalAmount { get; set; }
         public string StripePublishableKey { get; set; }
+        public string FullName { get; set; }
+        public string Email { get; set; }
+        public string Phone { get; set; }
+        public string Address { get; set; }
     }
 
     public class CartItemVM

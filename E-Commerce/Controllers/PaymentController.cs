@@ -1,32 +1,60 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using E_Commerce.ViewModels;
 using E_Commerce.Interfaces;
+using FinalProject.Models;
 using Stripe;
 
 namespace E_Commerce.Controllers
 {
+    [Authorize]
     public class PaymentController : Controller
     {
         private readonly IConfiguration _config;
         private readonly IPaymentService _paymentService;
+        private readonly ICartService _cartService;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public PaymentController(IConfiguration config, IPaymentService paymentService)
+        public PaymentController(
+            IConfiguration config,
+            IPaymentService paymentService,
+            ICartService cartService,
+            UserManager<ApplicationUser> userManager)
         {
             _config = config;
             _paymentService = paymentService;
+            _cartService = cartService;
+            _userManager = userManager;
         }
 
-        public IActionResult Checkout()
+        public async Task<IActionResult> Checkout()
         {
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null) return RedirectToAction("Login", "Account");
+
+            var cart = await _cartService.GetUserCartAsync(user.Id);
+
+            if (cart == null || !cart.Items.Any())
+            {
+                TempData["Error"] = "Your cart is empty.";
+                return RedirectToAction("Index", "Cart");
+            }
+
             var model = new CheckoutVM
             {
                 StripePublishableKey = _config["Stripe:PublishableKey"],
-                CartItems = new List<CartItemVM>
+                CartItems = cart.Items.Select(i => new CartItemVM
                 {
-                    new CartItemVM { ProductId = 1, ProductName = "Blue Sneakers", Quantity = 1, Price = 59.99m },
-                    new CartItemVM { ProductId = 2, ProductName = "White T-Shirt",  Quantity = 2, Price = 19.99m },
-                    new CartItemVM { ProductId = 3, ProductName = "Black Bag",      Quantity = 1, Price = 34.99m }
-                }
+                    ProductId = i.ProductId,
+                    ProductName = i.ProductName,
+                    Quantity = i.Quantity,
+                    Price = i.Price
+                }).ToList(),
+                FullName = user.FullName,
+                Email = user.Email,
+                Phone = user.PhoneNumber,
+                Address = string.Empty
             };
 
             model.TotalAmount = model.CartItems.Sum(x => x.Subtotal);
@@ -35,13 +63,31 @@ namespace E_Commerce.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> ProcessPayment(string stripeToken, decimal totalAmount)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ProcessPayment(
+            string stripeToken,
+            decimal totalAmount,
+            string fullName,
+            string email,
+            string phone,
+            string address)
         {
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null) return RedirectToAction("Login", "Account");
+
+            var cart = await _cartService.GetUserCartAsync(user.Id);
+
+            if (cart == null || !cart.Items.Any())
+            {
+                TempData["Error"] = "Your cart is empty.";
+                return RedirectToAction("Index", "Cart");
+            }
+
             var chargeOptions = new ChargeCreateOptions
             {
                 Amount = (long)(totalAmount * 100),
                 Currency = "usd",
-                Description = "E-Commerce Order",
+                Description = $"E-Commerce Order - {fullName}",
                 Source = stripeToken
             };
 
@@ -53,43 +99,32 @@ namespace E_Commerce.Controllers
 
                 if (charge.Status == "succeeded")
                 {
-                    string userId = "dummy-user-id-123";
+                    var items = cart.Items
+                        .Select(i => (i.ProductId, i.Quantity, i.Price))
+                        .ToList();
 
-                    var items = new List<(int ProductId, int Quantity, decimal Price)>
-                    {
-                        (1, 1, 59.99m),
-                        (2, 2, 19.99m),
-                        (3, 1, 34.99m)
-                    };
+                    await _paymentService.SaveOrderAsync(user.Id, items);
 
-                    await _paymentService.SaveOrderAsync(userId, items);
-
-                    var successModel = new PaymentSuccessVM
+                    return View("SuccessPayment", new PaymentSuccessVM
                     {
                         ChargeId = charge.Id,
                         TotalAmount = totalAmount
-                    };
-
-                    return View("SuccessPayment", successModel);
+                    });
                 }
                 else
                 {
-                    var failedModel = new PaymentFailedVM
+                    return View("FailedPayment", new PaymentFailedVM
                     {
                         ErrorMessage = "Payment failed. Please try again."
-                    };
-
-                    return View("FailedPayment", failedModel);
+                    });
                 }
             }
             catch (StripeException ex)
             {
-                var failedModel = new PaymentFailedVM
+                return View("FailedPayment", new PaymentFailedVM
                 {
                     ErrorMessage = ex.StripeError.Message
-                };
-
-                return View("FailedPayment", failedModel);
+                });
             }
         }
     }
