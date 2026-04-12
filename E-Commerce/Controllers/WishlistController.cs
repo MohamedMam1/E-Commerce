@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace E_Commerce.Controllers
 {
-    [Authorize]
+   [Authorize]
     public class WishlistController : Controller
     {
         private readonly IWishlistService _wishlistService;
@@ -27,9 +27,15 @@ namespace E_Commerce.Controllers
         [HttpPost]
         public async Task<IActionResult> ToggleWishlist(int productId)
         {
+            if (productId <= 0)
+                return Json(new { success = false, message = "Invalid product." });
+
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrEmpty(userId))
+                return Json(new { success = false, message = "Please log in to use the wishlist." });
+
             await _wishlistService.ToggleWishlistItemAsync(userId, productId);
-            
+
             return Json(new { success = true, message = "Wishlist updated!" });
         }
 

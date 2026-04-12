@@ -1,4 +1,4 @@
-﻿using E_Commerce.Interfaces;
+using E_Commerce.Interfaces;
 using E_Commerce.ViewModels.AdminDashboard;
 using E_Commerce.ViewModels.UserDashboard;
 using FinalProject.Models;
@@ -202,7 +202,9 @@ namespace E_Commerce.Services
                         ProductImage = OI.Product != null ? OI.Product.ImageUrl : string.Empty,
                         Quantity = OI.Quantity,
                         UnitPrice = OI.Price,
-                        SubTotal = OI.Quantity * OI.Price
+                        SubTotal = OI.Quantity * OI.Price,
+                        Size = OI.Size.ToString(),
+                        Color = OI.Color.ToString()
                     }).ToList()
                     : new List<AdminOrderItemDetailsVM>()
             };

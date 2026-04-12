@@ -1,19 +1,12 @@
-﻿namespace E_Commerce.ViewModels
+using E_Commerce.ViewModels.Cart;
+
+namespace E_Commerce.ViewModels
 {
     public class CheckoutVM
     {
         public List<CartItemVM> CartItems { get; set; }
         public decimal TotalAmount { get; set; }
         public string StripePublishableKey { get; set; }
-    }
-
-    public class CartItemVM
-    {
-        public int ProductId { get; set; }
-        public string ProductName { get; set; }
-        public int Quantity { get; set; }
-        public decimal Price { get; set; }
-        public decimal Subtotal => Quantity * Price;
     }
     public class PaymentSuccessVM
     {

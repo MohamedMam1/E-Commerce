@@ -1,4 +1,4 @@
-﻿using E_Commerce.Interfaces;
+using E_Commerce.Interfaces;
 using E_Commerce.Models;
 using E_Commerce.ViewModels.AdminDashboard;
 using E_Commerce.ViewModels.AdminViewModel.Product;
@@ -49,7 +49,10 @@ namespace E_Commerce.Services
                 ImageUrl = p.ImageUrl,
                 CategoryId = p.CategoryId,
                 CategoryName = p.Category?.Name,
-                productImages = p.ExtraImages?.Select(img => img.ImageUrl).ToList()
+                productImages = p.ExtraImages?.Select(img => img.ImageUrl).ToList(),
+                Quantity = p.Quantity,
+                Size = p.Size,
+                Color = p.Color
             };
         }
 
@@ -66,6 +69,8 @@ namespace E_Commerce.Services
                 Price = p.Price,
                 Quantity = p.Quantity,
                 CategoryId = p.CategoryId,
+                Size = p.Size,
+                Color = p.Color,
                 ExistingMainImageUrl = p.ImageUrl,
                 ExistingExtraImageUrls = p.ExtraImages?
                     .Select(ei => ei.ImageUrl)
@@ -85,6 +90,8 @@ namespace E_Commerce.Services
                 Price = model.Price,
                 Quantity = model.Quantity,
                 CategoryId = model.CategoryId,
+                Size = model.Size,
+                Color = model.Color,
                 ImageUrl = mainImageUrl,
                 CreatedAt = DateTime.UtcNow
             };
@@ -117,6 +124,8 @@ namespace E_Commerce.Services
             product.Price = model.Price;
             product.Quantity = model.Quantity;
             product.CategoryId = model.CategoryId;
+            product.Size = model.Size;
+            product.Color = model.Color;
 
             // Replace main image only if a new one is uploaded
             if (model.MainImage != null && model.MainImage.Length > 0)

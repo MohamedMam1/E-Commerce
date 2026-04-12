@@ -1,4 +1,4 @@
-﻿namespace E_Commerce.ViewModels.AdminDashboard
+namespace E_Commerce.ViewModels.AdminDashboard
 {
     public class AdminOrderItemDetailsVM
     {
@@ -8,5 +8,7 @@
         public int Quantity { get; set; }
         public decimal UnitPrice { get; set; }
         public decimal SubTotal { get; set; }
+        public string Size { get; set; } = string.Empty;
+        public string Color { get; set; } = string.Empty;
     }
 }
