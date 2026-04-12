@@ -1,0 +1,147 @@
+﻿@{
+    ViewData["Title"] = "Contact";
+}
+
+<!-- Hero -->
+<section style="background:#1a1a1a; padding:72px 40px 56px; text-align:center; position:relative; overflow:hidden;">
+    <div style="position:absolute;inset:0;background-image:repeating-linear-gradient(0deg,rgba(255,255,255,0.03) 0,rgba(255,255,255,0.03) 1px,transparent 1px,transparent 60px),repeating-linear-gradient(90deg,rgba(255,255,255,0.03) 0,rgba(255,255,255,0.03) 1px,transparent 1px,transparent 60px);pointer-events:none;"></div>
+    <p style="font-size:11px;letter-spacing:3px;text-transform:uppercase;color:#aaa;margin-bottom:16px;">Get in touch</p>
+    <h1 style="font-size:40px;font-weight:400;color:#fff;margin-bottom:16px;line-height:1.2;">Contact <span style="color:#c8a96e;">Us</span></h1>
+    <div style="width:48px;height:2px;background:#c8a96e;margin:0 auto 18px;"></div>
+    <p style="font-size:14px;color:#999;max-width:480px;margin:0 auto;line-height:1.7;">Have a question, feedback, or just want to say hello? We'd love to hear from you.</p>
+</section>
+
+<!-- Contact Form + Info -->
+<div style="max-width:1100px;margin:0 auto;padding:70px 40px;display:flex;gap:60px;flex-wrap:wrap;align-items:flex-start;">
+
+    <!-- Form -->
+    <div style="flex:1;min-width:280px;">
+        <p style="font-size:11px;letter-spacing:3px;text-transform:uppercase;color:#c8a96e;margin-bottom:14px;">Send a message</p>
+        <h2 style="font-size:26px;font-weight:400;color:#1a1a1a;margin-bottom:10px;">We'll get back to you</h2>
+        <p style="font-size:14px;color:#888;line-height:1.7;margin-bottom:28px;">Fill out the form and one of our team members will respond within 24 hours.</p>
+
+        <form method="post">
+            @Html.AntiForgeryToken()
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:18px;">
+                <div>
+                    <label style="font-size:12px;letter-spacing:1px;text-transform:uppercase;color:#999;display:block;margin-bottom:6px;">First name</label>
+                    <input type="text" name="firstName" placeholder="Muhammad" class="stext-111 cl8 plh3 size-111 bor8 p-lr-15" style="width:100%;padding:10px 14px;border:0.5px solid #ddd;font-size:14px;color:#1a1a1a;background:#fff;outline:none;" />
+                </div>
+                <div>
+                    <label style="font-size:12px;letter-spacing:1px;text-transform:uppercase;color:#999;display:block;margin-bottom:6px;">Last name</label>
+                    <input type="text" name="lastName" placeholder="Khaled" style="width:100%;padding:10px 14px;border:0.5px solid #ddd;font-size:14px;color:#1a1a1a;background:#fff;outline:none;" />
+                </div>
+            </div>
+            <div style="margin-bottom:18px;">
+                <label style="font-size:12px;letter-spacing:1px;text-transform:uppercase;color:#999;display:block;margin-bottom:6px;">Email address</label>
+                <input type="email" name="email" placeholder="you@example.com" style="width:100%;padding:10px 14px;border:0.5px solid #ddd;font-size:14px;color:#1a1a1a;background:#fff;outline:none;" />
+            </div>
+            <div style="margin-bottom:18px;">
+                <label style="font-size:12px;letter-spacing:1px;text-transform:uppercase;color:#999;display:block;margin-bottom:6px;">Subject</label>
+                <select name="subject" style="width:100%;padding:10px 14px;border:0.5px solid #ddd;font-size:14px;color:#1a1a1a;background:#fff;outline:none;appearance:none;">
+                    <option>General inquiry</option>
+                    <option>Order support</option>
+                    <option>Returns &amp; refunds</option>
+                    <option>Other</option>
+                </select>
+            </div>
+            <div style="margin-bottom:18px;">
+                <label style="font-size:12px;letter-spacing:1px;text-transform:uppercase;color:#999;display:block;margin-bottom:6px;">Message</label>
+                <textarea name="message" placeholder="Write your message here..." rows="5" style="width:100%;padding:10px 14px;border:0.5px solid #ddd;font-size:14px;color:#1a1a1a;background:#fff;outline:none;resize:vertical;"></textarea>
+            </div>
+            <button type="submit" class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04" style="padding:12px 36px;background:#1a1a1a;color:#fff;font-size:12px;letter-spacing:2px;text-transform:uppercase;border:none;cursor:pointer;">
+                Send Message
+            </button>
+        </form>
+    </div>
+
+    <!-- Info -->
+    <div style="flex:0 0 280px;min-width:220px;">
+        <p style="font-size:11px;letter-spacing:3px;text-transform:uppercase;color:#c8a96e;margin-bottom:14px;">Our info</p>
+        <h2 style="font-size:22px;font-weight:400;color:#1a1a1a;margin-bottom:24px;">Reach us directly</h2>
+
+        <div style="border-left:2px solid #c8a96e;padding:10px 0 10px 18px;margin-bottom:20px;">
+            <p style="font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#999;margin-bottom:4px;">Email</p>
+            <p style="font-size:14px;color:#1a1a1a;">support@fashionstore.com</p>
+        </div>
+        <div style="border-left:2px solid #c8a96e;padding:10px 0 10px 18px;margin-bottom:20px;">
+            <p style="font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#999;margin-bottom:4px;">Phone</p>
+            <p style="font-size:14px;color:#1a1a1a;">+20 100 000 0000</p>
+        </div>
+        <div style="border-left:2px solid #c8a96e;padding:10px 0 10px 18px;margin-bottom:20px;">
+            <p style="font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#999;margin-bottom:4px;">Location</p>
+            <p style="font-size:14px;color:#1a1a1a;">Cairo, Egypt</p>
+        </div>
+        <div style="border-left:2px solid #c8a96e;padding:10px 0 10px 18px;margin-bottom:20px;">
+            <p style="font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#999;margin-bottom:4px;">Working hours</p>
+            <p style="font-size:14px;color:#1a1a1a;">Sun – Thu, 9 AM – 6 PM</p>
+        </div>
+    </div>
+</div>
+
+<!-- Team Cards -->
+<div style="background:#f8f7f4;padding:70px 40px;">
+    <div style="text-align:center;margin-bottom:48px;">
+        <p style="font-size:11px;letter-spacing:3px;text-transform:uppercase;color:#c8a96e;margin-bottom:14px;">The team</p>
+        <h2 style="font-size:28px;font-weight:400;color:#1a1a1a;margin-bottom:10px;">Contact a Developer Directly</h2>
+        <p style="font-size:14px;color:#888;max-width:400px;margin:0 auto;">Each member of our team is happy to hear from you.</p>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:20px;max-width:1100px;margin:0 auto;">
+
+        <!-- Muhammad Mamdouh -->
+        <div class="block2" style="background:#fff;border:0.5px solid #e8e8e4;padding:24px 20px 22px;display:flex;flex-direction:column;align-items:center;text-align:center;transition:transform 0.3s;" onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform='translateY(0)'">
+            <div style="width:64px;height:64px;border-radius:50%;background:#1a1a1a;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:500;color:#fff;margin-bottom:16px;">MM</div>
+            <p style="font-size:15px;font-weight:400;color:#1a1a1a;margin-bottom:4px;">Muhammad Mamdouh</p>
+            <p style="font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:#999;margin-bottom:14px;">Full-Stack Developer</p>
+            <div style="width:24px;height:2px;background:#c8a96e;margin-bottom:14px;"></div>
+            <p style="font-size:12px;color:#c8a96e;">m.mamdouh@fashionstore.com</p>
+        </div>
+
+        <!-- Abdelrahman Ehab -->
+        <div class="block2" style="background:#fff;border:0.5px solid #e8e8e4;padding:24px 20px 22px;display:flex;flex-direction:column;align-items:center;text-align:center;transition:transform 0.3s;" onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform='translateY(0)'">
+            <div style="width:64px;height:64px;border-radius:50%;background:#2c3e50;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:500;color:#fff;margin-bottom:16px;">AE</div>
+            <p style="font-size:15px;font-weight:400;color:#1a1a1a;margin-bottom:4px;">Abdelrahman Ehab</p>
+            <p style="font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:#999;margin-bottom:14px;">Back-End Developer</p>
+            <div style="width:24px;height:2px;background:#5dade2;margin-bottom:14px;"></div>
+            <p style="font-size:12px;color:#5dade2;">a.ehab@fashionstore.com</p>
+        </div>
+
+        <!-- Muhammad Elsayed Ghareed -->
+        <div class="block2" style="background:#fff;border:0.5px solid #e8e8e4;padding:24px 20px 22px;display:flex;flex-direction:column;align-items:center;text-align:center;transition:transform 0.3s;" onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform='translateY(0)'">
+            <div style="width:64px;height:64px;border-radius:50%;background:#1e3a2f;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:500;color:#fff;margin-bottom:16px;">ME</div>
+            <p style="font-size:15px;font-weight:400;color:#1a1a1a;margin-bottom:4px;">Muhammad Elsayed Ghareed</p>
+            <p style="font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:#999;margin-bottom:14px;">Front-End Developer</p>
+            <div style="width:24px;height:2px;background:#27ae60;margin-bottom:14px;"></div>
+            <p style="font-size:12px;color:#27ae60;">m.ghareed@fashionstore.com</p>
+        </div>
+
+        <!-- Muhammad Khaled -->
+        <div class="block2" style="background:#fff;border:0.5px solid #e8e8e4;padding:24px 20px 22px;display:flex;flex-direction:column;align-items:center;text-align:center;transition:transform 0.3s;" onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform='translateY(0)'">
+            <div style="width:64px;height:64px;border-radius:50%;background:#3b1f3f;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:500;color:#fff;margin-bottom:16px;">MK</div>
+            <p style="font-size:15px;font-weight:400;color:#1a1a1a;margin-bottom:4px;">Muhammad Khaled</p>
+            <p style="font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:#999;margin-bottom:14px;">UI / UX Developer</p>
+            <div style="width:24px;height:2px;background:#9b59b6;margin-bottom:14px;"></div>
+            <p style="font-size:12px;color:#9b59b6;">m.khaled@fashionstore.com</p>
+        </div>
+
+        <!-- Fouad Sherif AlMinshawi -->
+        <div class="block2" style="background:#fff;border:0.5px solid #e8e8e4;padding:24px 20px 22px;display:flex;flex-direction:column;align-items:center;text-align:center;transition:transform 0.3s;" onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform='translateY(0)'">
+            <div style="width:64px;height:64px;border-radius:50%;background:#3d2000;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:500;color:#fff;margin-bottom:16px;">FA</div>
+            <p style="font-size:15px;font-weight:400;color:#1a1a1a;margin-bottom:4px;">Fouad Sherif AlMinshawi</p>
+            <p style="font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:#999;margin-bottom:14px;">Systems Developer</p>
+            <div style="width:24px;height:2px;background:#e67e22;margin-bottom:14px;"></div>
+            <p style="font-size:12px;color:#e67e22;">f.alminshawi@fashionstore.com</p>
+        </div>
+
+        <!-- Mahinour Salah -->
+        <div class="block2" style="background:#fff;border:0.5px solid #e8e8e4;padding:24px 20px 22px;display:flex;flex-direction:column;align-items:center;text-align:center;transition:transform 0.3s;" onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform='translateY(0)'">
+            <div style="width:64px;height:64px;border-radius:50%;background:#3a1228;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:500;color:#fff;margin-bottom:16px;">MS</div>
+            <p style="font-size:15px;font-weight:400;color:#1a1a1a;margin-bottom:4px;">Mahinour Salah</p>
+            <p style="font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:#999;margin-bottom:14px;">Full-Stack Developer</p>
+            <div style="width:24px;height:2px;background:#e91e8c;margin-bottom:14px;"></div>
+            <p style="font-size:12px;color:#e91e8c;">m.salah@fashionstore.com</p>
+        </div>
+
+    </div>
+</div>
