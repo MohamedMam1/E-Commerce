@@ -25,11 +25,12 @@ namespace E_Commerce.Repositories
                 .ToListAsync();
         }
 
-        public async Task<Cart> GetCartItemAsync(string userId, int productId)
+        public async Task<Cart> GetCartItemAsync(string userId, int productId, ProductSize size, ProductColor color)
         {
             return await _context.Carts
                 .Include(c => c.Product)
-                .FirstOrDefaultAsync(c => c.UserId == userId && c.ProductId == productId);
+                .FirstOrDefaultAsync(c =>
+                    c.UserId == userId && c.ProductId == productId && c.Size == size && c.Color == color);
         }
 
         public async Task AddToCartAsync(Cart cartItem)

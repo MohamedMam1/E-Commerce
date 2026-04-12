@@ -456,6 +456,7 @@
                                 <tr>
                                     <th colspan="2">Product</th>
                                     <th class="col-price">Price</th>
+                                    <th class="col-variant">Variant</th>
                                     <th class="col-qty">Quantity</th>
                                     <th class="col-total">Total</th>
                                     <th class="col-remove"></th>
@@ -476,12 +477,16 @@
                                         <td class="price-cell">
                                             $@item.Price.ToString("0.00")
                                         </td>
+                                        <td class="price-cell" style="text-align:left;font-size:13px;color:#7a7873;">
+                                            @item.Size / @item.Color
+                                        </td>
                                         <td class="qty-cell">
                                             <div class="qty-control">
-                                                <button class="qty-btn" onclick="updateQuantity(@item.ProductId, @(item.Quantity - 1))" aria-label="Decrease quantity">&#x2212;</button>
-                                                <input class="qty-input" type="number" value="@item.Quantity" readonly>
-                                                <button class="qty-btn" onclick="updateQuantity(@item.ProductId, @(item.Quantity + 1))" aria-label="Increase quantity">&#x2B;</button>
+                                                <button type="button" class="qty-btn" onclick="updateQuantity(@item.ProductId, @(item.Quantity - 1), @((int)item.Size), @((int)item.Color), @item.MaxQuantity, @item.Quantity)" aria-label="Decrease quantity">&#x2212;</button>
+                                                <input class="qty-input" type="number" value="@item.Quantity" readonly title="Max @item.MaxQuantity in stock">
+                                                <button type="button" class="qty-btn" onclick="updateQuantity(@item.ProductId, @(item.Quantity + 1), @((int)item.Size), @((int)item.Color), @item.MaxQuantity, @item.Quantity)" aria-label="Increase quantity">&#x2B;</button>
                                             </div>
+                                            <div class="stext-102 cl6" style="font-size:11px;margin-top:6px;">Max @item.MaxQuantity in stock</div>
                                         </td>
                                         <td class="total-cell">
                                             $@item.Subtotal.ToString("0.00")
@@ -489,6 +494,8 @@
                                         <td class="remove-cell">
                                             <form asp-action="RemoveFromCart" asp-controller="Cart" method="post" class="d-inline">
                                                 <input type="hidden" name="productId" value="@item.ProductId" />
+                                                <input type="hidden" name="size" value="@((int)item.Size)" />
+                                                <input type="hidden" name="color" value="@((int)item.Color)" />
                                                 <button type="submit" class="remove-btn" aria-label="Remove item">
                                                     <svg class="remove-icon" viewBox="0 0 24 24">
                                                         <polyline points="3 6 5 6 21 6"></polyline>
@@ -507,7 +514,7 @@
                         {
                             <tbody>
                                 <tr>
-                                    <td colspan="6">
+                                    <td colspan="7">
                                         <div class="empty-cart">
                                             <svg class="empty-cart-icon" viewBox="0 0 64 64" fill="none" stroke="#1C1C1A" stroke-width="1.5">
                                                 <path d="M8 8h5l6 32h30l4-22H18" />
@@ -578,17 +585,63 @@
 
 @section Scripts {
     <script>
-        function updateQuantity(productId, newQuantity) {
-            if (newQuantity < 0) return;
+        var cartQtyRequestInFlight = false;
 
+        function cartAlert(title, text, icon) {
+            var msg = title + "\n\n" + text;
+            if (typeof swal !== 'function') {
+                window.alert(msg);
+                return;
+            }
+            try {
+                swal({
+                    title: title,
+                    text: text,
+                    icon: icon || "info",
+                    button: "OK",
+                    closeOnClickOutside: false,
+                    closeOnEsc: false
+                });
+            } catch (e) {
+                window.alert(msg);
+            }
+        }
+
+        function updateQuantity(productId, newQuantity, size, color, maxQty, currentQty) {
+            if (newQuantity < 0) return;
+            if (cartQtyRequestInFlight) return;
+
+            if (newQuantity === currentQty) return;
+
+            if (newQuantity > maxQty) {
+                cartAlert(
+                    "Stock limit",
+                    "Only " + maxQty + " available in stock for this item. Click OK to continue.",
+                    "warning");
+                return;
+            }
+
+            cartQtyRequestInFlight = true;
             $.ajax({
                 url: '/Cart/UpdateQuantity',
                 type: 'POST',
-                data: { productId: productId, quantity: newQuantity },
+                dataType: 'json',
+                data: { productId: productId, quantity: newQuantity, size: size, color: color },
                 success: function (result) {
-                    if (result.success) {
+                    if (result && result.success) {
                         location.reload();
+                    } else {
+                        cartAlert(
+                            "Could not update",
+                            (result && result.message) ? result.message : "Try again.",
+                            "error");
                     }
+                },
+                error: function () {
+                    cartAlert("Error", "Could not reach the server.", "error");
+                },
+                complete: function () {
+                    cartQtyRequestInFlight = false;
                 }
             });
         }

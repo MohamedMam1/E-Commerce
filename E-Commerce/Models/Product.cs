@@ -22,6 +22,12 @@ namespace FinalProject.Models
         [Range(0, int.MaxValue, ErrorMessage = "Quantity must be 0 or greater.")]
         public int Quantity { get; set; }
 
+        [Required]
+        public ProductSize Size { get; set; }
+
+        [Required]
+        public ProductColor Color { get; set; }
+
         public bool IsAvailable => Quantity > 0;
 
         public ICollection<ProductImage> ExtraImages { get; set; }

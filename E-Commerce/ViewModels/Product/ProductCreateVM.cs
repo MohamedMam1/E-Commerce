@@ -1,5 +1,6 @@
-﻿// ViewModels/Product/ProductCreateVM.cs
+// ViewModels/Product/ProductCreateVM.cs
 using System.ComponentModel.DataAnnotations;
+using FinalProject.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
@@ -22,6 +23,12 @@ namespace E_Commerce.ViewModels.Product
 
         [Required(ErrorMessage = "Please select a category.")]
         public int CategoryId { get; set; }
+
+        [Range(1, 4, ErrorMessage = "Please select a size.")]
+        public ProductSize Size { get; set; }
+
+        [Range(1, 4, ErrorMessage = "Please select a color.")]
+        public ProductColor Color { get; set; }
 
         public bool IsAvailable { get; set; }
 

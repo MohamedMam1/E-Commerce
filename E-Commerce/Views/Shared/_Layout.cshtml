@@ -134,12 +134,12 @@
 
 									<div class="size-204 respon6-next">
 										<div class="rs1-select2 bor8 bg0">
-											<select class="js-select2" name="time">
-												<option>Choose an option</option>
-												<option>Size S</option>
-												<option>Size M</option>
-												<option>Size L</option>
-												<option>Size XL</option>
+											<select class="js-select2 js-product-size" name="modal-size">
+												<option value="">Choose an option</option>
+												<option value="1">S</option>
+												<option value="2">M</option>
+												<option value="3">L</option>
+												<option value="4">XL</option>
 											</select>
 											<div class="dropDownSelect2"></div>
 										</div>
@@ -153,12 +153,12 @@
 
 									<div class="size-204 respon6-next">
 										<div class="rs1-select2 bor8 bg0">
-											<select class="js-select2" name="time">
-												<option>Choose an option</option>
-												<option>Red</option>
-												<option>Blue</option>
-												<option>White</option>
-												<option>Grey</option>
+											<select class="js-select2 js-product-color" name="modal-color">
+												<option value="">Choose an option</option>
+												<option value="1">Red</option>
+												<option value="2">Blue</option>
+												<option value="3">White</option>
+												<option value="4">Grey</option>
 											</select>
 											<div class="dropDownSelect2"></div>
 										</div>
@@ -399,6 +399,10 @@
 			$(this).on('click', function(e){
 				e.preventDefault();
 				var productId = btn.data('product-id');
+				if (!productId) {
+					swal("Product required", "This wishlist action needs a product. Open a product detail page.", "info");
+					return;
+				}
 
 				$.post('/Wishlist/ToggleWishlist', { productId: productId }, function(response) {
 					if (response.success) {
@@ -437,9 +441,20 @@
 			$(this).on('click', function(e){
 				e.preventDefault();
 				var productId = btn.data('product-id');
-				var quantity = btn.closest('.flex-w').find('.num-product').val() || 1;
+				if (!productId) {
+					swal("Product required", "Open a product detail page to add items with size and color.", "info");
+					return;
+				}
+				var container = btn.closest('.sec-product-detail, .wrap-modal1, .modal');
+				var quantity = parseInt(btn.closest('.flex-w').find('.num-product').val(), 10) || 1;
+				var size = parseInt(container.find('.js-product-size').first().val(), 10);
+				var color = parseInt(container.find('.js-product-color').first().val(), 10);
+				if (!size || !color) {
+					swal("Selection required", "Please choose a size and a color.", "warning");
+					return;
+				}
 
-				$.post('/Cart/AddToCart', { productId: productId, quantity: parseInt(quantity) }, function(response) {
+				$.post('/Cart/AddToCart', { productId: productId, quantity: quantity, size: size, color: color }, function(response) {
 					if (response.success) {
 						swal($.trim(nameProduct), "is added to cart !", "success");
 
@@ -448,7 +463,7 @@
 							var $icon = $(this);
 							if ($icon.find('.zmdi-shopping-cart').length > 0) {
 								var currentCount = parseInt($icon.attr('data-notify')) || 0;
-								$icon.attr('data-notify', currentCount + parseInt(quantity));
+								$icon.attr('data-notify', currentCount + quantity);
 							}
 						});
 					} else {

@@ -1,4 +1,5 @@
 using E_Commerce.ViewModels.Cart;
+using FinalProject.Models;
 using System.Threading.Tasks;
 
 namespace E_Commerce.Interfaces
@@ -7,9 +8,11 @@ namespace E_Commerce.Interfaces
     {
         Task<CartVM> GetUserCartAsync(string userId);
         Task<int> GetCartItemCountAsync(string userId);
-        Task AddItemToCartAsync(string userId, int productId, int quantity = 1);
-        Task UpdateCartItemQuantityAsync(string userId, int productId, int quantity);
-        Task RemoveItemFromCartAsync(string userId, int productId);
+        Task<(bool Success, string Message)> AddItemToCartAsync(
+            string userId, int productId, int quantity, ProductSize size, ProductColor color);
+        Task<(bool Success, string Message)> UpdateCartItemQuantityAsync(
+            string userId, int productId, int quantity, ProductSize size, ProductColor color);
+        Task RemoveItemFromCartAsync(string userId, int productId, ProductSize size, ProductColor color);
         Task ClearCartAsync(string userId);
     }
 }

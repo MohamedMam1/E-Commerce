@@ -10,6 +10,12 @@ namespace FinalProject.Models
         public int ProductId { get; set; }
 
         [Required]
+        public ProductSize Size { get; set; }
+
+        [Required]
+        public ProductColor Color { get; set; }
+
+        [Required]
         public int Quantity { get; set; }
 
         [ForeignKey("UserId")]

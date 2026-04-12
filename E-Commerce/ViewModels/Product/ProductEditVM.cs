@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using FinalProject.Models;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System.ComponentModel.DataAnnotations;
 
 namespace E_Commerce.ViewModels.Product
@@ -22,6 +23,12 @@ namespace E_Commerce.ViewModels.Product
 
         [Required(ErrorMessage = "Please select a category.")]
         public int CategoryId { get; set; }
+
+        [Range(1, 4, ErrorMessage = "Please select a size.")]
+        public ProductSize Size { get; set; }
+
+        [Range(1, 4, ErrorMessage = "Please select a color.")]
+        public ProductColor Color { get; set; }
         public string? ExistingMainImageUrl { get; set; }
         public List<string> ExistingExtraImageUrls { get; set; } = new();
         public IFormFile? MainImage { get; set; }

@@ -355,7 +355,7 @@
                                             <div class="action-group">
                                                 @if (item.IsAvailable)
                                                 {
-                                                    <button class="btn-add-cart" onclick="addToCart(@item.ProductId)" aria-label="Add to cart">
+                                                    <button class="btn-add-cart" onclick="addToCart(@item.ProductId, @((int)item.Size), @((int)item.Color))" aria-label="Add to cart">
                                                         <svg viewBox="0 0 24 24">
                                                             <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
                                                             <line x1="3" y1="6" x2="21" y2="6"></line>
@@ -407,14 +407,20 @@
 
 @section Scripts {
     <script>
-        function addToCart(productId) {
+        function addToCart(productId, size, color) {
+            if (!size || !color) {
+                swal("Selection required", "This product needs a size and color. Open the product page to choose options.", "warning");
+                return;
+            }
             $.ajax({
                 url: '/Cart/AddToCart',
                 type: 'POST',
-                data: { productId: productId, quantity: 1 },
+                data: { productId: productId, quantity: 1, size: size, color: color },
                 success: function (result) {
                     if (result.success) {
                         swal("Success", result.message, "success");
+                    } else {
+                        swal("Error", result.message || "Could not add to cart.", "error");
                     }
                 }
             });

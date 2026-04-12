@@ -1,4 +1,4 @@
-﻿using E_Commerce.Models;
+using E_Commerce.Models;
 using FinalProject.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -26,7 +26,7 @@ namespace FinalProject.Context
             base.OnModelCreating(modelBuilder);
 
             // Configure composite primary keys
-            modelBuilder.Entity<Cart>().HasKey(c => new { c.UserId, c.ProductId });
+            modelBuilder.Entity<Cart>().HasKey(c => new { c.UserId, c.ProductId, c.Size, c.Color });
             modelBuilder.Entity<Wishlist>().HasKey(w => new { w.UserId, w.ProductId });
 
             // Additional configurations can be added here if needed

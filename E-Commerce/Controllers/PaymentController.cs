@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using E_Commerce.ViewModels;
+using E_Commerce.ViewModels.Cart;
 using E_Commerce.Interfaces;
 using Stripe;
 using System.Security.Claims;
@@ -32,7 +33,10 @@ namespace E_Commerce.Controllers
                     ProductId = i.ProductId,
                     ProductName = i.ProductName,
                     Quantity = i.Quantity,
-                    Price = i.Price
+                    Price = i.Price,
+                    Size = i.Size,
+                    Color = i.Color,
+                    MaxQuantity = i.MaxQuantity
                 }).ToList()
             };
 
@@ -63,7 +67,9 @@ namespace E_Commerce.Controllers
                     var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
                     var cart = await _cartService.GetUserCartAsync(userId);
 
-                    var items = cart.Items.Select(i => (i.ProductId, i.Quantity, i.Price)).ToList();
+                    var items = cart.Items
+                        .Select(i => (i.ProductId, i.Quantity, i.Price, i.Size, i.Color))
+                        .ToList();
 
                     await _paymentService.SaveOrderAsync(userId, items);
 
@@ -99,4 +105,4 @@ namespace E_Commerce.Controllers
             }
         }
     }
-}
+}

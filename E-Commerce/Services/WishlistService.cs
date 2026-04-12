@@ -27,7 +27,9 @@ namespace E_Commerce.Services
                     ProductName = w.Product?.Name ?? "Unknown Product",
                     Price = w.Product?.Price ?? 0,
                     ImageUrl = w.Product?.ImageUrl,
-                    IsAvailable = w.Product?.IsAvailable ?? false
+                    IsAvailable = w.Product?.IsAvailable ?? false,
+                    Size = w.Product?.Size ?? default,
+                    Color = w.Product?.Color ?? default
                 }).ToList()
             };
 

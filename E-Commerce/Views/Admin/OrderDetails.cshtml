@@ -1,4 +1,4 @@
-﻿@model E_Commerce.ViewModels.AdminDashboard.AdminOrderDetailsVM
+@model E_Commerce.ViewModels.AdminDashboard.AdminOrderDetailsVM
 
 @{
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
@@ -69,6 +69,7 @@
                             <thead class="table-header-sticky">
                                 <tr>
                                     <th>Product</th>
+                                    <th>Variant</th>
                                     <th>Quantity</th>
                                     <th>Unit Price</th>
                                     <th>Subtotal</th>
@@ -86,6 +87,7 @@
                                                 <span>@item.ProductName</span>
                                             </div>
                                         </td>
+                                        <td>@item.Size / @item.Color</td>
                                         <td>@item.Quantity</td>
                                         <td>@item.UnitPrice.ToString("F2") LE</td>
                                         <td>@item.SubTotal.ToString("F2") LE</td>

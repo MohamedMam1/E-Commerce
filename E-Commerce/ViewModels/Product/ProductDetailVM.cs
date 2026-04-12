@@ -1,4 +1,6 @@
-﻿namespace E_Commerce.ViewModels.Product
+using FinalProject.Models;
+
+namespace E_Commerce.ViewModels.Product
 {
     public class ProductDetailVM
     {
@@ -13,5 +15,7 @@
 
         public List<string> productImages { get; set; }
         public int Quantity { get; set; }
+        public ProductSize Size { get; set; }
+        public ProductColor Color { get; set; }
     }
 }

@@ -1,4 +1,4 @@
-﻿@model E_Commerce.ViewModels.Product.ProductCreateVM
+@model E_Commerce.ViewModels.Product.ProductCreateVM
 
 @{
     ViewData["Title"] = "Add Product";
@@ -54,6 +54,34 @@
                             <input asp-for="Quantity" class="form-control" placeholder="Quantity" />
                             <label>Quantity</label>
                             <span asp-validation-for="Quantity" class="text-danger small"></span>
+                        </div>
+                    </div>
+
+                    <!-- Size -->
+                    <div class="col-md-6">
+                        <div class="form-floating">
+                            <select asp-for="Size" class="form-select">
+                                @foreach (var s in Enum.GetValues(typeof(ProductSize)).Cast<ProductSize>().Where(x => x != ProductSize.Unspecified))
+                                {
+                                    <option value="@((int)s)">@s</option>
+                                }
+                            </select>
+                            <label>Size (variant)</label>
+                            <span asp-validation-for="Size" class="text-danger small"></span>
+                        </div>
+                    </div>
+
+                    <!-- Color -->
+                    <div class="col-md-6">
+                        <div class="form-floating">
+                            <select asp-for="Color" class="form-select">
+                                @foreach (var c in Enum.GetValues(typeof(ProductColor)).Cast<ProductColor>().Where(x => x != ProductColor.Unspecified))
+                                {
+                                    <option value="@((int)c)">@c</option>
+                                }
+                            </select>
+                            <label>Color (variant)</label>
+                            <span asp-validation-for="Color" class="text-danger small"></span>
                         </div>
                     </div>
 
