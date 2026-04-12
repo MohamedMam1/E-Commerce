@@ -2,146 +2,907 @@
     ViewData["Title"] = "Contact";
 }
 
-<!-- Hero -->
-<section style="background:#1a1a1a; padding:72px 40px 56px; text-align:center; position:relative; overflow:hidden;">
-    <div style="position:absolute;inset:0;background-image:repeating-linear-gradient(0deg,rgba(255,255,255,0.03) 0,rgba(255,255,255,0.03) 1px,transparent 1px,transparent 60px),repeating-linear-gradient(90deg,rgba(255,255,255,0.03) 0,rgba(255,255,255,0.03) 1px,transparent 1px,transparent 60px);pointer-events:none;"></div>
-    <p style="font-size:11px;letter-spacing:3px;text-transform:uppercase;color:#aaa;margin-bottom:16px;">Get in touch</p>
-    <h1 style="font-size:40px;font-weight:400;color:#fff;margin-bottom:16px;line-height:1.2;">Contact <span style="color:#c8a96e;">Us</span></h1>
-    <div style="width:48px;height:2px;background:#c8a96e;margin:0 auto 18px;"></div>
-    <p style="font-size:14px;color:#999;max-width:480px;margin:0 auto;line-height:1.7;">Have a question, feedback, or just want to say hello? We'd love to hear from you.</p>
-</section>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Montserrat:wght@200;300;400;500;600&family=Cormorant:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet">
 
-<!-- Contact Form + Info -->
-<div style="max-width:1100px;margin:0 auto;padding:70px 40px;display:flex;gap:60px;flex-wrap:wrap;align-items:flex-start;">
+<style>
+    :root {
+        --gold: #b8963e;
+        --gold-light: #d4af6a;
+        --gold-pale: #f0e6cc;
+        --gold-dim: rgba(184,150,62,0.10);
+        --dark: #0e0e0e;
+        --dark2: #161616;
+        --dark3: #1f1f1f;
+        --light: #faf9f6;
+        --light2: #f3f1ec;
+        --cream: #ede8de;
+        --muted: #7a7a7a;
+        --muted2: #aaaaaa;
+        --border-dark: rgba(184,150,62,0.15);
+        --border-light: #e0d8c8;
+        --font-serif: 'Playfair Display', Georgia, serif;
+        --font-alt: 'Cormorant', Georgia, serif;
+        --font-sans: 'Montserrat', sans-serif;
+    }
 
-    <!-- Form -->
-    <div style="flex:1;min-width:280px;">
-        <p style="font-size:11px;letter-spacing:3px;text-transform:uppercase;color:#c8a96e;margin-bottom:14px;">Send a message</p>
-        <h2 style="font-size:26px;font-weight:400;color:#1a1a1a;margin-bottom:10px;">We'll get back to you</h2>
-        <p style="font-size:14px;color:#888;line-height:1.7;margin-bottom:28px;">Fill out the form and one of our team members will respond within 24 hours.</p>
+    .contact-page {
+        font-family: var(--font-sans);
+    }
 
-        <form method="post">
-            @Html.AntiForgeryToken()
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:18px;">
-                <div>
-                    <label style="font-size:12px;letter-spacing:1px;text-transform:uppercase;color:#999;display:block;margin-bottom:6px;">First name</label>
-                    <input type="text" name="firstName" placeholder="Muhammad" class="stext-111 cl8 plh3 size-111 bor8 p-lr-15" style="width:100%;padding:10px 14px;border:0.5px solid #ddd;font-size:14px;color:#1a1a1a;background:#fff;outline:none;" />
+    /* ── HERO ───────────────────────────────────────────── */
+    .c-hero {
+        background: var(--dark);
+        min-height: 520px;
+        display: flex;
+        align-items: center;
+        position: relative;
+        overflow: hidden;
+    }
+
+        .c-hero::before {
+            content: '';
+            position: absolute;
+            top: -200px;
+            right: -100px;
+            width: 500px;
+            height: 900px;
+            background: linear-gradient(135deg, rgba(184,150,62,0.06) 0%, transparent 60%);
+            transform: rotate(-15deg);
+            pointer-events: none;
+        }
+
+        .c-hero::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image: linear-gradient(rgba(184,150,62,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(184,150,62,0.05) 1px, transparent 1px);
+            background-size: 72px 72px;
+            pointer-events: none;
+        }
+
+    .c-hero-inner {
+        position: relative;
+        z-index: 2;
+        padding: 110px 0 100px;
+    }
+
+    .c-hero-tag {
+        display: inline-flex;
+        align-items: center;
+        gap: 12px;
+        font-family: var(--font-sans);
+        font-size: 9px;
+        font-weight: 500;
+        letter-spacing: 5px;
+        text-transform: uppercase;
+        color: var(--gold-light);
+        margin-bottom: 28px;
+    }
+
+        .c-hero-tag::before {
+            content: '';
+            display: block;
+            width: 30px;
+            height: 1px;
+            background: var(--gold-light);
+        }
+
+    .c-hero-h1 {
+        font-family: var(--font-serif);
+        font-size: clamp(3.2rem, 7vw, 6rem);
+        font-weight: 400;
+        color: #fff;
+        line-height: 1.0;
+        letter-spacing: -0.02em;
+        margin-bottom: 0;
+    }
+
+        .c-hero-h1 em {
+            font-style: italic;
+            color: var(--gold-light);
+        }
+
+    .c-hero-sub {
+        font-family: var(--font-sans);
+        font-size: 12px;
+        font-weight: 300;
+        letter-spacing: 0.08em;
+        color: var(--muted2);
+        line-height: 2;
+        max-width: 360px;
+        margin-top: 28px;
+    }
+
+    .c-hero-right {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        justify-content: center;
+        height: 100%;
+        padding: 110px 0;
+        gap: 24px;
+    }
+
+    .c-hero-vertical {
+        writing-mode: vertical-rl;
+        text-orientation: mixed;
+        font-family: var(--font-sans);
+        font-size: 9px;
+        font-weight: 500;
+        letter-spacing: 5px;
+        text-transform: uppercase;
+        color: rgba(184,150,62,0.45);
+        transform: rotate(180deg);
+    }
+
+    .c-hero-vline {
+        width: 1px;
+        height: 120px;
+        background: linear-gradient(180deg, transparent, var(--gold-light), transparent);
+        margin-left: auto;
+    }
+
+    /* ── SECTION LABELS ─────────────────────────────────── */
+    .c-tag {
+        font-family: var(--font-sans);
+        font-size: 9px;
+        font-weight: 600;
+        letter-spacing: 5px;
+        text-transform: uppercase;
+        color: var(--gold);
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 16px;
+    }
+
+        .c-tag::after {
+            content: '';
+            display: block;
+            width: 40px;
+            height: 1px;
+            background: var(--gold);
+        }
+
+    .c-h2 {
+        font-family: var(--font-serif);
+        font-size: clamp(2rem, 4vw, 3rem);
+        font-weight: 400;
+        color: var(--dark);
+        line-height: 1.1;
+        letter-spacing: -0.02em;
+        margin-bottom: 0;
+    }
+
+        .c-h2 em {
+            font-style: italic;
+            color: var(--gold);
+        }
+
+    .c-h2-light {
+        font-family: var(--font-serif);
+        font-size: clamp(2rem, 4vw, 3rem);
+        font-weight: 400;
+        color: #fff;
+        line-height: 1.1;
+        letter-spacing: -0.02em;
+        margin-bottom: 0;
+    }
+
+        .c-h2-light em {
+            font-style: italic;
+            color: var(--gold-light);
+        }
+
+    .c-p {
+        font-family: var(--font-sans);
+        font-size: 12px;
+        font-weight: 300;
+        color: var(--muted);
+        line-height: 2;
+        letter-spacing: 0.03em;
+    }
+
+    /* ── CONTACT CARDS ──────────────────────────────────── */
+    .c-cards {
+        background: var(--light);
+        padding: 90px 0;
+    }
+
+    .c-card {
+        background: #fff;
+        border: 1px solid var(--border-light);
+        padding: 36px 28px 32px;
+        height: 100%;
+        position: relative;
+        overflow: hidden;
+        transition: all 0.4s cubic-bezier(0.25,0.46,0.45,0.94);
+    }
+
+        .c-card::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--gold), var(--gold-light));
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.4s ease;
+        }
+
+        .c-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.08), 0 4px 12px rgba(184,150,62,0.1);
+            border-color: var(--cream);
+        }
+
+            .c-card:hover::after {
+                transform: scaleX(1);
+            }
+
+    .c-card-num {
+        font-family: var(--font-alt);
+        font-size: 3rem;
+        font-weight: 300;
+        color: var(--cream);
+        line-height: 1;
+        margin-bottom: 16px;
+        letter-spacing: -0.03em;
+    }
+
+    .c-card-icon {
+        width: 44px;
+        height: 44px;
+        background: var(--dark);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 20px;
+        font-size: 16px;
+        transition: background 0.3s;
+    }
+
+    .c-card:hover .c-card-icon {
+        background: var(--gold);
+    }
+
+    .c-card-label {
+        font-family: var(--font-sans);
+        font-size: 8px;
+        font-weight: 600;
+        letter-spacing: 4px;
+        text-transform: uppercase;
+        color: var(--gold);
+        margin-bottom: 8px;
+        display: block;
+    }
+
+    .c-card-title {
+        font-family: var(--font-serif);
+        font-size: 1.2rem;
+        font-weight: 500;
+        color: var(--dark);
+        margin-bottom: 10px;
+        letter-spacing: -0.01em;
+    }
+
+    .c-card-val {
+        font-family: var(--font-sans);
+        font-size: 12px;
+        font-weight: 300;
+        color: var(--muted);
+        line-height: 1.9;
+        margin: 0;
+        letter-spacing: 0.02em;
+    }
+
+    /* ── PROMISE STRIP ──────────────────────────────────── */
+    .c-promise {
+        background: var(--dark2);
+        padding: 90px 0;
+        position: relative;
+        overflow: hidden;
+    }
+
+        .c-promise::before,
+        .c-promise::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent 0%, var(--gold) 30%, var(--gold-light) 50%, var(--gold) 70%, transparent 100%);
+        }
+
+        .c-promise::before {
+            top: 0;
+        }
+
+        .c-promise::after {
+            bottom: 0;
+        }
+
+    .c-promise-big {
+        font-family: var(--font-serif);
+        font-size: clamp(3.5rem, 8vw, 6.5rem);
+        font-weight: 400;
+        color: var(--gold);
+        line-height: 1;
+        letter-spacing: -0.04em;
+        opacity: 0.75;
+    }
+
+    .c-promise-title {
+        font-family: var(--font-serif);
+        font-size: 1rem;
+        font-weight: 500;
+        color: #fff;
+        letter-spacing: 0.05em;
+        margin-bottom: 10px;
+    }
+
+    .c-promise-text {
+        font-family: var(--font-sans);
+        font-size: 11px;
+        font-weight: 300;
+        color: var(--muted2);
+        line-height: 2;
+        letter-spacing: 0.04em;
+        margin: 0;
+    }
+
+    .c-promise-sep {
+        width: 1px;
+        background: rgba(184,150,62,0.2);
+        align-self: stretch;
+        min-height: 100px;
+    }
+
+    /* ── FAQ ────────────────────────────────────────────── */
+    .c-faq {
+        background: var(--light2);
+        padding: 90px 0;
+    }
+
+    .c-faq-item {
+        border-bottom: 1px solid var(--border-light);
+    }
+
+    .c-faq-btn {
+        width: 100%;
+        background: none;
+        border: none;
+        padding: 24px 0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 1.5rem;
+        cursor: pointer;
+        text-align: left;
+    }
+
+    .c-faq-q {
+        font-family: var(--font-serif);
+        font-size: 1.05rem;
+        font-weight: 400;
+        color: var(--dark);
+        letter-spacing: -0.01em;
+        line-height: 1.3;
+        transition: color 0.2s;
+    }
+
+    .c-faq-btn:hover .c-faq-q {
+        color: var(--gold);
+    }
+
+    .c-faq-ico {
+        width: 28px;
+        height: 28px;
+        border: 1px solid var(--border-light);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        font-size: 14px;
+        color: var(--gold);
+        font-weight: 300;
+        transition: all 0.3s ease;
+        font-family: var(--font-sans);
+    }
+
+    .c-faq-btn.open .c-faq-ico {
+        transform: rotate(45deg);
+        background: var(--gold);
+        color: #fff;
+        border-color: var(--gold);
+    }
+
+    .c-faq-a {
+        font-family: var(--font-sans);
+        font-size: 12px;
+        font-weight: 300;
+        color: var(--muted);
+        line-height: 2;
+        letter-spacing: 0.03em;
+        padding: 0 0 24px;
+        display: none;
+        max-width: 580px;
+    }
+
+    /* ── LOCATION ───────────────────────────────────────── */
+    .c-location {
+        background: var(--dark3);
+        height: 360px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        overflow: hidden;
+    }
+
+        .c-location::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image: linear-gradient(rgba(184,150,62,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(184,150,62,0.04) 1px, transparent 1px);
+            background-size: 48px 48px;
+        }
+
+        .c-location::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse 60% 60% at 50% 50%, transparent 40%, var(--dark3) 100%);
+        }
+
+    .c-location-inner {
+        position: relative;
+        z-index: 2;
+        text-align: center;
+    }
+
+    .c-loc-ring {
+        width: 80px;
+        height: 80px;
+        border: 1px solid rgba(184,150,62,0.4);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 20px;
+        position: relative;
+        animation: ringPulse 3s ease-in-out infinite;
+    }
+
+        .c-loc-ring::before {
+            content: '';
+            position: absolute;
+            inset: -12px;
+            border: 1px solid rgba(184,150,62,0.15);
+            border-radius: 50%;
+        }
+
+    @@keyframes ringPulse {
+        0%, 100% {
+            box-shadow: 0 0 0 0 rgba(184,150,62,0.3);
+        }
+
+        50% {
+            box-shadow: 0 0 0 16px rgba(184,150,62,0);
+        }
+    }
+
+    .c-loc-ring span {
+        font-size: 26px;
+    }
+
+    .c-loc-label {
+        font-family: var(--font-sans);
+        font-size: 9px;
+        font-weight: 500;
+        letter-spacing: 5px;
+        text-transform: uppercase;
+        color: var(--muted2);
+        margin-bottom: 8px;
+    }
+
+    .c-loc-city {
+        font-family: var(--font-serif);
+        font-size: 2.4rem;
+        font-weight: 400;
+        color: var(--gold-light);
+        letter-spacing: -0.02em;
+        line-height: 1;
+    }
+
+    .c-loc-country {
+        font-family: var(--font-sans);
+        font-size: 10px;
+        font-weight: 300;
+        letter-spacing: 4px;
+        text-transform: uppercase;
+        color: var(--muted2);
+        margin-top: 6px;
+    }
+
+    /* ── SOCIAL ─────────────────────────────────────────── */
+    .c-social {
+        background: var(--dark);
+        padding: 50px 0;
+        border-top: 1px solid var(--border-dark);
+        text-align: center;
+    }
+
+    .c-social-label {
+        font-family: var(--font-sans);
+        font-size: 9px;
+        font-weight: 500;
+        letter-spacing: 5px;
+        text-transform: uppercase;
+        color: var(--muted2);
+        margin-bottom: 28px;
+        display: block;
+    }
+
+    .c-social-links {
+        display: flex;
+        justify-content: center;
+        gap: 8px;
+        flex-wrap: wrap;
+    }
+
+    .c-social-link {
+        font-family: var(--font-sans);
+        font-size: 9px;
+        font-weight: 500;
+        letter-spacing: 3px;
+        text-transform: uppercase;
+        color: var(--muted2);
+        text-decoration: none;
+        padding: 11px 24px;
+        border: 1px solid rgba(184,150,62,0.2);
+        transition: all 0.3s ease;
+        display: inline-block;
+    }
+
+        .c-social-link:hover {
+            color: var(--gold-light);
+            border-color: var(--gold);
+            background: var(--gold-dim);
+        }
+
+    /* ── CTA ────────────────────────────────────────────── */
+    .c-cta {
+        background: var(--gold);
+        padding: 80px 0;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+    }
+
+        .c-cta::before {
+            content: '';
+            position: absolute;
+            top: -80px;
+            right: -80px;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.06);
+        }
+
+        .c-cta::after {
+            content: '';
+            position: absolute;
+            bottom: -100px;
+            left: 20%;
+            width: 250px;
+            height: 250px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.04);
+        }
+
+        .c-cta h2 {
+            font-family: var(--font-serif);
+            font-size: clamp(1.8rem, 4vw, 2.8rem);
+            font-weight: 400;
+            color: #fff;
+            letter-spacing: -0.02em;
+            margin-bottom: 10px;
+        }
+
+            .c-cta h2 em {
+                font-style: italic;
+            }
+
+        .c-cta p {
+            font-family: var(--font-sans);
+            font-size: 12px;
+            font-weight: 300;
+            color: rgba(255,255,255,0.72);
+            letter-spacing: 0.05em;
+            margin-bottom: 36px;
+        }
+
+    .c-cta-btn-dark {
+        display: inline-block;
+        font-family: var(--font-sans);
+        font-size: 9px;
+        font-weight: 600;
+        letter-spacing: 4px;
+        text-transform: uppercase;
+        color: #fff;
+        background: var(--dark);
+        padding: 14px 40px;
+        text-decoration: none;
+        border: 1px solid var(--dark);
+        transition: all 0.3s ease;
+        position: relative;
+        z-index: 1;
+    }
+
+        .c-cta-btn-dark:hover {
+            background: transparent;
+            color: #fff;
+            border-color: rgba(255,255,255,0.6);
+        }
+
+    .c-cta-btn-outline {
+        display: inline-block;
+        font-family: var(--font-sans);
+        font-size: 9px;
+        font-weight: 600;
+        letter-spacing: 4px;
+        text-transform: uppercase;
+        color: #fff;
+        background: transparent;
+        padding: 14px 40px;
+        text-decoration: none;
+        border: 1px solid rgba(255,255,255,0.5);
+        transition: all 0.3s ease;
+        position: relative;
+        z-index: 1;
+    }
+
+        .c-cta-btn-outline:hover {
+            background: rgba(255,255,255,0.12);
+            border-color: #fff;
+            color: #fff;
+        }
+
+    @@media (max-width: 768px) {
+        .c-hero-right {
+            display: none;
+        }
+
+        .c-promise-sep {
+            display: none;
+        }
+
+        .c-hero-h1 {
+            font-size: 3rem;
+        }
+    }
+</style>
+
+<div class="contact-page">
+
+    <!-- ── HERO ──────────────────────────────────────────────── -->
+    <section class="c-hero">
+        <div class="container c-hero-inner">
+            <div class="row align-items-center">
+                <div class="col-lg-8">
+                    <div class="c-hero-tag">Customer Care</div>
+                    <h1 class="c-hero-h1">
+                        We're Always<br />
+                        <em>Here for You</em>
+                    </h1>
+                    <p class="c-hero-sub">
+                        Our dedicated team is committed to providing you with the finest shopping experience — before, during, and after every purchase.
+                    </p>
                 </div>
-                <div>
-                    <label style="font-size:12px;letter-spacing:1px;text-transform:uppercase;color:#999;display:block;margin-bottom:6px;">Last name</label>
-                    <input type="text" name="lastName" placeholder="Khaled" style="width:100%;padding:10px 14px;border:0.5px solid #ddd;font-size:14px;color:#1a1a1a;background:#fff;outline:none;" />
+                <div class="col-lg-3 offset-lg-1 d-none d-lg-flex c-hero-right">
+                    <div class="c-hero-vline"></div>
+                    <span class="c-hero-vertical">Coza Store — Est. 2020</span>
                 </div>
             </div>
-            <div style="margin-bottom:18px;">
-                <label style="font-size:12px;letter-spacing:1px;text-transform:uppercase;color:#999;display:block;margin-bottom:6px;">Email address</label>
-                <input type="email" name="email" placeholder="you@example.com" style="width:100%;padding:10px 14px;border:0.5px solid #ddd;font-size:14px;color:#1a1a1a;background:#fff;outline:none;" />
+        </div>
+    </section>
+
+    <!-- ── CONTACT CARDS ──────────────────────────────────────── -->
+    <section class="c-cards">
+        <div class="container">
+            <div class="row align-items-end mb-5">
+                <div class="col-lg-5">
+                    <div class="c-tag">Connect</div>
+                    <h2 class="c-h2">Reach Us<br /><em>Directly</em></h2>
+                </div>
+                <div class="col-lg-5 offset-lg-2 pt-3">
+                    <p class="c-p">Every inquiry is handled with discretion and care. Choose your preferred channel and our team will respond promptly.</p>
+                </div>
             </div>
-            <div style="margin-bottom:18px;">
-                <label style="font-size:12px;letter-spacing:1px;text-transform:uppercase;color:#999;display:block;margin-bottom:6px;">Subject</label>
-                <select name="subject" style="width:100%;padding:10px 14px;border:0.5px solid #ddd;font-size:14px;color:#1a1a1a;background:#fff;outline:none;appearance:none;">
-                    <option>General inquiry</option>
-                    <option>Order support</option>
-                    <option>Returns &amp; refunds</option>
-                    <option>Other</option>
-                </select>
+
+            <div class="row g-4">
+                <div class="col-sm-6 col-xl-3">
+                    <div class="c-card">
+                        <div class="c-card-num">01</div>
+                        <div class="c-card-icon">✉️</div>
+                        <span class="c-card-label">Email</span>
+                        <h4 class="c-card-title">Write to Us</h4>
+                        <p class="c-card-val">support@cozastore.com<br />returns@cozastore.com</p>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-xl-3">
+                    <div class="c-card">
+                        <div class="c-card-num">02</div>
+                        <div class="c-card-icon">📞</div>
+                        <span class="c-card-label">Phone</span>
+                        <h4 class="c-card-title">Call Us</h4>
+                        <p class="c-card-val">+20 100 000 0000<br />+20 100 000 0001</p>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-xl-3">
+                    <div class="c-card">
+                        <div class="c-card-num">03</div>
+                        <div class="c-card-icon">📍</div>
+                        <span class="c-card-label">Location</span>
+                        <h4 class="c-card-title">Visit Our Store</h4>
+                        <p class="c-card-val">Downtown Cairo,<br />Egypt — 11511</p>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-xl-3">
+                    <div class="c-card">
+                        <div class="c-card-num">04</div>
+                        <div class="c-card-icon">🕐</div>
+                        <span class="c-card-label">Hours</span>
+                        <h4 class="c-card-title">Opening Hours</h4>
+                        <p class="c-card-val">Sun – Thu: 9AM – 6PM<br />Fri – Sat: 10AM – 4PM</p>
+                    </div>
+                </div>
             </div>
-            <div style="margin-bottom:18px;">
-                <label style="font-size:12px;letter-spacing:1px;text-transform:uppercase;color:#999;display:block;margin-bottom:6px;">Message</label>
-                <textarea name="message" placeholder="Write your message here..." rows="5" style="width:100%;padding:10px 14px;border:0.5px solid #ddd;font-size:14px;color:#1a1a1a;background:#fff;outline:none;resize:vertical;"></textarea>
+        </div>
+    </section>
+
+    <!-- ── PROMISE STRIP ───────────────────────────────────────── -->
+    <section class="c-promise">
+        <div class="container">
+            <div class="row justify-content-center text-center g-4 align-items-center">
+                <div class="col-md-3">
+                    <div class="c-promise-big">24h</div>
+                    <h5 class="c-promise-title">Response Guarantee</h5>
+                    <p class="c-promise-text">Every message answered within 24 hours on all business days, without exception.</p>
+                </div>
+                <div class="col-auto d-none d-md-flex c-promise-sep"></div>
+                <div class="col-md-3">
+                    <div class="c-promise-big">7/7</div>
+                    <h5 class="c-promise-title">Always Available</h5>
+                    <p class="c-promise-text">Our digital support channels operate seven days a week for your convenience.</p>
+                </div>
+                <div class="col-auto d-none d-md-flex c-promise-sep"></div>
+                <div class="col-md-3">
+                    <div class="c-promise-big">30d</div>
+                    <h5 class="c-promise-title">Free Returns</h5>
+                    <p class="c-promise-text">Hassle-free returns accepted within 30 days of purchase — no questions asked.</p>
+                </div>
             </div>
-            <button type="submit" class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04" style="padding:12px 36px;background:#1a1a1a;color:#fff;font-size:12px;letter-spacing:2px;text-transform:uppercase;border:none;cursor:pointer;">
-                Send Message
-            </button>
-        </form>
+        </div>
+    </section>
+
+    <!-- ── FAQ ─────────────────────────────────────────────────── -->
+    <section class="c-faq">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 mb-5 mb-lg-0">
+                    <div class="c-tag">FAQ</div>
+                    <h2 class="c-h2" style="margin-bottom:20px;">Common<br /><em>Questions</em></h2>
+                    <div style="width:28px;height:1px;background:var(--gold);margin-bottom:20px;"></div>
+                    <p class="c-p">Can't find your answer? Our support team is just an email away and always happy to help.</p>
+                </div>
+                <div class="col-lg-7 offset-lg-1">
+
+                    <div class="c-faq-item">
+                        <button class="c-faq-btn" onclick="toggleFaq(this)">
+                            <span class="c-faq-q">How can I track my order?</span>
+                            <span class="c-faq-ico">+</span>
+                        </button>
+                        <p class="c-faq-a">Once your order ships, you will receive a confirmation email with a tracking number. Use this number on our website or the courier's portal to follow your shipment in real time.</p>
+                    </div>
+
+                    <div class="c-faq-item">
+                        <button class="c-faq-btn" onclick="toggleFaq(this)">
+                            <span class="c-faq-q">What is your return policy?</span>
+                            <span class="c-faq-ico">+</span>
+                        </button>
+                        <p class="c-faq-a">We accept returns within 30 days of purchase. Items must be unworn, unwashed, and in their original packaging with all tags attached. Contact returns@cozastore.com to begin.</p>
+                    </div>
+
+                    <div class="c-faq-item">
+                        <button class="c-faq-btn" onclick="toggleFaq(this)">
+                            <span class="c-faq-q">Do you offer international shipping?</span>
+                            <span class="c-faq-ico">+</span>
+                        </button>
+                        <p class="c-faq-a">Yes — we ship to over 50 countries worldwide. Rates and delivery windows vary by destination. All applicable duties and taxes are the recipient's responsibility.</p>
+                    </div>
+
+                    <div class="c-faq-item">
+                        <button class="c-faq-btn" onclick="toggleFaq(this)">
+                            <span class="c-faq-q">How do I find my correct size?</span>
+                            <span class="c-faq-ico">+</span>
+                        </button>
+                        <p class="c-faq-a">Every product page includes a detailed size guide with measurements in centimeters and inches. When between sizes, we recommend sizing up for a more comfortable fit.</p>
+                    </div>
+
+                    <div class="c-faq-item">
+                        <button class="c-faq-btn" onclick="toggleFaq(this)">
+                            <span class="c-faq-q">Can I modify or cancel my order?</span>
+                            <span class="c-faq-ico">+</span>
+                        </button>
+                        <p class="c-faq-a">Orders can be modified or cancelled within 2 hours of placement. After this window the order enters fulfilment and changes may not be possible. Email us immediately at support@cozastore.com.</p>
+                    </div>
+
+                    <div class="c-faq-item">
+                        <button class="c-faq-btn" onclick="toggleFaq(this)">
+                            <span class="c-faq-q">What payment methods do you accept?</span>
+                            <span class="c-faq-ico">+</span>
+                        </button>
+                        <p class="c-faq-a">We accept all major credit and debit cards, PayPal, Apple Pay, and Google Pay. All transactions are encrypted and processed through secure, PCI-compliant gateways.</p>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ── LOCATION ───────────────────────────────────────────── -->
+    <div class="c-location">
+        <div class="c-location-inner">
+            <div class="c-loc-ring"><span>📍</span></div>
+            <p class="c-loc-label">Our Location</p>
+            <h3 class="c-loc-city">Cairo</h3>
+            <p class="c-loc-country">Egypt</p>
+        </div>
     </div>
 
-    <!-- Info -->
-    <div style="flex:0 0 280px;min-width:220px;">
-        <p style="font-size:11px;letter-spacing:3px;text-transform:uppercase;color:#c8a96e;margin-bottom:14px;">Our info</p>
-        <h2 style="font-size:22px;font-weight:400;color:#1a1a1a;margin-bottom:24px;">Reach us directly</h2>
+    <!-- ── SOCIAL ─────────────────────────────────────────────── -->
+    <section class="c-social">
+        <span class="c-social-label">Follow Our Journey</span>
+        <div class="c-social-links">
+            <a href="#" class="c-social-link">Facebook</a>
+            <a href="#" class="c-social-link">Instagram</a>
+            <a href="#" class="c-social-link">Twitter / X</a>
+            <a href="#" class="c-social-link">TikTok</a>
+            <a href="#" class="c-social-link">Pinterest</a>
+        </div>
+    </section>
 
-        <div style="border-left:2px solid #c8a96e;padding:10px 0 10px 18px;margin-bottom:20px;">
-            <p style="font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#999;margin-bottom:4px;">Email</p>
-            <p style="font-size:14px;color:#1a1a1a;">support@fashionstore.com</p>
+    <!-- ── CTA ────────────────────────────────────────────────── -->
+    <section class="c-cta">
+        <div class="container" style="position:relative;z-index:1;">
+            <h2>Ready to <em>Start Shopping?</em></h2>
+            <p>Discover our latest collections — curated with style, delivered with care.</p>
+            <div class="d-flex gap-3 justify-content-center flex-wrap">
+                <a asp-controller="Product" asp-action="Index" class="c-cta-btn-dark">Shop Now</a>
+                <a asp-controller="Home" asp-action="About" class="c-cta-btn-outline">Our Story</a>
+            </div>
         </div>
-        <div style="border-left:2px solid #c8a96e;padding:10px 0 10px 18px;margin-bottom:20px;">
-            <p style="font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#999;margin-bottom:4px;">Phone</p>
-            <p style="font-size:14px;color:#1a1a1a;">+20 100 000 0000</p>
-        </div>
-        <div style="border-left:2px solid #c8a96e;padding:10px 0 10px 18px;margin-bottom:20px;">
-            <p style="font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#999;margin-bottom:4px;">Location</p>
-            <p style="font-size:14px;color:#1a1a1a;">Cairo, Egypt</p>
-        </div>
-        <div style="border-left:2px solid #c8a96e;padding:10px 0 10px 18px;margin-bottom:20px;">
-            <p style="font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#999;margin-bottom:4px;">Working hours</p>
-            <p style="font-size:14px;color:#1a1a1a;">Sun – Thu, 9 AM – 6 PM</p>
-        </div>
-    </div>
+    </section>
+
 </div>
 
-<!-- Team Cards -->
-<div style="background:#f8f7f4;padding:70px 40px;">
-    <div style="text-align:center;margin-bottom:48px;">
-        <p style="font-size:11px;letter-spacing:3px;text-transform:uppercase;color:#c8a96e;margin-bottom:14px;">The team</p>
-        <h2 style="font-size:28px;font-weight:400;color:#1a1a1a;margin-bottom:10px;">Contact a Developer Directly</h2>
-        <p style="font-size:14px;color:#888;max-width:400px;margin:0 auto;">Each member of our team is happy to hear from you.</p>
-    </div>
-
-    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:20px;max-width:1100px;margin:0 auto;">
-
-        <!-- Muhammad Mamdouh -->
-        <div class="block2" style="background:#fff;border:0.5px solid #e8e8e4;padding:24px 20px 22px;display:flex;flex-direction:column;align-items:center;text-align:center;transition:transform 0.3s;" onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform='translateY(0)'">
-            <div style="width:64px;height:64px;border-radius:50%;background:#1a1a1a;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:500;color:#fff;margin-bottom:16px;">MM</div>
-            <p style="font-size:15px;font-weight:400;color:#1a1a1a;margin-bottom:4px;">Muhammad Mamdouh</p>
-            <p style="font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:#999;margin-bottom:14px;">Full-Stack Developer</p>
-            <div style="width:24px;height:2px;background:#c8a96e;margin-bottom:14px;"></div>
-            <p style="font-size:12px;color:#c8a96e;">m.mamdouh@fashionstore.com</p>
-        </div>
-
-        <!-- Abdelrahman Ehab -->
-        <div class="block2" style="background:#fff;border:0.5px solid #e8e8e4;padding:24px 20px 22px;display:flex;flex-direction:column;align-items:center;text-align:center;transition:transform 0.3s;" onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform='translateY(0)'">
-            <div style="width:64px;height:64px;border-radius:50%;background:#2c3e50;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:500;color:#fff;margin-bottom:16px;">AE</div>
-            <p style="font-size:15px;font-weight:400;color:#1a1a1a;margin-bottom:4px;">Abdelrahman Ehab</p>
-            <p style="font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:#999;margin-bottom:14px;">Back-End Developer</p>
-            <div style="width:24px;height:2px;background:#5dade2;margin-bottom:14px;"></div>
-            <p style="font-size:12px;color:#5dade2;">a.ehab@fashionstore.com</p>
-        </div>
-
-        <!-- Muhammad Elsayed Ghareed -->
-        <div class="block2" style="background:#fff;border:0.5px solid #e8e8e4;padding:24px 20px 22px;display:flex;flex-direction:column;align-items:center;text-align:center;transition:transform 0.3s;" onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform='translateY(0)'">
-            <div style="width:64px;height:64px;border-radius:50%;background:#1e3a2f;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:500;color:#fff;margin-bottom:16px;">ME</div>
-            <p style="font-size:15px;font-weight:400;color:#1a1a1a;margin-bottom:4px;">Muhammad Elsayed Ghareed</p>
-            <p style="font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:#999;margin-bottom:14px;">Front-End Developer</p>
-            <div style="width:24px;height:2px;background:#27ae60;margin-bottom:14px;"></div>
-            <p style="font-size:12px;color:#27ae60;">m.ghareed@fashionstore.com</p>
-        </div>
-
-        <!-- Muhammad Khaled -->
-        <div class="block2" style="background:#fff;border:0.5px solid #e8e8e4;padding:24px 20px 22px;display:flex;flex-direction:column;align-items:center;text-align:center;transition:transform 0.3s;" onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform='translateY(0)'">
-            <div style="width:64px;height:64px;border-radius:50%;background:#3b1f3f;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:500;color:#fff;margin-bottom:16px;">MK</div>
-            <p style="font-size:15px;font-weight:400;color:#1a1a1a;margin-bottom:4px;">Muhammad Khaled</p>
-            <p style="font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:#999;margin-bottom:14px;">UI / UX Developer</p>
-            <div style="width:24px;height:2px;background:#9b59b6;margin-bottom:14px;"></div>
-            <p style="font-size:12px;color:#9b59b6;">m.khaled@fashionstore.com</p>
-        </div>
-
-        <!-- Fouad Sherif AlMinshawi -->
-        <div class="block2" style="background:#fff;border:0.5px solid #e8e8e4;padding:24px 20px 22px;display:flex;flex-direction:column;align-items:center;text-align:center;transition:transform 0.3s;" onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform='translateY(0)'">
-            <div style="width:64px;height:64px;border-radius:50%;background:#3d2000;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:500;color:#fff;margin-bottom:16px;">FA</div>
-            <p style="font-size:15px;font-weight:400;color:#1a1a1a;margin-bottom:4px;">Fouad Sherif AlMinshawi</p>
-            <p style="font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:#999;margin-bottom:14px;">Systems Developer</p>
-            <div style="width:24px;height:2px;background:#e67e22;margin-bottom:14px;"></div>
-            <p style="font-size:12px;color:#e67e22;">f.alminshawi@fashionstore.com</p>
-        </div>
-
-        <!-- Mahinour Salah -->
-        <div class="block2" style="background:#fff;border:0.5px solid #e8e8e4;padding:24px 20px 22px;display:flex;flex-direction:column;align-items:center;text-align:center;transition:transform 0.3s;" onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform='translateY(0)'">
-            <div style="width:64px;height:64px;border-radius:50%;background:#3a1228;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:500;color:#fff;margin-bottom:16px;">MS</div>
-            <p style="font-size:15px;font-weight:400;color:#1a1a1a;margin-bottom:4px;">Mahinour Salah</p>
-            <p style="font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:#999;margin-bottom:14px;">Full-Stack Developer</p>
-            <div style="width:24px;height:2px;background:#e91e8c;margin-bottom:14px;"></div>
-            <p style="font-size:12px;color:#e91e8c;">m.salah@fashionstore.com</p>
-        </div>
-
-    </div>
-</div>
+<script>
+    function toggleFaq(btn) {
+        const answer = btn.nextElementSibling;
+        const isOpen = btn.classList.contains('open');
+        document.querySelectorAll('.c-faq-btn').forEach(b => {
+            b.classList.remove('open');
+            b.nextElementSibling.style.display = 'none';
+        });
+        if (!isOpen) {
+            btn.classList.add('open');
+            answer.style.display = 'block';
+        }
+    }
+</script>
