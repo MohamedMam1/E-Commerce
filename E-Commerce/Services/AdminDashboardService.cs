@@ -41,13 +41,16 @@ namespace E_Commerce.Services
                 })
                 .ToListAsync();
 
-            var topProducts = await _context.Products.OrderByDescending(p => p.Quantity).Take(5)
+            var topProducts = await _context.Products
+                .Include(p => p.ProductVariants)
+                .OrderByDescending(p => p.ProductVariants.Sum(v => v.Stock))
+                .Take(5)
                 .Select(p => new ProductDashboardVM
                 {
                     ProductName = p.Name,
                     CategoryName = p.Category.Name,
                     Price = p.Price,
-                    Stock = p.Quantity
+                    Stock = p.ProductVariants.Sum(v => v.Stock)
                 })
                 .ToListAsync();
 

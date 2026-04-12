@@ -20,17 +20,13 @@ namespace FinalProject.Models
         [Required]
         public decimal Price { get; set; }
 
-        [Required]
-        public ProductSize Size { get; set; }
-
-        [Required]
-        public ProductColor Color { get; set; }
-
         // Navigation
         [ForeignKey("OrderId")]
         public Order Order { get; set; }
 
         [ForeignKey("ProductId")]
         public Product Product { get; set; }
+
+        public ICollection<OrderItemVariant> OrderItemVariants { get; set; }
     }
 }

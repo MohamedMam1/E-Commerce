@@ -19,23 +19,19 @@
             <p><strong>Email:</strong> @Model.Email</p>
             <p><strong>Phone:</strong> @Model.PhoneNumber</p>
             <hr />
-            <h5>Addresses</h5>
+            <h5>Address</h5>
 
-            @if (Model.Addresses != null && Model.Addresses.Any())
+            @if (!string.IsNullOrEmpty(Model.Address))
             {
-                <ul class="list-group mb-3">
-                    @foreach (var Address in Model.Addresses)
-                    {
-                        <li class="list-group-item">
-                            @Address.AddressLine
-                        </li>
-                    }
-                </ul>
+                <div class="alert alert-light border">
+                    <p class="mb-0"><strong>@Model.Address</strong></p>
+                    <small class="text-muted">@Model.City, @Model.PostalCode, @Model.Country</small>
+                </div>
             }
             else
             {
                 <div class="alert alert-info">
-                    No addresses added yet.
+                    No address added yet.
                 </div>
             }
 

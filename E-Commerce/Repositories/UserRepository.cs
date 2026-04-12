@@ -22,24 +22,19 @@ namespace E_Commerce.Repositories
         public async Task<ApplicationUser?> GetUserWithAddressesAsync(string UserId)
         {
             return await _context.Users
-                .Include(U => U.Addresses)
                 .FirstOrDefaultAsync(U => U.Id == UserId);
         }
 
         public async Task UpdateUserAddressesAsync(ApplicationUser User, List<string> UpdatedAddresses, string? NewAddressLine)
         {
-            for (int i = 0; i < User.Addresses.Count && i < UpdatedAddresses.Count; i++)
-            {
-                User.Addresses.ElementAt(i).AddressLine = UpdatedAddresses[i];
-            }
-
+            // User now has a single address stored directly in ApplicationUser
             if (!string.IsNullOrWhiteSpace(NewAddressLine))
             {
-                User.Addresses.Add(new Address
-                {
-                    UserId = User.Id,
-                    AddressLine = NewAddressLine
-                });
+                User.Address = NewAddressLine;
+            }
+            else if (UpdatedAddresses.Count > 0)
+            {
+                User.Address = UpdatedAddresses[0];
             }
 
             await _context.SaveChangesAsync();

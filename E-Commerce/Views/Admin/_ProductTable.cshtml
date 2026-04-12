@@ -14,8 +14,6 @@
                     <th>Name</th>
                     <th>Category</th>
                     <th>Price</th>
-                    <th>Quantity</th>
-                    <th>Status</th>
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -37,12 +35,12 @@
                         <td>@product.Name</td>
                         <td>@product.CategoryName</td>
                         <td>@product.Price.ToString("F2") LE</td>
-                        <td>@product.Quantity</td>
+                       @*  <td>@product.Quantity</td>
                         <td>
                             <span class="badge @(product.IsAvailable ? "bg-success" : "bg-danger")">
                                 @(product.IsAvailable ? "Available" : "Unavailable")
                             </span>
-                        </td>
+                        </td> *@
                         <td>
                             <div class="btn-group" role="group">
                                 <a asp-controller="Product"

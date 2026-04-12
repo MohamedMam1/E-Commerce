@@ -149,16 +149,39 @@ namespace E_Commerce.Repositories
 
         public async Task<bool> UpdateOrderStatusAsync(int OrderId, OrderStatus NewStatus)
         {
-            Order? Order = await _context.Orders.FirstOrDefaultAsync(O => O.Id == OrderId);
+            Order? order = await _context.Orders
+                .Include(O => O.OrderItems)
+                    .ThenInclude(OI => OI.OrderItemVariants) 
+                .FirstOrDefaultAsync(O => O.Id == OrderId);
 
-            if (Order == null)
-            {
+            if (order == null || OrderStatus.Cancelled == order.Status)
                 return false;
+
+            if (NewStatus == OrderStatus.Cancelled && order.Status != OrderStatus.Cancelled)
+            {
+                var variantIds = order.OrderItems
+                    .SelectMany(OI => OI.OrderItemVariants)
+                    .Select(v => v.ProductVariantId)
+                    .ToList();
+
+                var variants = await _context.ProductVariants
+                    .Where(pv => variantIds.Contains(pv.Id))
+                    .ToDictionaryAsync(pv => pv.Id);
+
+                foreach (var orderItem in order.OrderItems)
+                {
+                    foreach (var itemVariant in orderItem.OrderItemVariants)
+                    {
+                        if (variants.TryGetValue(itemVariant.ProductVariantId, out var productVariant))
+                        {
+                            productVariant.Stock += itemVariant.Quantity; 
+                        }
+                    }
+                }
             }
 
-            Order.Status = NewStatus;
-            await _context.SaveChangesAsync();
-
+            order.Status = NewStatus;
+            await _context.SaveChangesAsync(); 
             return true;
         }
         public async Task<Order?> GetOrderDetailsForAdminAsync(int orderId)
@@ -167,7 +190,9 @@ namespace E_Commerce.Repositories
                 .Where(O => O.Id == orderId)
                 .Include(O => O.User)
                 .Include(O => O.OrderItems)
-                .ThenInclude(OI => OI.Product)
+                    .ThenInclude(OI => OI.Product)
+                .Include(O => O.OrderItems)                     
+                    .ThenInclude(OI => OI.OrderItemVariants)    
                 .FirstOrDefaultAsync();
         }
     }

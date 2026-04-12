@@ -17,32 +17,22 @@ namespace E_Commerce.ViewModels.Product
         [Range(0.01, double.MaxValue, ErrorMessage = "Price must be greater than 0.")]
         public decimal Price { get; set; }
 
-        [Required(ErrorMessage = "Quantity is required.")]
-        [Range(0, int.MaxValue, ErrorMessage = "Quantity must be 0 or greater.")]
-        public int Quantity { get; set; }
-
         [Required(ErrorMessage = "Please select a category.")]
         public int CategoryId { get; set; }
-
-        [Range(1, 4, ErrorMessage = "Please select a size.")]
-        public ProductSize Size { get; set; }
-
-        [Range(1, 4, ErrorMessage = "Please select a color.")]
-        public ProductColor Color { get; set; }
 
         public bool IsAvailable { get; set; }
 
         [Required(ErrorMessage = "Main image is required.")]
         public IFormFile MainImage { get; set; }
 
-        [Required(ErrorMessage = "Extra image is required.")]
         public IFormFile? ExtraImage1 { get; set; }
 
-        [Required(ErrorMessage = "Extra image is required.")]
         public IFormFile? ExtraImage2 { get; set; }
 
-        [Required(ErrorMessage = "Extra image is required.")]
         public IFormFile? ExtraImage3 { get; set; }
+
+        [Required(ErrorMessage = "At least one variant is required.")]
+        public List<ProductVariantVM> Variants { get; set; } = new();
 
         public List<SelectListItem> Categories { get; set; } = new();
     }

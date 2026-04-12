@@ -203,8 +203,12 @@ namespace E_Commerce.Services
                         Quantity = OI.Quantity,
                         UnitPrice = OI.Price,
                         SubTotal = OI.Quantity * OI.Price,
-                        Size = OI.Size.ToString(),
-                        Color = OI.Color.ToString()
+                        Size = OI.OrderItemVariants != null && OI.OrderItemVariants.Any() 
+                            ? OI.OrderItemVariants.First().Size 
+                            : "N/A",
+                        Color = OI.OrderItemVariants != null && OI.OrderItemVariants.Any() 
+                            ? OI.OrderItemVariants.First().Color 
+                            : "N/A"
                     }).ToList()
                     : new List<AdminOrderItemDetailsVM>()
             };

@@ -19,18 +19,18 @@ namespace E_Commerce.Services
         {
             ApplicationUser? User = await _userRepository.GetUserWithAddressesAsync(UserId);
 
-            if (User == null || User.Addresses == null)
+            if (User == null || string.IsNullOrEmpty(User.Address))
             {
                 return new List<UserAddressVM>();
             }
 
-            return User.Addresses
-                .Select(A => new UserAddressVM
+            return new List<UserAddressVM>
+            {
+                new UserAddressVM
                 {
-                    Id = A.Id,
-                    AddressLine = A.AddressLine
-                })
-                .ToList();
+                    AddressLine = User.Address
+                }
+            };
         }
 
         public async Task UpdateUserAddressesAsync(string UserId, List<UserAddressVM> Addresses, string? NewAddressLine)

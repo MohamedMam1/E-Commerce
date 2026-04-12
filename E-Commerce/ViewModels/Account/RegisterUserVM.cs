@@ -29,6 +29,20 @@ namespace E_Commerce.ViewModels.Account
         [Phone(ErrorMessage = "Invalid phone number")]
         public string Phone { get; set; }
 
-        // public List<AddressVM> Address { get; set; } = new List<AddressVM>();
+        [Required(ErrorMessage = "Address is required")]
+        [StringLength(255)]
+        public string Address { get; set; }
+
+        [Required(ErrorMessage = "City is required")]
+        [StringLength(100)]
+        public string City { get; set; }
+
+        [Required(ErrorMessage = "Postal code is required")]
+        [StringLength(20)]
+        public string PostalCode { get; set; }
+
+        [Required(ErrorMessage = "Country is required")]
+        [StringLength(100)]
+        public string Country { get; set; }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using E_Commerce.Interfaces;
 using E_Commerce.ViewModels.Account;
 using FinalProject.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -50,7 +51,11 @@ namespace E_Commerce.Controllers
                 FullName = model.FullName?.Trim(),
                 UserName = model.Email?.Trim(),
                 Email = model.Email?.Trim(),
-                PhoneNumber = model.Phone?.Trim()
+                PhoneNumber = model.Phone?.Trim(),
+                Address = model.Address?.Trim(),
+                City = model.City?.Trim(),
+                PostalCode = model.PostalCode?.Trim(),
+                Country = model.Country?.Trim()
             };
 
             var result = await _userManager.CreateAsync(user, model.Password);
@@ -136,6 +141,22 @@ namespace E_Commerce.Controllers
         {
             await _signInManager.SignOutAsync();
             return RedirectToAction("Index", "Home");
+        }
+
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> Dashboard()
+        {
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+                return Challenge();
+
+            // Check if user is admin
+            if (await _userManager.IsInRoleAsync(user, "Admin"))
+                return RedirectToAction("Index", "Admin");
+
+            // Regular user goes to user dashboard
+            return RedirectToAction("Index", "UserDashboard");
         }
 
 

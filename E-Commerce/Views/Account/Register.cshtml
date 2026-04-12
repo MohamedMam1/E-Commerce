@@ -5,13 +5,13 @@
     ViewData["Title"] = "Register";
 }
 
-<section class="vh-100" style="background-color: #508bfc;">
-    <div class="container py-5 h-100">
-        <div class="row d-flex justify-content-center align-items-center h-100">
+<section style="background-color: #508bfc; min-height: calc(100vh - 60px); padding: 40px 0;">
+    <div class="container py-5">
+        <div class="row d-flex justify-content-center">
             <div class="col-12 col-md-8 col-lg-6 col-xl-5">
 
                 <div class="card shadow-2-strong" style="border-radius: 1rem;">
-                    <div class="card-body p-5">
+                    <div class="card-body p-5 pb-4">
 
                         <h3 class="mb-4 text-center">Register</h3>
 
@@ -53,6 +53,34 @@
                                 <label asp-for="Phone" class="form-label"></label>
                                 <input asp-for="Phone" class="form-control" />
                                 <span asp-validation-for="Phone" class="text-danger small d-block mt-1"></span>
+                            </div>
+
+                            <!-- Address -->
+                            <div class="mb-3">
+                                <label asp-for="Address" class="form-label"></label>
+                                <input asp-for="Address" class="form-control" />
+                                <span asp-validation-for="Address" class="text-danger small d-block mt-1"></span>
+                            </div>
+
+                            <!-- City -->
+                            <div class="mb-3">
+                                <label asp-for="City" class="form-label"></label>
+                                <input asp-for="City" class="form-control" />
+                                <span asp-validation-for="City" class="text-danger small d-block mt-1"></span>
+                            </div>
+
+                            <!-- Postal Code -->
+                            <div class="mb-3">
+                                <label asp-for="PostalCode" class="form-label"></label>
+                                <input asp-for="PostalCode" class="form-control" />
+                                <span asp-validation-for="PostalCode" class="text-danger small d-block mt-1"></span>
+                            </div>
+
+                            <!-- Country -->
+                            <div class="mb-3">
+                                <label asp-for="Country" class="form-label"></label>
+                                <input asp-for="Country" class="form-control" />
+                                <span asp-validation-for="Country" class="text-danger small d-block mt-1"></span>
                             </div>
 
                             <button type="submit" class="btn btn-primary w-100 mt-2">

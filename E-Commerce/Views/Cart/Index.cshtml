@@ -468,7 +468,7 @@
                                     <tr class="cart-row">
                                         <td style="width: 96px; padding-right: 0;">
                                             <div class="product-img-wrap">
-                                                <img src="~/images/@item.ImageUrl" alt="@item.ProductName">
+                                                <img src="@item.ImageUrl" alt="@item.ProductName">
                                             </div>
                                         </td>
                                         <td>
@@ -482,9 +482,9 @@
                                         </td>
                                         <td class="qty-cell">
                                             <div class="qty-control">
-                                                <button type="button" class="qty-btn" onclick="updateQuantity(@item.ProductId, @(item.Quantity - 1), @((int)item.Size), @((int)item.Color), @item.MaxQuantity, @item.Quantity)" aria-label="Decrease quantity">&#x2212;</button>
+                                                <button type="button" class="qty-btn" onclick="updateQuantity(@item.CartItemId, @(item.Quantity - 1), @item.MaxQuantity, @item.Quantity)" aria-label="Decrease quantity">&#x2212;</button>
                                                 <input class="qty-input" type="number" value="@item.Quantity" readonly title="Max @item.MaxQuantity in stock">
-                                                <button type="button" class="qty-btn" onclick="updateQuantity(@item.ProductId, @(item.Quantity + 1), @((int)item.Size), @((int)item.Color), @item.MaxQuantity, @item.Quantity)" aria-label="Increase quantity">&#x2B;</button>
+                                                <button type="button" class="qty-btn" onclick="updateQuantity(@item.CartItemId, @(item.Quantity + 1), @item.MaxQuantity, @item.Quantity)" aria-label="Increase quantity">&#x2B;</button>
                                             </div>
                                             <div class="stext-102 cl6" style="font-size:11px;margin-top:6px;">Max @item.MaxQuantity in stock</div>
                                         </td>
@@ -493,9 +493,7 @@
                                         </td>
                                         <td class="remove-cell">
                                             <form asp-action="RemoveFromCart" asp-controller="Cart" method="post" class="d-inline">
-                                                <input type="hidden" name="productId" value="@item.ProductId" />
-                                                <input type="hidden" name="size" value="@((int)item.Size)" />
-                                                <input type="hidden" name="color" value="@((int)item.Color)" />
+                                                <input type="hidden" name="cartItemId" value="@item.CartItemId" />
                                                 <button type="submit" class="remove-btn" aria-label="Remove item">
                                                     <svg class="remove-icon" viewBox="0 0 24 24">
                                                         <polyline points="3 6 5 6 21 6"></polyline>
@@ -553,14 +551,14 @@
                             <span class="label">Subtotal</span>
                             <span class="value">$@Model.TotalPrice.ToString("0.00")</span>
                         </div>
-                        <div class="summary-line">
+                    @*     <div class="summary-line">
                             <span class="label">Shipping</span>
                             <span class="value" style="color: #6B9E78;">Calculated at checkout</span>
                         </div>
                         <div class="summary-line">
                             <span class="label">Tax</span>
                             <span class="value" style="color: #9C9A94;">Calculated at checkout</span>
-                        </div>
+                        </div> *@
 
                         <div class="summary-total">
                             <span class="label">Total</span>
@@ -607,7 +605,7 @@
             }
         }
 
-        function updateQuantity(productId, newQuantity, size, color, maxQty, currentQty) {
+        function updateQuantity(cartItemId, newQuantity, maxQty, currentQty) {
             if (newQuantity < 0) return;
             if (cartQtyRequestInFlight) return;
 
@@ -626,7 +624,7 @@
                 url: '/Cart/UpdateQuantity',
                 type: 'POST',
                 dataType: 'json',
-                data: { productId: productId, quantity: newQuantity, size: size, color: color },
+                data: { cartItemId: cartItemId, quantity: newQuantity },
                 success: function (result) {
                     if (result && result.success) {
                         location.reload();

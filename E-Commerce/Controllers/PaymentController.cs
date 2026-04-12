@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using E_Commerce.ViewModels;
 using E_Commerce.ViewModels.Cart;
 using E_Commerce.Interfaces;
@@ -68,8 +68,8 @@ namespace E_Commerce.Controllers
                     var cart = await _cartService.GetUserCartAsync(userId);
 
                     var items = cart.Items
-                        .Select(i => (i.ProductId, i.Quantity, i.Price, i.Size, i.Color))
-                        .ToList();
+                            .Select(i => (ProductVariantId: i.ProductVariantId, i.Quantity, i.Price)) // ✅ Works now
+                            .ToList(); ;
 
                     await _paymentService.SaveOrderAsync(userId, items);
 

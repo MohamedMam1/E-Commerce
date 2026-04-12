@@ -12,6 +12,7 @@ namespace E_Commerce.Interfaces
         Task<bool> ExistsAsync(int id);
         IQueryable<Product> GetQueryable();
         Task DeleteExtraImagesAsync(int productId);
+        Task DeleteVariantsAsync(int productId);
 
         Task<(List<Product> Products, int TotalCount)> SearchAndFilterAsync(
             string searchTerm,
@@ -23,3 +24,4 @@ namespace E_Commerce.Interfaces
             int pageSize = 10);
     }
 }
+

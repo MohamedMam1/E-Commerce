@@ -5,9 +5,15 @@ namespace FinalProject.Models
 {
     public class Wishlist
     {
-        public string UserId { get; set; }  // Changed to string
+        [Required]
+        [StringLength(450)]
+        public string UserId { get; set; }
 
+        [Required]
         public int ProductId { get; set; }
+
+        [Required]
+        public DateTime AddedAt { get; set; } = DateTime.UtcNow;
 
         // Navigation
         [ForeignKey("UserId")]

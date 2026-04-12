@@ -1,4 +1,4 @@
-@using E_Commerce.ViewModels.Product
+﻿@using E_Commerce.ViewModels.Product
 @model ProductDetailVM
 
 @{
@@ -19,7 +19,7 @@
 
 							<div class="item-slick3" data-thumb="@Model.ImageUrl">
 								<div class="wrap-pic-w pos-relative">
-									<img src="~/images/@Model.ImageUrl" alt="@Model.Name">
+									<img src="@Model.ImageUrl" alt="@Model.Name">
 
 									<a class="flex-c-m size-108 how-pos1 bor0 fs-16 cl10 bg0 hov-btn3 trans-04" href="@Model.ImageUrl">
 										<i class="fa fa-expand"></i>
@@ -66,10 +66,11 @@
 
 							<div class="size-204 respon6-next">
 								<div class="rs1-select2 bor8 bg0">
-									<select class="js-select2 js-product-size" asp-for="Size">
-										@foreach (var s in Enum.GetValues(typeof(ProductSize)).Cast<ProductSize>().Where(x => x != ProductSize.Unspecified))
+									<select class="js-select2" id="sizeSelect">
+										<option value="">Select Size</option>
+										@foreach (var variant in Model.Variants.Select(v => v.Size).Distinct())
 										{
-											<option value="@((int)s)">@s</option>
+											<option value="@variant">@variant</option>
 										}
 									</select>
 									<div class="dropDownSelect2"></div>
@@ -84,11 +85,8 @@
 
 							<div class="size-204 respon6-next">
 								<div class="rs1-select2 bor8 bg0">
-									<select class="js-select2 js-product-color" asp-for="Color">
-										@foreach (var c in Enum.GetValues(typeof(ProductColor)).Cast<ProductColor>().Where(x => x != ProductColor.Unspecified))
-										{
-											<option value="@((int)c)">@c</option>
-										}
+									<select class="js-select2 js-product-color" id="colorSelect" disabled>
+										<option value="">Select Size First</option>
 									</select>
 									<div class="dropDownSelect2"></div>
 								</div>
@@ -102,7 +100,7 @@
 										<i class="fs-16 zmdi zmdi-minus"></i>
 									</div>
 
-									<input class="mtext-104 cl3 txt-center num-product" type="number" name="num-product" value="1" min="1" max="@Model.Quantity">
+									<input class="mtext-104 cl3 txt-center num-product" type="number" id="quantityInput" value="1" min="1" max="999">
 
 									<div class="btn-num-product-up cl8 hov-btn3 trans-04 flex-c-m">
 										<i class="fs-16 zmdi zmdi-plus"></i>
@@ -110,12 +108,14 @@
 								</div>
 
 								<button class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04 js-addcart-detail"
-										data-product-id="@Model.Id">
+										data-product-id="@Model.Id"
+										id="addToCartBtn">
 									Add to cart
 								</button>
 							</div>
 						</div>
 					</div>
+
 					<div class="flex-w flex-m p-l-100 p-t-40 respon7">
 						<div class="flex-m bor9 p-r-10 m-r-11">
 							<a href="#" class="fs-14 cl3 hov-cl1 trans-04 lh-10 p-lr-5 p-tb-2 js-addwish-detail tooltip100"
@@ -149,3 +149,173 @@
 </section>
 
 
+@section Scripts {
+	<script>
+
+		const variants = @Html.Raw(Json.Serialize(Model.Variants));
+
+		let selectedVariant = null;
+
+		// =========================
+		// Reset quantity
+		// =========================
+		function resetQuantity() {
+			$('#quantityInput').val(1);
+		}
+
+		// =========================
+		// SIZE changes → filter colors
+		// =========================
+		$('#sizeSelect').on('change', function () {
+			const selectedSize = $(this).val()?.trim() || "";
+
+			// Reset variant & quantity
+			selectedVariant = null;
+			resetQuantity();
+
+			if (!selectedSize) {
+				// Disable color and reset options
+				$('#colorSelect')
+					.empty()
+					.append('<option value="">Select Size First</option>')
+					.prop('disabled', true)
+					.trigger('change');
+				return;
+			}
+
+			// Get unique colors available for the selected size
+			const availableColors = variants
+				.filter(v => (v.size ?? v.Size ?? "").toString().trim().toLowerCase() === selectedSize.toLowerCase())
+				.map(v => (v.color ?? v.Color ?? "").toString().trim())
+				.filter((c, i, arr) => c && arr.indexOf(c) === i);
+
+			// Populate color dropdown
+			$('#colorSelect')
+				.empty()
+				.append('<option value="">Select Color</option>');
+
+			availableColors.forEach(color => {
+				$('#colorSelect').append(`<option value="${color}">${color}</option>`);
+			});
+
+			// Enable color dropdown
+			$('#colorSelect').prop('disabled', false).trigger('change');
+		});
+
+		// =========================
+		// COLOR changes → detect variant
+		// =========================
+		$('#colorSelect').on('change', function () {
+			const selectedSize = $('#sizeSelect').val()?.trim() || "";
+			const selectedColor = $(this).val()?.trim() || "";
+
+			selectedVariant = variants.find(v => {
+				const vSize = (v.size ?? v.Size ?? "").toString().trim();
+				const vColor = (v.color ?? v.Color ?? "").toString().trim();
+
+				return vSize.toLowerCase() === selectedSize.toLowerCase() &&
+					   vColor.toLowerCase() === selectedColor.toLowerCase();
+			});
+
+			console.log("selectedVariant:", selectedVariant);
+			resetQuantity();
+		});
+
+		// =========================
+		// PLUS button (+)
+		// =========================
+		$('.btn-num-product-up').on('click', function () {
+
+			const input = $(this).prev();
+			let qty = parseInt(input.val()) || 1;
+
+			if (!selectedVariant) {
+				swal("Select variant first", "Please choose size and color", "warning");
+				return;
+			}
+
+			const stock = selectedVariant.stock ?? selectedVariant.Stock ?? 0;
+
+			if (qty >= stock) {
+				swal("Stock limit reached", `Only ${stock} items available`, "warning");
+				input.val(stock);
+				return;
+			}
+
+			input.val(qty + 1);
+		});
+
+		// =========================
+		// MINUS button (-)
+		// =========================
+		$('.btn-num-product-down').on('click', function () {
+
+			const input = $(this).next();
+			let qty = parseInt(input.val()) || 1;
+
+			if (qty > 1) {
+				input.val(qty - 1);
+			}
+		});
+
+		// =========================
+		// ADD TO CART
+		// =========================
+		$('#addToCartBtn').on('click', function (e) {
+			e.preventDefault();
+
+			const selectedSize = $('#sizeSelect').val()?.trim() || "";
+			const selectedColor = $('#colorSelect').val()?.trim() || "";
+			const quantity = parseInt($('#quantityInput').val()) || 1;
+
+			// Validate selection
+			if (!selectedSize || !selectedColor) {
+				swal("Selection required", "Please choose a size and a color.", "warning");
+				return;
+			}
+
+			// Re-confirm variant
+			if (!selectedVariant) {
+				swal("Error", `No variant found for Size: ${selectedSize} and Color: ${selectedColor}`, "error");
+				return;
+			}
+
+			// Stock check
+			const stock = selectedVariant.stock ?? selectedVariant.Stock ?? 0;
+
+			if (quantity > stock) {
+				swal("Stock limit", `Only ${stock} items available`, "error");
+				return;
+			}
+
+			// Safe ID
+			const variantId = selectedVariant?.id ?? selectedVariant?.Id;
+
+			if (!variantId || variantId === 0) {
+				swal("Error", "Invalid product variant ID. Fix backend mapping.", "error");
+				return;
+			}
+
+			// AJAX
+			$.ajax({
+				url: '/Cart/AddToCart',
+				type: 'POST',
+				data: {
+					productVariantId: variantId,
+					quantity: quantity
+				},
+				success: function (res) {
+					if (res.success) {
+						swal("Success", res.message, "success");
+					} else {
+						swal("Error", res.message, "error");
+					}
+				},
+				error: function () {
+					swal("Error", "A server error occurred. Please try again.", "error");
+				}
+			});
+		});
+
+	</script>
+}
