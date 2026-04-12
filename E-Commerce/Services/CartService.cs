@@ -1,6 +1,8 @@
 using E_Commerce.Interfaces;
 using E_Commerce.ViewModels.Cart;
+using FinalProject.Context;
 using FinalProject.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -11,11 +13,13 @@ namespace E_Commerce.Services
     {
         private readonly ICartRepository _cartRepo;
         private readonly IProductRepository _productRepo;
+        private readonly ITiContext _context;
 
-        public CartService(ICartRepository cartRepo, IProductRepository productRepo)
+        public CartService(ICartRepository cartRepo, IProductRepository productRepo, ITiContext context)
         {
             _cartRepo = cartRepo;
             _productRepo = productRepo;
+            _context = context;
         }
 
         public async Task<CartVM> GetUserCartAsync(string userId)
@@ -31,14 +35,16 @@ namespace E_Commerce.Services
             {
                 Items = cartItems.Select(c => new CartItemVM
                 {
-                    ProductId = c.ProductId,
-                    ProductName = c.Product?.Name ?? "Unknown Product",
-                    Price = c.Product?.Price ?? 0,
-                    ImageUrl = c.Product?.ImageUrl,
+                    CartItemId = c.Id,
+                    ProductVariantId = c.ProductVariantId, 
+                    ProductId = c.ProductVariant.ProductId,
+                    ProductName = c.ProductVariant.Product?.Name ?? "Unknown Product",
+                    Price = c.ProductVariant.Product?.Price ?? 0,
+                    ImageUrl = c.ProductVariant.Product?.ImageUrl,
                     Quantity = c.Quantity,
-                    Size = c.Size,
-                    Color = c.Color,
-                    MaxQuantity = c.Product?.Quantity ?? 0
+                    Size = c.ProductVariant.Size,
+                    Color = c.ProductVariant.Color,
+                    MaxQuantity = c.ProductVariant.Stock
                 }).ToList()
             };
 
@@ -54,7 +60,7 @@ namespace E_Commerce.Services
         }
 
         public async Task<(bool Success, string Message)> AddItemToCartAsync(
-            string userId, int productId, int quantity, ProductSize size, ProductColor color)
+            string userId, int productVariantId, int quantity)
         {
             if (string.IsNullOrEmpty(userId))
                 return (false, "You must be logged in to add items to your cart.");
@@ -62,31 +68,25 @@ namespace E_Commerce.Services
             if (quantity <= 0)
                 return (false, "Quantity must be at least 1.");
 
-            if (size == ProductSize.Unspecified)
-                return (false, "Please select a size.");
+            var variant = await _context.ProductVariants
+                .Include(pv => pv.Product)
+                .FirstOrDefaultAsync(pv => pv.Id == productVariantId);
+            
+            if (variant == null)
+                return (false, "Product variant not found.");
 
-            if (color == ProductColor.Unspecified)
-                return (false, "Please select a color.");
-
-            var product = await _productRepo.GetByIdAsync(productId);
-            if (product == null)
-                return (false, "Product not found.");
-
-            if (!product.IsAvailable)
+            if (variant.Stock <= 0)
                 return (false, "This product is out of stock.");
 
-            if (product.Size != size || product.Color != color)
-                return (false, "Selected size and color must match this product.");
-
-            var existingItem = await _cartRepo.GetCartItemAsync(userId, productId, size, color);
+            var existingItem = await _cartRepo.GetCartItemAsync(userId, productVariantId);
             var inCart = existingItem?.Quantity ?? 0;
             var totalRequested = inCart + quantity;
 
-            if (totalRequested > product.Quantity)
+            if (totalRequested > variant.Stock)
             {
                 if (inCart > 0)
-                    return (false, $"Only {product.Quantity} in stock. You already have {inCart} in your cart.");
-                return (false, $"Only {product.Quantity} item(s) available in stock.");
+                    return (false, $"Only {variant.Stock} in stock. You already have {inCart} in your cart.");
+                return (false, $"Only {variant.Stock} item(s) available in stock.");
             }
 
             if (existingItem != null)
@@ -96,12 +96,10 @@ namespace E_Commerce.Services
             }
             else
             {
-                var newItem = new Cart
+                var newItem = new CartItem
                 {
                     UserId = userId,
-                    ProductId = productId,
-                    Size = size,
-                    Color = color,
+                    ProductVariantId = productVariantId,
                     Quantity = quantity
                 };
                 await _cartRepo.AddToCartAsync(newItem);
@@ -111,17 +109,20 @@ namespace E_Commerce.Services
         }
 
         public async Task<(bool Success, string Message)> UpdateCartItemQuantityAsync(
-            string userId, int productId, int quantity, ProductSize size, ProductColor color)
+            string userId, int cartItemId, int quantity)
         {
             if (string.IsNullOrEmpty(userId))
                 return (false, "You must be logged in.");
 
-            var existingItem = await _cartRepo.GetCartItemAsync(userId, productId, size, color);
+            var existingItem = await _context.CartItems
+                .Include(c => c.ProductVariant)
+                .FirstOrDefaultAsync(c => c.Id == cartItemId && c.UserId == userId);
+            
             if (existingItem == null)
                 return (false, "Cart item not found.");
 
-            var product = existingItem.Product ?? await _productRepo.GetByIdAsync(productId);
-            var maxQty = product?.Quantity ?? 0;
+            var variant = existingItem.ProductVariant;
+            var maxQty = variant?.Stock ?? 0;
 
             if (quantity > maxQty)
                 return (false, $"Quantity cannot exceed {maxQty} in stock.");
@@ -137,12 +138,12 @@ namespace E_Commerce.Services
             return (true, "Quantity updated.");
         }
 
-        public async Task RemoveItemFromCartAsync(string userId, int productId, ProductSize size, ProductColor color)
+        public async Task RemoveItemFromCartAsync(string userId, int cartItemId)
         {
-            var existingItem = await _cartRepo.GetCartItemAsync(userId, productId, size, color);
-            if (existingItem != null)
+            var item = await _context.CartItems.FirstOrDefaultAsync(c => c.Id == cartItemId && c.UserId == userId);
+            if (item != null)
             {
-                await _cartRepo.RemoveFromCartAsync(existingItem);
+                await _cartRepo.RemoveFromCartAsync(item);
             }
         }
 
@@ -152,3 +153,5 @@ namespace E_Commerce.Services
         }
     }
 }
+
+

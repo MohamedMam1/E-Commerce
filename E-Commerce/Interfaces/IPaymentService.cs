@@ -1,4 +1,6 @@
-using FinalProject.Models;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace E_Commerce.Interfaces
 {
@@ -6,6 +8,7 @@ namespace E_Commerce.Interfaces
     {
         Task SaveOrderAsync(
             string userId,
-            List<(int ProductId, int Quantity, decimal Price, ProductSize Size, ProductColor Color)> items);
+            List<(int ProductVariantId, int Quantity, decimal Price)> items);
     }
 }
+

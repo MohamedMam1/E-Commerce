@@ -3,25 +3,30 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace FinalProject.Models
 {
-    public class Cart
+    public class CartItem
     {
-        public string UserId { get; set; }  
-
-        public int ProductId { get; set; }
-
-        [Required]
-        public ProductSize Size { get; set; }
+        [Key]
+        public int Id { get; set; }
 
         [Required]
-        public ProductColor Color { get; set; }
+        [StringLength(450)]
+        public string UserId { get; set; }
 
         [Required]
+        public int ProductVariantId { get; set; }
+
+        [Required]
+        [Range(1, int.MaxValue, ErrorMessage = "Quantity must be at least 1.")]
         public int Quantity { get; set; }
 
+        [Required]
+        public DateTime AddedAt { get; set; } = DateTime.UtcNow;
+
+        // Navigation properties
         [ForeignKey("UserId")]
         public ApplicationUser User { get; set; }
 
-        [ForeignKey("ProductId")]
-        public Product Product { get; set; }
+        [ForeignKey("ProductVariantId")]
+        public ProductVariant ProductVariant { get; set; }
     }
 }

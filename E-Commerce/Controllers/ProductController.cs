@@ -24,8 +24,13 @@ namespace E_Commerce.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var result = await _productServce.GetFilteredProductsForCustomerAsync(searchTerm: null,categoryName:null ,categoryId: null,isAvailable: null,minPrice: null,
-                maxPrice: null,sortBy: null,pageNumber: 1,pageSize: 12);
+            var result = await _productServce.GetFilteredProductsForCustomerAsync(
+                searchTerm: null, categoryName: null, categoryId: null,
+                isAvailable: null, minPrice: null, maxPrice: null,
+                sortBy: null, pageNumber: 1, pageSize: 12);
+
+            var categories = await _categoryService.GetAllCategoriesAsync();
+            ViewBag.Categories = categories;
 
             return View(result);
         }

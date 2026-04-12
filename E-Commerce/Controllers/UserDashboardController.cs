@@ -33,7 +33,7 @@ namespace E_Commerce.Controllers
             {
                 return Challenge();
             }
-            List<UserAddressVM> UserAddresses = await _userService.GetUserAddressesAsync(CurrentUser.Id);
+
             List<UserOrderSummaryVM> RecentOrders = await _orderService.GetRecentOrdersByUserIdAsync(CurrentUser.Id);
 
             UserDashboardVM userVM = new UserDashboardVM
@@ -41,7 +41,10 @@ namespace E_Commerce.Controllers
                 FullName = CurrentUser.FullName,
                 Email = CurrentUser.Email,
                 PhoneNumber = CurrentUser.PhoneNumber,
-                Addresses = UserAddresses,
+                Address = CurrentUser.Address,
+                City = CurrentUser.City,
+                PostalCode = CurrentUser.PostalCode,
+                Country = CurrentUser.Country,
                 RecentOrders = RecentOrders
             };
 
@@ -59,13 +62,16 @@ namespace E_Commerce.Controllers
             {
                 return Challenge();
             }
-            List<UserAddressVM> UserAddresses = await _userService.GetUserAddressesAsync(CurrentUser.Id);
+
             EditProfileVM editedUserVM = new EditProfileVM
             {
                 FullName = CurrentUser.FullName,
                 Email = CurrentUser.Email,
                 PhoneNumber = CurrentUser.PhoneNumber,
-                Addresses = UserAddresses
+                Address = CurrentUser.Address,
+                City = CurrentUser.City,
+                PostalCode = CurrentUser.PostalCode,
+                Country = CurrentUser.Country
             };
 
             return View(editedUserVM);
@@ -77,7 +83,7 @@ namespace E_Commerce.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return View("EditProfile",editedUserFromRq);
+                return View("EditProfile", editedUserFromRq);
             }
 
             ApplicationUser? CurrentUser = await _userManager.GetUserAsync(User);
@@ -89,6 +95,10 @@ namespace E_Commerce.Controllers
 
             CurrentUser.FullName = editedUserFromRq.FullName;
             CurrentUser.PhoneNumber = editedUserFromRq.PhoneNumber;
+            CurrentUser.Address = editedUserFromRq.Address;
+            CurrentUser.City = editedUserFromRq.City;
+            CurrentUser.PostalCode = editedUserFromRq.PostalCode;
+            CurrentUser.Country = editedUserFromRq.Country;
 
             IdentityResult editEmailResult = await _userManager.SetEmailAsync(CurrentUser, editedUserFromRq.Email);
 
@@ -99,7 +109,7 @@ namespace E_Commerce.Controllers
                     ModelState.AddModelError("", Error.Description);
                 }
 
-                return View("EditProfile",editedUserFromRq);
+                return View("EditProfile", editedUserFromRq);
             }
 
             IdentityResult updateResult = await _userManager.UpdateAsync(CurrentUser);
@@ -111,10 +121,8 @@ namespace E_Commerce.Controllers
                     ModelState.AddModelError("", Error.Description);
                 }
 
-                return View("EditProfile",editedUserFromRq);
+                return View("EditProfile", editedUserFromRq);
             }
-
-            await _userService.UpdateUserAddressesAsync(CurrentUser.Id, editedUserFromRq.Addresses, editedUserFromRq.NewAddressLine);
 
             return RedirectToAction("Index");
         }

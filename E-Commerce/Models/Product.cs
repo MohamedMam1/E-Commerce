@@ -18,17 +18,8 @@ namespace FinalProject.Models
         public decimal Price { get; set; }
 
         public string ImageUrl { get; set; }
-        [Required]
-        [Range(0, int.MaxValue, ErrorMessage = "Quantity must be 0 or greater.")]
-        public int Quantity { get; set; }
-
-        [Required]
-        public ProductSize Size { get; set; }
-
-        [Required]
-        public ProductColor Color { get; set; }
-
-        public bool IsAvailable => Quantity > 0;
+        
+        public bool IsAvailable => ProductVariants?.Any(v => v.Stock > 0) ?? false;
 
         public ICollection<ProductImage> ExtraImages { get; set; }
 
@@ -44,7 +35,8 @@ namespace FinalProject.Models
         [ForeignKey("CategoryId")]
         public Category Category { get; set; }
 
-        public ICollection<Cart> Carts { get; set; }
+        public ICollection<ProductVariant> ProductVariants { get; set; }
+        public ICollection<CartItem> Carts { get; set; }
         public ICollection<Wishlist> Wishlists { get; set; }
         public ICollection<OrderItem> OrderItems { get; set; }
     }

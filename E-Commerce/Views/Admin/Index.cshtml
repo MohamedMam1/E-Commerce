@@ -24,7 +24,7 @@
                         <div class="stat-icon blue"><i class="bi bi-currency-dollar"></i></div>
                         <div class="stat-body">
                             <div class="label">Total Revenue</div>
-                            <div class="value">@(Model.TotalRevenue.ToString("N2") + " LE")</div>
+                            <div class="value">@(Model.TotalRevenue.ToString("N0") + " LE")</div>
                         </div>
                     </div>
                 </div>
@@ -87,7 +87,7 @@
                         <div class="stat-icon blue"><i class="bi bi-graph-up-arrow"></i></div>
                         <div class="stat-body">
                             <div class="label">Avg Order Value</div>
-                            <div class="value">@(Model.AverageOrderValue.ToString("N2") + " LE")</div>
+                            <div class="value">@(Model.AverageOrderValue.ToString("N0") + " LE")</div>
                         </div>
                     </div>
                 </div>

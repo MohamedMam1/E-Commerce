@@ -8,8 +8,14 @@ namespace FinalProject.Models
         public DateTime CreatedAt { get; set; }
 
         public UserStatus Status { get; set; } = UserStatus.Active;
-        public List<Address> Addresses { get; set; } = new List<Address>();
-        public List<Cart> Carts { get; set; } = new List<Cart>();
+
+        // Single address fields
+        public string Address { get; set; }
+        public string City { get; set; }
+        public string PostalCode { get; set; }
+        public string Country { get; set; }
+
+        public List<CartItem> Carts { get; set; } = new List<CartItem>();
         public ICollection<Wishlist> Wishlists { get; set; } = new List<Wishlist>();
         public ICollection<Order> Orders { get; set; } = new List<Order>();
     }

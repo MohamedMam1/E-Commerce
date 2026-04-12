@@ -48,43 +48,6 @@
                         </div>
                     </div>
 
-                    <!-- Quantity -->
-                    <div class="col-md-6">
-                        <div class="form-floating">
-                            <input asp-for="Quantity" class="form-control" placeholder="Quantity" />
-                            <label>Quantity</label>
-                            <span asp-validation-for="Quantity" class="text-danger small"></span>
-                        </div>
-                    </div>
-
-                    <!-- Size -->
-                    <div class="col-md-6">
-                        <div class="form-floating">
-                            <select asp-for="Size" class="form-select">
-                                @foreach (var s in Enum.GetValues(typeof(ProductSize)).Cast<ProductSize>().Where(x => x != ProductSize.Unspecified))
-                                {
-                                    <option value="@((int)s)">@s</option>
-                                }
-                            </select>
-                            <label>Size (variant)</label>
-                            <span asp-validation-for="Size" class="text-danger small"></span>
-                        </div>
-                    </div>
-
-                    <!-- Color -->
-                    <div class="col-md-6">
-                        <div class="form-floating">
-                            <select asp-for="Color" class="form-select">
-                                @foreach (var c in Enum.GetValues(typeof(ProductColor)).Cast<ProductColor>().Where(x => x != ProductColor.Unspecified))
-                                {
-                                    <option value="@((int)c)">@c</option>
-                                }
-                            </select>
-                            <label>Color (variant)</label>
-                            <span asp-validation-for="Color" class="text-danger small"></span>
-                        </div>
-                    </div>
-
                     <!-- Description -->
                     <div class="col-12">
                         <div class="form-floating">
@@ -95,6 +58,35 @@
                             <span asp-validation-for="Description" class="text-danger small"></span>
                         </div>
                     </div>
+
+                    <!-- Variants Section -->
+                    <div class="col-12">
+                        <h5 class="mt-4 mb-3">Product Variants</h5>
+                        <div id="variants-container">
+                            <div class="variant-row mb-3 p-3 border rounded bg-light">
+                                <div class="row">
+                                    <div class="col-md-4 mb-2">
+                                        <label class="form-label">Size</label>
+                                        <input type="text" name="Variants[0].Size" class="form-control" placeholder="e.g., S, M, L, XL" />
+                                    </div>
+                                    <div class="col-md-4 mb-2">
+                                        <label class="form-label">Color</label>
+                                        <input type="text" name="Variants[0].Color" class="form-control" placeholder="e.g., Red, Blue" />
+                                    </div>
+                                    <div class="col-md-3 mb-2">
+                                        <label class="form-label">Stock</label>
+                                        <input type="number" name="Variants[0].Stock" class="form-control" min="0" />
+                                    </div>
+                                    <div class="col-md-1 mb-2 d-flex align-items-end">
+                                        <button type="button" class="btn btn-danger btn-sm w-100" onclick="removeVariant(this)">Remove</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="button" class="btn btn-secondary mt-2" onclick="addVariant()">+ Add Variant</button>
+                    </div>
+
+
 
                 </div>
 
@@ -156,6 +148,8 @@
     }
 
     <script>
+        let variantIndex = 1;
+
         function previewImage(input, previewId) {
             const preview = document.getElementById(previewId);
 
@@ -172,5 +166,37 @@
                 preview.classList.add('d-none');
             }
         }
+
+        function addVariant() {
+            const container = document.getElementById('variants-container');
+            const newVariant = document.createElement('div');
+            newVariant.className = 'variant-row mb-3 p-3 border rounded bg-light';
+            newVariant.innerHTML = `
+                <div class="row">
+                    <div class="col-md-4 mb-2">
+                        <label class="form-label">Size</label>
+                        <input type="text" name="Variants[${variantIndex}].Size" class="form-control" placeholder="e.g., S, M, L, XL" />
+                    </div>
+                    <div class="col-md-4 mb-2">
+                        <label class="form-label">Color</label>
+                        <input type="text" name="Variants[${variantIndex}].Color" class="form-control" placeholder="e.g., Red, Blue" />
+                    </div>
+                    <div class="col-md-3 mb-2">
+                        <label class="form-label">Stock</label>
+                        <input type="number" name="Variants[${variantIndex}].Stock" class="form-control" min="0" />
+                    </div>
+                    <div class="col-md-1 mb-2 d-flex align-items-end">
+                        <button type="button" class="btn btn-danger btn-sm w-100" onclick="removeVariant(this)">Remove</button>
+                    </div>
+                </div>
+            `;
+            container.appendChild(newVariant);
+            variantIndex++;
+        }
+
+        function removeVariant(button) {
+            button.closest('.variant-row').remove();
+        }
     </script>
+
 }

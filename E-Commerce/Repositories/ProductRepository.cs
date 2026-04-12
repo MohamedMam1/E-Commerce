@@ -29,6 +29,7 @@ namespace E_Commerce.Repositories
                 .Where(p => !p.IsDeleted && !p.Category.IsDeleted)
                 .Include(p => p.Category)
                 .Include(p => p.ExtraImages)
+                .Include(p => p.ProductVariants) 
                 .FirstOrDefaultAsync(p => p.Id == id);
         }
 
@@ -77,6 +78,7 @@ namespace E_Commerce.Repositories
             var query = _context.Products
                 .Where(p => !p.IsDeleted && !p.Category.IsDeleted)
                 .Include(p => p.Category)
+                .Include(p => p.ProductVariants)
                 .AsQueryable();
 
             if (!string.IsNullOrEmpty(searchTerm))
@@ -88,9 +90,9 @@ namespace E_Commerce.Repositories
             if (isAvailable.HasValue)
             {
                 if (isAvailable.Value)
-                    query = query.Where(p => p.Quantity > 0);
+                    query = query.Where(p => p.ProductVariants.Any(v => v.Stock > 0));
                 else
-                    query = query.Where(p => p.Quantity == 0);
+                    query = query.Where(p => !p.ProductVariants.Any(v => v.Stock > 0));
             }
 
             if (minPrice.HasValue)
@@ -107,6 +109,13 @@ namespace E_Commerce.Repositories
                 .Take(pageSize)
                 .ToListAsync();
             return (products, totalCount);
+        }
+
+        public async Task DeleteVariantsAsync(int productId)
+        {
+            var variants = _context.ProductVariants.Where(v => v.ProductId == productId);
+            _context.ProductVariants.RemoveRange(variants);
+            await _context.SaveChangesAsync();
         }
     }
 }

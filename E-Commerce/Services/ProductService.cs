@@ -50,9 +50,13 @@ namespace E_Commerce.Services
                 CategoryId = p.CategoryId,
                 CategoryName = p.Category?.Name,
                 productImages = p.ExtraImages?.Select(img => img.ImageUrl).ToList(),
-                Quantity = p.Quantity,
-                Size = p.Size,
-                Color = p.Color
+                Variants = p.ProductVariants?.Select(v => new ProductVariantVM
+                {
+                    Id = v.Id,             
+                    Size = v.Size,
+                    Color = v.Color,
+                    Stock = v.Stock
+                }).ToList() ?? new List<ProductVariantVM>()
             };
         }
 
@@ -67,14 +71,18 @@ namespace E_Commerce.Services
                 Name = p.Name,
                 Description = p.Description,
                 Price = p.Price,
-                Quantity = p.Quantity,
                 CategoryId = p.CategoryId,
-                Size = p.Size,
-                Color = p.Color,
                 ExistingMainImageUrl = p.ImageUrl,
                 ExistingExtraImageUrls = p.ExtraImages?
                     .Select(ei => ei.ImageUrl)
-                    .ToList() ?? new List<string>()
+                    .ToList() ?? new List<string>(),
+                Variants = p.ProductVariants?.Select(v => new ProductVariantVM
+                {
+                    Id = v.Id,             
+                    Size = v.Size,
+                    Color = v.Color,
+                    Stock = v.Stock
+                }).ToList() ?? new List<ProductVariantVM>()
             };
         }
 
@@ -88,10 +96,7 @@ namespace E_Commerce.Services
                 Name = model.Name,
                 Description = model.Description,
                 Price = model.Price,
-                Quantity = model.Quantity,
                 CategoryId = model.CategoryId,
-                Size = model.Size,
-                Color = model.Color,
                 ImageUrl = mainImageUrl,
                 CreatedAt = DateTime.UtcNow
             };
@@ -111,6 +116,15 @@ namespace E_Commerce.Services
 
             product.ExtraImages = extraImages;
 
+            // Add variants
+            product.ProductVariants = model.Variants?.Select(v => new ProductVariant
+            {
+                Size = v.Size,
+                Color = v.Color,
+                Stock = v.Stock,
+                CreatedAt = DateTime.UtcNow
+            }).ToList() ?? new List<ProductVariant>();
+
             await _repo.AddAsync(product);
         }
 
@@ -122,10 +136,7 @@ namespace E_Commerce.Services
             product.Name = model.Name;
             product.Description = model.Description;
             product.Price = model.Price;
-            product.Quantity = model.Quantity;
             product.CategoryId = model.CategoryId;
-            product.Size = model.Size;
-            product.Color = model.Color;
 
             // Replace main image only if a new one is uploaded
             if (model.MainImage != null && model.MainImage.Length > 0)
@@ -158,6 +169,19 @@ namespace E_Commerce.Services
                 }
             }
 
+            // Update variants
+            if (model.Variants != null && model.Variants.Any())
+            {
+                await _repo.DeleteVariantsAsync(product.Id);
+                product.ProductVariants = model.Variants.Select(v => new ProductVariant
+                {
+                    Size = v.Size,
+                    Color = v.Color,
+                    Stock = v.Stock,
+                    CreatedAt = DateTime.UtcNow
+                }).ToList();
+            }
+
             await _repo.UpdateAsync(product);
         }
 
@@ -184,8 +208,8 @@ namespace E_Commerce.Services
                 CategoryName = p.Category?.Name,
                 ImageUrl = p.ImageUrl,
                 Price = p.Price,
-                Quantity = p.Quantity,
-                IsAvailable = p.IsAvailable
+                Quantity = p.ProductVariants?.Sum(v => v.Stock) ?? 0,
+                IsAvailable = p.ProductVariants?.Any(v => v.Stock > 0) ?? false
             }).ToList();
         }
 
@@ -204,9 +228,9 @@ namespace E_Commerce.Services
             if (isAvailable.HasValue)
             {
                 if (isAvailable.Value)
-                    query = query.Where(p => p.Quantity > 0);
+                    query = query.Where(p => p.ProductVariants.Any(v => v.Stock > 0));
                 else
-                    query = query.Where(p => p.Quantity == 0);
+                    query = query.Where(p => !p.ProductVariants.Any(v => v.Stock > 0));
             }
 
             var totalCount = await query.CountAsync();
@@ -223,8 +247,8 @@ namespace E_Commerce.Services
                 CategoryName = p.Category?.Name,
                 ImageUrl = p.ImageUrl,
                 Price = p.Price,
-                Quantity = p.Quantity,
-                IsAvailable = p.Quantity > 0
+                Quantity = p.ProductVariants?.Sum(v => v.Stock) ?? 0,
+                IsAvailable = p.ProductVariants?.Any(v => v.Stock > 0) ?? false
             }).ToList();
 
             return new PaginatedResultVM<AdminProductListVM>
@@ -284,9 +308,9 @@ namespace E_Commerce.Services
             if (isAvailable.HasValue)
             {
                 if (isAvailable.Value)
-                    query = query.Where(p => p.Quantity > 0);
+                    query = query.Where(p => p.ProductVariants.Any(v => v.Stock > 0));
                 else
-                    query = query.Where(p => p.Quantity == 0);
+                    query = query.Where(p => !p.ProductVariants.Any(v => v.Stock > 0));
             }
 
             if (minPrice.HasValue)
@@ -316,8 +340,8 @@ namespace E_Commerce.Services
                 CategoryName = p.Category?.Name,
                 ImageUrl = p.ImageUrl,
                 Price = p.Price,
-                Quantity = p.Quantity,
-                IsAvailable = p.Quantity > 0
+                Quantity = p.ProductVariants?.Sum(v => v.Stock) ?? 0,
+                IsAvailable = p.ProductVariants?.Any(v => v.Stock > 0) ?? false
             }).ToList();
 
             return new PaginatedResultVM<ProductListVM>
