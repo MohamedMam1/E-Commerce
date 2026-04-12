@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace E_Commerce.Controllers
 {
-   
+   [Authorize]
     public class WishlistController : Controller
     {
         private readonly IWishlistService _wishlistService;

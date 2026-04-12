@@ -4,83 +4,401 @@
     ViewData["Title"] = "My Wishlist";
 }
 
-<!-- breadcrumb -->
-<div class="container">
-    <div class="bread-crumb flex-w p-l-25 p-r-15 p-t-30 p-lr-0-lg">
-        <a href="/" class="stext-109 cl8 hov-cl1 trans-04">
-            Home
-            <i class="fa fa-angle-right m-l-9 m-r-10" aria-hidden="true"></i>
-        </a>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 
-        <span class="stext-109 cl4">
-            My Wishlist
-        </span>
-    </div>
-</div>
+<style>
+    .wishlist-page {
+        font-family: 'DM Sans', sans-serif;
+        background: #FAFAF8;
+        min-height: 100vh;
+        color: #1C1C1A;
+    }
 
-<!-- Wishlist -->
-<div class="bg0 p-t-75 p-b-85">
+    .wishlist-header {
+        border-bottom: 1px solid #E8E5DF;
+        padding: 2rem 0 1.5rem;
+        margin-bottom: 3rem;
+    }
+
+        .wishlist-header .breadcrumb-trail {
+            font-size: 12px;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: #9C9A94;
+            margin-bottom: 1rem;
+        }
+
+            .wishlist-header .breadcrumb-trail a {
+                color: #9C9A94;
+                text-decoration: none;
+                transition: color 0.2s;
+            }
+
+                .wishlist-header .breadcrumb-trail a:hover {
+                    color: #1C1C1A;
+                }
+
+        .wishlist-header h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 400;
+            letter-spacing: -0.02em;
+            margin: 0;
+            line-height: 1.1;
+        }
+
+        .wishlist-header .item-count {
+            font-size: 14px;
+            color: #9C9A94;
+            margin-top: 0.5rem;
+            font-weight: 300;
+        }
+
+    /* Wishlist Table */
+    .wishlist-table-wrap {
+        overflow-x: auto;
+    }
+
+    .wishlist-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+        .wishlist-table thead th {
+            font-size: 11px;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: #9C9A94;
+            font-weight: 500;
+            padding: 0 0 1rem;
+            border-bottom: 1px solid #E8E5DF;
+            text-align: left;
+        }
+
+            .wishlist-table thead th.col-price {
+                text-align: right;
+            }
+
+            .wishlist-table thead th.col-status {
+                text-align: center;
+            }
+
+            .wishlist-table thead th.col-action {
+                text-align: center;
+                width: 200px;
+            }
+
+        .wishlist-table .wishlist-row {
+            border-bottom: 1px solid #F0EDE7;
+            transition: background 0.2s;
+        }
+
+            .wishlist-table .wishlist-row:hover {
+                background: #FDFCFA;
+            }
+
+        .wishlist-table td {
+            padding: 1.5rem 0;
+            vertical-align: middle;
+        }
+
+            .wishlist-table td + td {
+                padding-left: 1rem;
+            }
+
+    /* Product cell */
+    .product-img-wrap {
+        width: 80px;
+        height: 80px;
+        border-radius: 8px;
+        overflow: hidden;
+        background: #F0EDE7;
+        flex-shrink: 0;
+    }
+
+        .product-img-wrap img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+    .product-name {
+        font-size: 15px;
+        font-weight: 400;
+        color: #1C1C1A;
+        line-height: 1.4;
+    }
+
+    /* Price */
+    .price-cell {
+        font-size: 15px;
+        color: #5C5A55;
+        text-align: right;
+        font-weight: 300;
+        white-space: nowrap;
+    }
+
+    /* Status badge */
+    .status-cell {
+        text-align: center;
+    }
+
+    .stock-badge {
+        display: inline-block;
+        padding: 0.3rem 0.9rem;
+        border-radius: 100px;
+        font-size: 12px;
+        font-weight: 500;
+        letter-spacing: 0.04em;
+    }
+
+        .stock-badge.in-stock {
+            background: #EAF4EE;
+            color: #2E7D50;
+        }
+
+        .stock-badge.out-of-stock {
+            background: #FDECEA;
+            color: #C0392B;
+        }
+
+    /* Action cell */
+    .action-cell {
+        text-align: center;
+    }
+
+    .action-group {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .btn-add-cart {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 0.5rem 1.1rem;
+        background: #1C1C1A;
+        color: #FAFAF8;
+        border: none;
+        border-radius: 100px;
+        font-family: 'DM Sans', sans-serif;
+        font-size: 13px;
+        font-weight: 500;
+        letter-spacing: 0.03em;
+        cursor: pointer;
+        transition: opacity 0.2s;
+        white-space: nowrap;
+    }
+
+        .btn-add-cart:hover {
+            opacity: 0.8;
+        }
+
+        .btn-add-cart svg {
+            width: 14px;
+            height: 14px;
+            stroke: currentColor;
+            fill: none;
+            stroke-width: 1.5;
+            stroke-linecap: round;
+            flex-shrink: 0;
+        }
+
+    .remove-btn {
+        background: none;
+        border: none;
+        cursor: pointer;
+        color: #C5C2BA;
+        padding: 6px;
+        border-radius: 50%;
+        transition: background 0.15s, color 0.15s;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+        .remove-btn:hover {
+            background: #FDECEA;
+            color: #C0392B;
+        }
+
+    .remove-icon {
+        width: 16px;
+        height: 16px;
+        stroke: currentColor;
+        fill: none;
+        stroke-width: 1.5;
+        stroke-linecap: round;
+    }
+
+    /* Empty state */
+    .empty-wishlist {
+        padding: 4rem 0;
+        text-align: center;
+    }
+
+    .empty-wishlist-icon {
+        width: 64px;
+        height: 64px;
+        margin: 0 auto 1.5rem;
+        opacity: 0.2;
+    }
+
+    .empty-wishlist h3 {
+        font-family: 'Playfair Display', serif;
+        font-size: 1.5rem;
+        font-weight: 400;
+        color: #1C1C1A;
+        margin-bottom: 0.5rem;
+    }
+
+    .empty-wishlist p {
+        color: #9C9A94;
+        font-size: 14px;
+        font-weight: 300;
+        margin-bottom: 2rem;
+    }
+
+    .btn-continue {
+        display: inline-block;
+        padding: 0.75rem 2rem;
+        background: #1C1C1A;
+        color: #FAFAF8;
+        text-decoration: none;
+        font-size: 13px;
+        letter-spacing: 0.06em;
+        border-radius: 100px;
+        transition: opacity 0.2s;
+    }
+
+        .btn-continue:hover {
+            opacity: 0.8;
+            color: #FAFAF8;
+        }
+
+    @@media (max-width: 575px) {
+        .product-img-wrap {
+            width: 56px;
+            height: 56px;
+        }
+
+        .product-name {
+            font-size: 13px;
+        }
+
+        .price-cell {
+            font-size: 13px;
+        }
+
+        .btn-add-cart span {
+            display: none;
+        }
+    }
+</style>
+
+<div class="wishlist-page">
     <div class="container">
-        <div class="row">
-            <div class="col-lg-10 col-xl-10 m-lr-auto m-b-50">
-                <div class="m-l-25 m-r--38 m-lr-0-xl">
-                    <div class="wrap-table-shopping-cart">
-                        <table class="table-shopping-cart">
-                            <tr class="table_head">
-                                <th class="column-1">Product</th>
-                                <th class="column-2"></th>
-                                <th class="column-3">Price</th>
-                                <th class="column-4">Status</th>
-                                <th class="column-5 text-center">Action</th>
-                            </tr>
+        <div class="wishlist-header">
+            <div class="breadcrumb-trail">
+                <a href="/">Home</a>
+                <span style="margin: 0 0.5rem;">&#x2192;</span>
+                <span>My Wishlist</span>
+            </div>
+            <h1>My Wishlist</h1>
+            @if (Model.Items.Any())
+            {
+                <p class="item-count">@Model.Items.Count() item@(Model.Items.Count() != 1 ? "s" : "") saved</p>
+            }
+        </div>
 
-                            @if(Model.Items.Any())
-                            {
-                                foreach(var item in Model.Items)
+        <div class="row">
+            <div class="col-12">
+                <div class="wishlist-table-wrap">
+                    <table class="wishlist-table">
+                        @if (Model.Items.Any())
+                        {
+                            <thead>
+                                <tr>
+                                    <th colspan="2">Product</th>
+                                    <th class="col-price">Price</th>
+                                    <th class="col-status">Status</th>
+                                    <th class="col-action">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model.Items)
                                 {
-                                    <tr class="table_row">
-                                        <td class="column-1">
-                                            <div class="how-itemcart1">
-                                                <img src="@item.ImageUrl" alt="IMG">
+                                    <tr class="wishlist-row">
+                                        <td style="width: 96px; padding-right: 0;">
+                                            <div class="product-img-wrap">
+                                                <img src="@item.ImageUrl" alt="@item.ProductName">
                                             </div>
                                         </td>
-                                        <td class="column-2">@item.ProductName</td>
-                                        <td class="column-3">$ @item.Price.ToString("0.00")</td>
-                                        <td class="column-4">
-                                            @if(item.IsAvailable)
+                                        <td>
+                                            <span class="product-name">@item.ProductName</span>
+                                        </td>
+                                        <td class="price-cell">
+                                            $@item.Price.ToString("0.00")
+                                        </td>
+                                        <td class="status-cell">
+                                            @if (item.IsAvailable)
                                             {
-                                                <span class="badge bg-success text-white p-2">In Stock</span>
+                                                <span class="stock-badge in-stock">In Stock</span>
                                             }
                                             else
                                             {
-                                                <span class="badge bg-danger text-white p-2">Out of Stock</span>
+                                                <span class="stock-badge out-of-stock">Out of Stock</span>
                                             }
                                         </td>
-                                        <td class="column-5 text-center">
-                                            <div class="d-flex justify-content-center align-items-center">
-                                                @if(item.IsAvailable)
+                                        <td class="action-cell">
+                                            <div class="action-group">
+                                                @if (item.IsAvailable)
                                                 {
-                                                    <button onclick="addToCart(@item.ProductId)" class="flex-c-m stext-101 cl0 size-111 bg1 bor1 hov-btn1 p-lr-15 trans-04 m-r-10">
-                                                        Add to Cart
+                                                    <button class="btn-add-cart" onclick="addToCart(@item.ProductId)" aria-label="Add to cart">
+                                                        <svg viewBox="0 0 24 24">
+                                                            <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                                                            <line x1="3" y1="6" x2="21" y2="6"></line>
+                                                            <path d="M16 10a4 4 0 0 1-8 0"></path>
+                                                        </svg>
+                                                        <span>Add to Cart</span>
                                                     </button>
                                                 }
                                                 <form asp-action="RemoveFromWishlist" asp-controller="Wishlist" method="post" class="d-inline">
                                                     <input type="hidden" name="productId" value="@item.ProductId" />
-                                                    <button type="submit" class="btn btn-sm btn-outline-danger"><i class="fa fa-trash"></i></button>
+                                                    <button type="submit" class="remove-btn" aria-label="Remove from wishlist">
+                                                        <svg class="remove-icon" viewBox="0 0 24 24">
+                                                            <polyline points="3 6 5 6 21 6"></polyline>
+                                                            <path d="M19 6l-1 14H6L5 6"></path>
+                                                            <path d="M10 11v6M14 11v6"></path>
+                                                            <path d="M9 6V4h6v2"></path>
+                                                        </svg>
+                                                    </button>
                                                 </form>
                                             </div>
                                         </td>
                                     </tr>
                                 }
-                            }
-                            else
-                            {
+                            </tbody>
+                        }
+                        else
+                        {
+                            <tbody>
                                 <tr>
-                                    <td colspan="5" class="text-center p-4">Your wishlist is empty.</td>
+                                    <td colspan="5">
+                                        <div class="empty-wishlist">
+                                            <svg class="empty-wishlist-icon" viewBox="0 0 64 64" fill="none" stroke="#1C1C1A" stroke-width="1.5">
+                                                <path d="M32 54s-26-16-26-32a14 14 0 0 1 26-7 14 14 0 0 1 26 7c0 16-26 32-26 32z" />
+                                            </svg>
+                                            <h3>Your wishlist is empty</h3>
+                                            <p>Save items you love and come back to them later.</p>
+                                            <a href="/" class="btn-continue">Explore Products</a>
+                                        </div>
+                                    </td>
                                 </tr>
-                            }
-                        </table>
-                    </div>
+                            </tbody>
+                        }
+                    </table>
                 </div>
             </div>
         </div>

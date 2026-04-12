@@ -1,7 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using E_Commerce.ViewModels;
 using E_Commerce.Interfaces;
 using Stripe;
+using System.Security.Claims;
 
 namespace E_Commerce.Controllers
 {
@@ -9,24 +10,30 @@ namespace E_Commerce.Controllers
     {
         private readonly IConfiguration _config;
         private readonly IPaymentService _paymentService;
+        private readonly ICartService _cartService;
 
-        public PaymentController(IConfiguration config, IPaymentService paymentService)
+        public PaymentController(IConfiguration config, IPaymentService paymentService, ICartService cartService)
         {
             _config = config;
             _paymentService = paymentService;
+            _cartService = cartService;
         }
 
-        public IActionResult Checkout()
+        public async Task<IActionResult> Checkout()
         {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var cart = await _cartService.GetUserCartAsync(userId);
+
             var model = new CheckoutVM
             {
                 StripePublishableKey = _config["Stripe:PublishableKey"],
-                CartItems = new List<CartItemVM>
+                CartItems = cart.Items.Select(i => new CartItemVM
                 {
-                    new CartItemVM { ProductId = 1, ProductName = "Blue Sneakers", Quantity = 1, Price = 59.99m },
-                    new CartItemVM { ProductId = 2, ProductName = "White T-Shirt",  Quantity = 2, Price = 19.99m },
-                    new CartItemVM { ProductId = 3, ProductName = "Black Bag",      Quantity = 1, Price = 34.99m }
-                }
+                    ProductId = i.ProductId,
+                    ProductName = i.ProductName,
+                    Quantity = i.Quantity,
+                    Price = i.Price
+                }).ToList()
             };
 
             model.TotalAmount = model.CartItems.Sum(x => x.Subtotal);
@@ -53,16 +60,15 @@ namespace E_Commerce.Controllers
 
                 if (charge.Status == "succeeded")
                 {
-                    string userId = "dummy-user-id-123";
+                    var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                    var cart = await _cartService.GetUserCartAsync(userId);
 
-                    var items = new List<(int ProductId, int Quantity, decimal Price)>
-                    {
-                        (1, 1, 59.99m),
-                        (2, 2, 19.99m),
-                        (3, 1, 34.99m)
-                    };
+                    var items = cart.Items.Select(i => (i.ProductId, i.Quantity, i.Price)).ToList();
 
                     await _paymentService.SaveOrderAsync(userId, items);
+
+                    // Clear the cart after successful payment
+                    await _cartService.ClearCartAsync(userId);
 
                     var successModel = new PaymentSuccessVM
                     {
@@ -93,4 +99,4 @@ namespace E_Commerce.Controllers
             }
         }
     }
-}
+}

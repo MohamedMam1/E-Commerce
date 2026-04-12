@@ -291,11 +291,9 @@
 							View Cart
 						</a>
 
-						<!--
-						<a href="/Checkout/Index" class="flex-c-m stext-101 cl0 size-107 bg3 bor2 hov-btn3 p-lr-15 trans-04 m-b-10">
+						<a href="/Payment/Checkout" class="flex-c-m stext-101 cl0 size-107 bg3 bor2 hov-btn3 p-lr-15 trans-04 m-b-10">
 							Check Out
 						</a>
-						-->
 					</div>
 				</div>
 			</div>
@@ -356,22 +354,77 @@
 
 		$('.js-addwish-b2').each(function(){
 			var nameProduct = $(this).parent().parent().find('.js-name-b2').html();
-			$(this).on('click', function(){
-				swal(nameProduct, "is added to wishlist !", "success");
+			var btn = $(this);
 
-				$(this).addClass('js-addedwish-b2');
-				$(this).off('click');
+			$(this).on('click', function(e){
+				e.preventDefault();
+				var productId = btn.data('product-id');
+				if (!productId) {
+					swal($.trim(nameProduct), "is added to wishlist !", "success");
+					return;
+				}
+
+				$.post('/Wishlist/ToggleWishlist', { productId: productId }, function(response) {
+					if (response.success) {
+						swal($.trim(nameProduct), "is added to wishlist !", "success");
+						btn.addClass('js-addedwish-b2');
+
+						// Update wishlist badge count
+						$('.icon-header-noti').each(function() {
+							var $icon = $(this);
+							if ($icon.find('.zmdi-favorite-outline').length > 0) {
+								var currentCount = parseInt($icon.attr('data-notify')) || 0;
+								$icon.attr('data-notify', currentCount + 1);
+							}
+						});
+					} else {
+						swal("Error", response.message || "Could not update wishlist.", "error");
+					}
+				}).fail(function(xhr) {
+					if (xhr.status === 401) {
+						swal("Login Required", "Please log in to use the wishlist.", "warning").then(function() {
+							window.location.href = '/Account/Login';
+						});
+					} else {
+						swal("Error", "Something went wrong.", "error");
+					}
+				});
 			});
 		});
 
 		$('.js-addwish-detail').each(function(){
 			var nameProduct = $(this).parent().parent().parent().find('.js-name-detail').html();
+			var btn = $(this);
 
-			$(this).on('click', function(){
-				swal(nameProduct, "is added to wishlist !", "success");
+			$(this).on('click', function(e){
+				e.preventDefault();
+				var productId = btn.data('product-id');
 
-				$(this).addClass('js-addedwish-detail');
-				$(this).off('click');
+				$.post('/Wishlist/ToggleWishlist', { productId: productId }, function(response) {
+					if (response.success) {
+						swal($.trim(nameProduct), "is added to wishlist !", "success");
+						btn.addClass('js-addedwish-detail');
+
+						// Update wishlist badge count
+						$('.icon-header-noti').each(function() {
+							var $icon = $(this);
+							if ($icon.find('.zmdi-favorite-outline').length > 0) {
+								var currentCount = parseInt($icon.attr('data-notify')) || 0;
+								$icon.attr('data-notify', currentCount + 1);
+							}
+						});
+					} else {
+						swal("Error", response.message || "Could not update wishlist.", "error");
+					}
+				}).fail(function(xhr) {
+					if (xhr.status === 401) {
+						swal("Login Required", "Please log in to use the wishlist.", "warning").then(function() {
+							window.location.href = '/Account/Login';
+						});
+					} else {
+						swal("Error", "Something went wrong.", "error");
+					}
+				});
 			});
 		});
 
@@ -379,8 +432,37 @@
 
 		$('.js-addcart-detail').each(function(){
 			var nameProduct = $(this).parent().parent().parent().parent().find('.js-name-detail').html();
-			$(this).on('click', function(){
-				swal(nameProduct, "is added to cart !", "success");
+			var btn = $(this);
+
+			$(this).on('click', function(e){
+				e.preventDefault();
+				var productId = btn.data('product-id');
+				var quantity = btn.closest('.flex-w').find('.num-product').val() || 1;
+
+				$.post('/Cart/AddToCart', { productId: productId, quantity: parseInt(quantity) }, function(response) {
+					if (response.success) {
+						swal($.trim(nameProduct), "is added to cart !", "success");
+
+						// Update cart badge count in navbar
+						$('.icon-header-noti').each(function() {
+							var $icon = $(this);
+							if ($icon.find('.zmdi-shopping-cart').length > 0) {
+								var currentCount = parseInt($icon.attr('data-notify')) || 0;
+								$icon.attr('data-notify', currentCount + parseInt(quantity));
+							}
+						});
+					} else {
+						swal("Error", response.message || "Could not add item to cart.", "error");
+					}
+				}).fail(function(xhr) {
+					if (xhr.status === 401 || xhr.status === 302) {
+						swal("Login Required", "Please log in to add items to your cart.", "warning").then(function() {
+							window.location.href = '/Account/Login';
+						});
+					} else {
+						swal("Error", "Something went wrong. Please try again.", "error");
+					}
+				});
 			});
 		});
 
