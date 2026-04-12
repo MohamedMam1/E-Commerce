@@ -4,6 +4,7 @@ using E_Commerce.ViewModels.Cart;
 using E_Commerce.Interfaces;
 using Stripe;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 
 namespace E_Commerce.Controllers
 {
@@ -20,6 +21,7 @@ namespace E_Commerce.Controllers
             _cartService = cartService;
         }
 
+        [Authorize]
         public async Task<IActionResult> Checkout()
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -39,13 +41,15 @@ namespace E_Commerce.Controllers
                     MaxQuantity = i.MaxQuantity
                 }).ToList()
             };
-
+            if(model.CartItems.Count == 0)
+                return RedirectToAction("Index", "Cart");
             model.TotalAmount = model.CartItems.Sum(x => x.Subtotal);
 
             return View(model);
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> ProcessPayment(string stripeToken, decimal totalAmount)
         {
             var chargeOptions = new ChargeCreateOptions

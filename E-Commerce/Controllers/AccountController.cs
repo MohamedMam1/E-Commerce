@@ -108,11 +108,16 @@ namespace E_Commerce.Controllers
         {
             if (!ModelState.IsValid)
                 return View(model);
-
+        
             var user = await _userManager.FindByEmailAsync(model.Email.Trim());
 
             if (user != null)
             {
+                if (user.Status == UserStatus.Banned)
+                {
+                    ModelState.AddModelError("", "Your account has been banned. Please contact the administrator for more details."); 
+                    return View(model);
+                }
                 if (!await _userManager.IsEmailConfirmedAsync(user))
                 {
                     TempData["UnverifiedEmail"] = user.Email;

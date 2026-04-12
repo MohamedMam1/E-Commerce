@@ -47,6 +47,11 @@ namespace E_Commerce
             {
                 options.SignIn.RequireConfirmedEmail = true;
             });
+            builder.Services.ConfigureApplicationCookie(options =>
+            {
+                options.LoginPath = "/Account/Login";
+                options.AccessDeniedPath = "/Account/Login";
+            });
 
             var app = builder.Build();
 

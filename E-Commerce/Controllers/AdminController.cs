@@ -5,7 +5,6 @@ using FinalProject.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using System.Runtime.CompilerServices;
 
 namespace E_Commerce.Controllers
 {
@@ -46,6 +45,8 @@ namespace E_Commerce.Controllers
             return View(dashboardVM);
         }
 
+        [Authorize(Roles = "Admin")]
+        [HttpGet]
         public async Task<IActionResult> Products()
         {
             var categories = await _categoryService.GetAllCategoriesAsync();
@@ -53,11 +54,14 @@ namespace E_Commerce.Controllers
             return View();
         }
 
+        [Authorize(Roles = "Admin")]
+        [HttpGet]
         public IActionResult Categories()
         {
             return View();
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public async Task<IActionResult> GetProductsTable(string searchTerm, int? categoryId, bool? isAvailable, int page = 1)
         {
@@ -65,6 +69,7 @@ namespace E_Commerce.Controllers
             return PartialView("_ProductTable", result);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public async Task<IActionResult> GetCategoriesTable(string searchTerm, int page = 1)
         {
@@ -72,16 +77,16 @@ namespace E_Commerce.Controllers
             return PartialView("_CategoryTable", result);
         }
 
-        //Adam
-        #region Order
         
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public IActionResult Orders()
         {
             return View();
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> OrdersTable(string? searchTerm, string? status, DateTime? dateFrom, DateTime? dateTo, int pageNumber = 1, int pageSize = 10)
         {
             var result = await _orderService.GetFilteredOrdersForAdminAsync(searchTerm, status, dateFrom, dateTo, pageNumber, pageSize);
@@ -89,6 +94,7 @@ namespace E_Commerce.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> UpdateOrderStatus(int id, [FromBody] UpdateOrderStatusVM model)
         {
             if (model == null || string.IsNullOrWhiteSpace(model.Status))
@@ -108,6 +114,7 @@ namespace E_Commerce.Controllers
 
      
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> OrderDetails(int id)
         {
             AdminOrderDetailsVM? order = await _orderService.GetOrderDetailsForAdminAsync(id);
@@ -119,11 +126,10 @@ namespace E_Commerce.Controllers
 
             return View(order);
         }
-        #endregion
 
-        #region User
    
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Users()
         {
             var userPagination = await _userService.GetUsersWithRolesAsync(null, null, null, 1, 10);
@@ -144,6 +150,7 @@ namespace E_Commerce.Controllers
 
    
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> UsersTable(string? searchTerm, string? status, string? role, int pageNumber = 1, int pageSize = 10)
         {
             var model = await _userService.GetUsersWithRolesAsync(searchTerm, status, role, pageNumber, pageSize);
@@ -152,6 +159,7 @@ namespace E_Commerce.Controllers
 
    
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> UsersRole(string id, [FromBody] UpdateUserRoleVM model)
         {
             if (string.IsNullOrWhiteSpace(id))
@@ -220,6 +228,7 @@ namespace E_Commerce.Controllers
 
        
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> UpdateUserStatus(string id, [FromBody] UpdateUserStatusVM model)
         {
             if (string.IsNullOrWhiteSpace(id))
@@ -273,6 +282,7 @@ namespace E_Commerce.Controllers
 
        
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteUser(string id)
         {
             if (string.IsNullOrWhiteSpace(id))
@@ -300,7 +310,6 @@ namespace E_Commerce.Controllers
 
             return Json(new { success = true });
         }
-        #endregion
 
     }
 }
