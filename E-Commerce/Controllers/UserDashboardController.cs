@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace E_Commerce.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "User")]
     public class UserDashboardController : Controller
     {
         private readonly UserManager<ApplicationUser> _userManager;
@@ -39,7 +39,7 @@ namespace E_Commerce.Controllers
             UserDashboardVM userVM = new UserDashboardVM
             {
                 FullName = CurrentUser.FullName,
-                Email = CurrentUser.Email,
+                Email = CurrentUser.UserName,
                 PhoneNumber = CurrentUser.PhoneNumber,
                 Address = CurrentUser.Address,
                 City = CurrentUser.City,
@@ -52,81 +52,72 @@ namespace E_Commerce.Controllers
         }
         #endregion
 
-        #region Edit UserData
         [HttpGet]
         public async Task<IActionResult> EditProfile()
         {
-            ApplicationUser? CurrentUser = await _userManager.GetUserAsync(User);
+            ApplicationUser? currentUser = await _userManager.GetUserAsync(User);
 
-            if (CurrentUser == null)
+            if (currentUser == null)
             {
                 return Challenge();
             }
 
             EditProfileVM editedUserVM = new EditProfileVM
             {
-                FullName = CurrentUser.FullName,
-                Email = CurrentUser.Email,
-                PhoneNumber = CurrentUser.PhoneNumber,
-                Address = CurrentUser.Address,
-                City = CurrentUser.City,
-                PostalCode = CurrentUser.PostalCode,
-                Country = CurrentUser.Country
+                FullName = currentUser.FullName,
+                Email = currentUser.UserName,
+                PhoneNumber = currentUser.PhoneNumber,
+                Address = currentUser.Address,
+                City = currentUser.City,
+                PostalCode = currentUser.PostalCode,
+                Country = currentUser.Country,
             };
 
             return View(editedUserVM);
         }
-
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditProfile(EditProfileVM editedUserFromRq)
+        public async Task<IActionResult> EditProfile(EditProfileVM model)
         {
-            if (!ModelState.IsValid)
+            if (!ModelState.IsValid) return View(model);
+
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null) return Challenge();
+
+            user.FullName = model.FullName;
+            user.PhoneNumber = model.PhoneNumber;
+            user.Address = model.Address;
+            user.City = model.City;
+            user.PostalCode = model.PostalCode;
+            user.Country = model.Country;
+
+            var result = await _userManager.UpdateAsync(user);
+
+            if (!result.Succeeded)
             {
-                return View("EditProfile", editedUserFromRq);
+                foreach (var error in result.Errors) ModelState.AddModelError("", error.Description);
+                return View(model);
             }
 
-            ApplicationUser? CurrentUser = await _userManager.GetUserAsync(User);
-
-            if (CurrentUser == null)
+            if (!string.IsNullOrEmpty(model.NewPassword))
             {
-                return Challenge();
-            }
-
-            CurrentUser.FullName = editedUserFromRq.FullName;
-            CurrentUser.PhoneNumber = editedUserFromRq.PhoneNumber;
-            CurrentUser.Address = editedUserFromRq.Address;
-            CurrentUser.City = editedUserFromRq.City;
-            CurrentUser.PostalCode = editedUserFromRq.PostalCode;
-            CurrentUser.Country = editedUserFromRq.Country;
-
-            IdentityResult editEmailResult = await _userManager.SetEmailAsync(CurrentUser, editedUserFromRq.Email);
-
-            if (!editEmailResult.Succeeded)
-            {
-                foreach (IdentityError Error in editEmailResult.Errors)
+                if (string.IsNullOrEmpty(model.CurrentPassword))
                 {
-                    ModelState.AddModelError("", Error.Description);
+                    ModelState.AddModelError("CurrentPassword", "Current password is required.");
+                    return View(model);
                 }
 
-                return View("EditProfile", editedUserFromRq);
-            }
-
-            IdentityResult updateResult = await _userManager.UpdateAsync(CurrentUser);
-
-            if (!updateResult.Succeeded)
-            {
-                foreach (IdentityError Error in updateResult.Errors)
+                var passwordResult = await _userManager.ChangePasswordAsync(user, model.CurrentPassword, model.NewPassword);
+                if (!passwordResult.Succeeded)
                 {
-                    ModelState.AddModelError("", Error.Description);
+                    foreach (var error in passwordResult.Errors) ModelState.AddModelError("", error.Description);
+                    return View(model);
                 }
-
-                return View("EditProfile", editedUserFromRq);
             }
-
-            return RedirectToAction("Index");
+            return RedirectToAction("Index"); 
         }
-        #endregion
+
+
         public async Task<IActionResult> Orders()
         {
             ApplicationUser? CurrentUser = await _userManager.GetUserAsync(User);

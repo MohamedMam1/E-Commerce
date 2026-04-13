@@ -1,55 +1,54 @@
-﻿@using E_Commerce.ViewModels.UserDashboard
+@using E_Commerce.ViewModels.UserDashboard
 @model List<UserOrderSummaryVM>
 @{
     ViewData["Title"] = "My Orders";
 }
 
-<div class="container mt-4">
-    <h2 class="mb-4">My Orders</h2>
+<div class="dashboard-page">
+    <div class="container">
+        <span class="dashboard-eyebrow">My Account</span>
+        <h1 class="dashboard-heading">My Orders</h1>
+        <hr style="border-color:var(--sand);margin:1.5rem 0 2.5rem;">
 
-    @if (Model != null && Model.Any())
-    {
-        <div class="card shadow-sm">
-            <div class="card-body">
-                <table class="table table-hover align-middle">
-                    <thead>
-                        <tr>
-                            <th>Order Id</th>
-                            <th>Date</th>
-                            <th>Items Count</th>
-                            <th>Total Price</th>
-                            <th></th>
-                        </tr>
-                    </thead>
-
-                    <tbody>
-                        @foreach (var Order in Model)
-                        {
+        <div class="dash-card">
+            <div class="dash-card-body" style="padding:0;">
+                @if (Model != null && Model.Any())
+                {
+                    <table class="dash-table">
+                        <thead>
                             <tr>
-                                <td>@Order.OrderId</td>
-                                <td>@Order.OrderDate.ToString("dd/MM/yyyy hh:mm tt")</td>
-                                <td>@Order.ItemsCount</td>
-                                <td>@Order.TotalPrice.ToString("0.00")</td>
-                                <td>
-                                    <a asp-action="OrderDetails"
-                                       asp-asp-controller="UserDashboard"
-                                       asp-route-id="@Order.OrderId"
-                                       class="btn btn-sm btn-primary">
-                                        View Details
-                                    </a>
-                                </td>
+                                <th>Order ID</th>
+                                <th>Date</th>
+                                <th>Items</th>
+                                <th>Total</th>
+                                <th></th>
                             </tr>
-                        }
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            @foreach (var order in Model)
+                            {
+                                <tr>
+                                    <td>#@order.OrderId</td>
+                                    <td>@order.OrderDate.ToString("dd MMM yyyy, hh:mm tt")</td>
+                                    <td>@order.ItemsCount</td>
+                                    <td>@order.TotalPrice.ToString("0.00") LE</td>
+                                    <td>
+                                        <a asp-action="OrderDetails" asp-controller="UserDashboard" asp-route-id="@order.OrderId" class="btn-dash-sm">View Details</a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+                else
+                {
+                    <div class="dash-alert-empty" style="margin:1.5rem;">You have no orders yet.</div>
+                }
             </div>
         </div>
-    }
-    else
-    {
-        <div class="alert alert-info">
-            You have no orders yet.
-        </div>
-    }
-</div>
 
+        <a asp-action="Index" asp-controller="UserDashboard" class="btn-dash-outline mt-3 d-inline-block">
+            &larr; Back to Dashboard
+        </a>
+    </div>
+</div>

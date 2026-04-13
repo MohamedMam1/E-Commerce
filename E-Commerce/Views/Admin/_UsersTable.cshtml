@@ -26,20 +26,21 @@
                                 <div class="user-avatar">@user.User.FullName.Substring(0, 1)</div>
                                 <div>
                                     <div class="user-name">@user.User.FullName</div>
-                                    <span class="text-muted" style="font-size:12px;">@user.User.UserName</span>
                                 </div>
                             </div>
                         </td>
                         <td>
-                            <a href="mailto:@user.User.Email" class="email-link">@user.User.Email</a>
+                            <a href="mailto:@user.User.UserName" class="email-link">@user.User.UserName</a>
                         </td>
                         <td>
                             @if (user.Roles.Any())
                             {
-                                @foreach (var role in user.Roles)
-                                {
-                                    <span class="badge bg-primary">@role</span>
-                                }
+                                <div class="roles-container">
+                                    @foreach (var role in user.Roles)
+                                    {
+                                        <span class="role-badge">@role</span>
+                                    }
+                                </div>
                             }
                             else
                             {
@@ -72,9 +73,18 @@
                                             </a>
                                         </li>
                                         <li>
-                                            <a class="dropdown-item" href="javascript:void(0)" onclick="editUserStatus('@user.User.Id', '@(user.User.Status.ToString() == "Active" ? "Banned" : "Active")'); return false;">
-                                                @(user.User.Status.ToString() == "Active" ? "Ban User" : "Unban User")
-                                            </a>
+                                            @if (User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value == user.User.Id)
+                                            {
+                                                <a class="dropdown-item disabled" href="javascript:void(0)" title="You cannot ban yourself" style="opacity: 0.6; cursor: not-allowed;">
+                                                    <i class="bi bi-ban me-2"></i>@(user.User.Status.ToString() == "Active" ? "Ban User" : "Unban User")
+                                                </a>
+                                            }
+                                            else
+                                            {
+                                                <a class="dropdown-item" href="javascript:void(0)" onclick="editUserStatus('@user.User.Id', '@(user.User.Status.ToString() == "Active" ? "Banned" : "Active")'); return false;">
+                                                    <i class="bi bi-ban me-2"></i>@(user.User.Status.ToString() == "Active" ? "Ban User" : "Unban User")
+                                                </a>
+                                            }
                                         </li>
                                     </ul>
                                 </div>
@@ -169,6 +179,31 @@
         font-weight: 600;
     }
 
+    .roles-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        align-items: center;
+    }
+
+    .role-badge {
+        display: inline-block;
+        background: linear-gradient(135deg, #0066cc 0%, #0052a3 100%);
+        color: white;
+        padding: 6px 14px;
+        border-radius: 6px;
+        font-size: 13px;
+        font-weight: 500;
+        white-space: nowrap;
+        box-shadow: 0 2px 4px rgba(0, 102, 204, 0.15);
+        transition: all 0.2s ease;
+    }
+
+    .role-badge:hover {
+        box-shadow: 0 4px 8px rgba(0, 102, 204, 0.25);
+        transform: translateY(-1px);
+    }
+
     .action-buttons {
         display: flex;
         gap: 8px;
@@ -219,4 +254,4 @@
         display: block;
         margin-bottom: 16px;
     }
-</style
+</style>

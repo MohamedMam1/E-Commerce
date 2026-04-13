@@ -1,6 +1,7 @@
 ﻿using E_Commerce.Interfaces;
 using E_Commerce.Services;
 using E_Commerce.ViewModels.AdminDashboard;
+using E_Commerce.ViewModels.UserDashboard;
 using FinalProject.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -37,7 +38,6 @@ namespace E_Commerce.Controllers
             _userManager = userManager;
         }
 
-        [Authorize(Roles = "Admin")]
         [HttpGet]
         public async Task<IActionResult> IndexAsync()
         {
@@ -45,7 +45,6 @@ namespace E_Commerce.Controllers
             return View(dashboardVM);
         }
 
-        [Authorize(Roles = "Admin")]
         [HttpGet]
         public async Task<IActionResult> Products()
         {
@@ -54,14 +53,12 @@ namespace E_Commerce.Controllers
             return View();
         }
 
-        [Authorize(Roles = "Admin")]
         [HttpGet]
         public IActionResult Categories()
         {
             return View();
         }
 
-        [Authorize(Roles = "Admin")]
         [HttpGet]
         public async Task<IActionResult> GetProductsTable(string searchTerm, int? categoryId, bool? isAvailable, int page = 1)
         {
@@ -69,7 +66,6 @@ namespace E_Commerce.Controllers
             return PartialView("_ProductTable", result);
         }
 
-        [Authorize(Roles = "Admin")]
         [HttpGet]
         public async Task<IActionResult> GetCategoriesTable(string searchTerm, int page = 1)
         {
@@ -79,14 +75,12 @@ namespace E_Commerce.Controllers
 
         
         [HttpGet]
-        [Authorize(Roles = "Admin")]
         public IActionResult Orders()
         {
             return View();
         }
 
         [HttpGet]
-        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> OrdersTable(string? searchTerm, string? status, DateTime? dateFrom, DateTime? dateTo, int pageNumber = 1, int pageSize = 10)
         {
             var result = await _orderService.GetFilteredOrdersForAdminAsync(searchTerm, status, dateFrom, dateTo, pageNumber, pageSize);
@@ -94,7 +88,6 @@ namespace E_Commerce.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> UpdateOrderStatus(int id, [FromBody] UpdateOrderStatusVM model)
         {
             if (model == null || string.IsNullOrWhiteSpace(model.Status))
@@ -114,7 +107,6 @@ namespace E_Commerce.Controllers
 
      
         [HttpGet]
-        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> OrderDetails(int id)
         {
             AdminOrderDetailsVM? order = await _orderService.GetOrderDetailsForAdminAsync(id);
@@ -129,7 +121,6 @@ namespace E_Commerce.Controllers
 
    
         [HttpGet]
-        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Users()
         {
             var userPagination = await _userService.GetUsersWithRolesAsync(null, null, null, 1, 10);
@@ -150,7 +141,26 @@ namespace E_Commerce.Controllers
 
    
         [HttpGet]
-        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> GetUserRoles(string id)
+        {
+            if (string.IsNullOrWhiteSpace(id))
+            {
+                return Json(new { success = false, roles = new List<string>() });
+            }
+
+            ApplicationUser? User = await _userManager.FindByIdAsync(id);
+
+            if (User == null)
+            {
+                return Json(new { success = false, roles = new List<string>() });
+            }
+
+            IList<string> Roles = await _userManager.GetRolesAsync(User);
+
+            return Json(new { success = true, roles = Roles.ToList() });
+        }
+
+        [HttpGet]
         public async Task<IActionResult> UsersTable(string? searchTerm, string? status, string? role, int pageNumber = 1, int pageSize = 10)
         {
             var model = await _userService.GetUsersWithRolesAsync(searchTerm, status, role, pageNumber, pageSize);
@@ -159,7 +169,6 @@ namespace E_Commerce.Controllers
 
    
         [HttpPost]
-        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> UsersRole(string id, [FromBody] UpdateUserRoleVM model)
         {
             if (string.IsNullOrWhiteSpace(id))
@@ -181,6 +190,13 @@ namespace E_Commerce.Controllers
 
             string RoleName = model.RoleName.Trim();
 
+            // Check if user already has this role
+            bool UserHasRole = await _userManager.IsInRoleAsync(User, RoleName);
+            if (UserHasRole)
+            {
+                return Json(new { success = false, message = "User already has this role." });
+            }
+
             bool RoleExists = await _roleManager.RoleExistsAsync(RoleName);
             if (!RoleExists)
             {
@@ -196,22 +212,7 @@ namespace E_Commerce.Controllers
                 }
             }
 
-            IList<string> CurrentRoles = await _userManager.GetRolesAsync(User);
-
-            if (CurrentRoles.Any())
-            {
-                IdentityResult RemoveRolesResult = await _userManager.RemoveFromRolesAsync(User, CurrentRoles);
-
-                if (!RemoveRolesResult.Succeeded)
-                {
-                    return Json(new
-                    {
-                        success = false,
-                        message = RemoveRolesResult.Errors.FirstOrDefault()?.Description ?? "Failed to remove current roles."
-                    });
-                }
-            }
-
+            // Add the role without removing existing ones
             IdentityResult AddRoleResult = await _userManager.AddToRoleAsync(User, RoleName);
 
             if (!AddRoleResult.Succeeded)
@@ -226,9 +227,51 @@ namespace E_Commerce.Controllers
             return Json(new { success = true });
         }
 
-       
         [HttpPost]
-        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> RemoveUserRole(string id, [FromBody] UpdateUserRoleVM model)
+        {
+            if (string.IsNullOrWhiteSpace(id))
+            {
+                return Json(new { success = false, message = "Invalid user id." });
+            }
+
+            if (model == null || string.IsNullOrWhiteSpace(model.RoleName))
+            {
+                return Json(new { success = false, message = "Role name is required." });
+            }
+
+            ApplicationUser? User = await _userManager.FindByIdAsync(id);
+
+            if (User == null)
+            {
+                return Json(new { success = false, message = "User not found." });
+            }
+
+            // Prevent user from removing their own admin role
+            var currentUserId = this.User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+            
+            if (currentUserId == id && model.RoleName.Trim() == "Admin")
+            {
+                return Json(new { success = false, message = "You cannot remove your own admin role." });
+            }
+
+            string RoleName = model.RoleName.Trim();
+
+            IdentityResult RemoveRoleResult = await _userManager.RemoveFromRoleAsync(User, RoleName);
+
+            if (!RemoveRoleResult.Succeeded)
+            {
+                return Json(new
+                {
+                    success = false,
+                    message = RemoveRoleResult.Errors.FirstOrDefault()?.Description ?? "Failed to remove role."
+                });
+            }
+
+            return Json(new { success = true });
+        }
+
+        [HttpPost]
         public async Task<IActionResult> UpdateUserStatus(string id, [FromBody] UpdateUserStatusVM model)
         {
             if (string.IsNullOrWhiteSpace(id))
@@ -246,6 +289,13 @@ namespace E_Commerce.Controllers
             if (User == null)
             {
                 return Json(new { success = false, message = "User not found." });
+            }
+
+            // Prevent user from banning themselves
+            var currentUserId = this.User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+            if (currentUserId == id && model.Status.Trim() == "Banned")
+            {
+                return Json(new { success = false, message = "You cannot ban yourself." });
             }
 
             string NewStatus = model.Status.Trim();
@@ -282,7 +332,6 @@ namespace E_Commerce.Controllers
 
        
         [HttpPost]
-        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteUser(string id)
         {
             if (string.IsNullOrWhiteSpace(id))
@@ -309,6 +358,79 @@ namespace E_Commerce.Controllers
             }
 
             return Json(new { success = true });
+        }
+
+        public IActionResult AccountSettings()
+        {
+            return RedirectToAction(nameof(EditAdminAccount));
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> EditAdminAccount()
+        {
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null) return NotFound();
+
+            var model = new EditAdminAccountVM
+            {
+                FullName = user.FullName,
+                Email = user.UserName,
+                PhoneNumber = user.PhoneNumber,
+                Address = user.Address,
+                City = user.City,
+                PostalCode = user.PostalCode,
+                Country = user.Country
+            };
+
+            return View("AccountSettings", model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditAdminAccount(EditAdminAccountVM model)
+        {
+            if (!ModelState.IsValid)
+                return View("AccountSettings", model);
+
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null) return NotFound();
+
+            // Update profile information
+            user.FullName = model.FullName;
+            user.PhoneNumber = model.PhoneNumber;
+            user.Address = model.Address;
+            user.City = model.City;
+            user.PostalCode = model.PostalCode;
+            user.Country = model.Country;
+
+            var updateResult = await _userManager.UpdateAsync(user);
+
+            if (!updateResult.Succeeded)
+            {
+                foreach (var error in updateResult.Errors)
+                    ModelState.AddModelError("", error.Description);
+                return View("AccountSettings", model);
+            }
+
+            if (!string.IsNullOrEmpty(model.NewPassword))
+            {
+                if (string.IsNullOrEmpty(model.CurrentPassword))
+                {
+                    ModelState.AddModelError("CurrentPassword", "Current password is required to change your password.");
+                    return View("AccountSettings", model);
+                }
+
+                var passwordResult = await _userManager.ChangePasswordAsync(user, model.CurrentPassword, model.NewPassword);
+
+                if (!passwordResult.Succeeded)
+                {
+                    foreach (var error in passwordResult.Errors)
+                        ModelState.AddModelError("", error.Description);
+                    return View("AccountSettings", model);
+                }
+            }
+
+            return RedirectToAction("Index");
         }
 
     }

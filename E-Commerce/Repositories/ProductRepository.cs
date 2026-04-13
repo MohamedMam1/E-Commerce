@@ -29,7 +29,8 @@ namespace E_Commerce.Repositories
                 .Where(p => !p.IsDeleted && !p.Category.IsDeleted)
                 .Include(p => p.Category)
                 .Include(p => p.ExtraImages)
-                .Include(p => p.ProductVariants) 
+                .Include(p => p.ProductVariants)
+                .ThenInclude(v => v.OrderItemVariants)
                 .FirstOrDefaultAsync(p => p.Id == id);
         }
 
@@ -39,6 +40,7 @@ namespace E_Commerce.Repositories
             _context.Products.Add(product);
             await _context.SaveChangesAsync();
         }
+
 
         public async Task UpdateAsync(Product product)
         {

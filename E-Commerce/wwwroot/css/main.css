@@ -1,4 +1,4 @@
-/*------------------------------------------------------------------
+﻿/*------------------------------------------------------------------
 Project:  
 Version:  
 Last change:  
@@ -3332,5 +3332,443 @@ input.num-product::-webkit-inner-spin-button {
   .respon3 {
     padding: 20px;
   }
+    :root {
+        --cream: #F9F6F1;
+        --parchment: #F0EBE3;
+        --sand: #D6CFC4;
+        --stone: #9A9186;
+        --ink: #2A2724;
+        --gold: #B09A7E;
+        --white: #FFFFFF;
+        --ff-serif: 'Cormorant Garamond', Georgia, serif;
+        --ff-sans: 'Jost', sans-serif;
+    }
+
+    *, *::before, *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+
+    body {
+        font-family: var(--ff-sans);
+        background: var(--cream);
+        color: var(--ink);
+    }
+
+    /* ── SHARED UTILITIES ── */
+    .eyebrow {
+        font-family: var(--ff-sans);
+        font-size: 0.68rem;
+        font-weight: 600;
+        letter-spacing: 0.22em;
+        text-transform: uppercase;
+        color: var(--gold);
+    }
+
+    .display-serif {
+        font-family: var(--ff-serif);
+        font-weight: 300;
+        line-height: 1.15;
+        color: var(--ink);
+    }
+
+    .section-divider {
+        width: 40px;
+        height: 1px;
+        background: var(--gold);
+        display: block;
+        margin: 1.5rem auto;
+    }
+
+        .section-divider.left {
+            margin: 1.5rem 0;
+        }
+
+    /* ══════════════════════════════════════
+           SECTION 1 — BRAND STORY
+        ══════════════════════════════════════ */
+    .brand-story {
+        background: var(--ink);
+        padding: 100px 0;
+        position: relative;
+        overflow: hidden;
+    }
+
+        .brand-story::before {
+            content: '';
+            position: absolute;
+            top: -60px;
+            right: -60px;
+            width: 420px;
+            height: 420px;
+            border-radius: 50%;
+            border: 1px solid rgba(176, 154, 126, 0.12);
+            pointer-events: none;
+        }
+
+        .brand-story::after {
+            content: '';
+            position: absolute;
+            bottom: -100px;
+            left: -80px;
+            width: 580px;
+            height: 580px;
+            border-radius: 50%;
+            border: 1px solid rgba(176, 154, 126, 0.07);
+            pointer-events: none;
+        }
+
+        .brand-story .story-year {
+            font-family: var(--ff-serif);
+            font-size: clamp(5rem, 12vw, 9rem);
+            font-weight: 300;
+            color: rgba(176, 154, 126, 0.10);
+            line-height: 1;
+            position: absolute;
+            top: 60px;
+            right: 5%;
+            pointer-events: none;
+            user-select: none;
+        }
+
+        .brand-story .display-serif {
+            color: var(--white);
+            font-size: clamp(2.2rem, 4.5vw, 3.4rem);
+        }
+
+        .brand-story .story-body {
+            color: rgba(255,255,255,0.62);
+            font-size: 0.95rem;
+            line-height: 1.95;
+            font-weight: 300;
+        }
+
+        .brand-story .story-pull {
+            font-family: var(--ff-serif);
+            font-size: clamp(1.15rem, 2vw, 1.4rem);
+            font-weight: 400;
+            font-style: italic;
+            color: var(--gold);
+            line-height: 1.7;
+            border-left: 2px solid var(--gold);
+            padding-left: 1.5rem;
+            margin: 2.5rem 0;
+        }
+
+        .brand-story .stat-row {
+            display: flex;
+            gap: 3rem;
+            margin-top: 2.8rem;
+            padding-top: 2.8rem;
+            border-top: 1px solid rgba(255,255,255,0.08);
+        }
+
+        .brand-story .stat-item .stat-num {
+            font-family: var(--ff-serif);
+            font-size: 2.2rem;
+            font-weight: 300;
+            color: var(--white);
+            line-height: 1;
+        }
+
+        .brand-story .stat-item .stat-label {
+            font-size: 0.7rem;
+            font-weight: 500;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: var(--stone);
+            margin-top: 6px;
+        }
+
+    /* ══════════════════════════════════════
+           SECTION 2 — WHY CHOOSE US
+        ══════════════════════════════════════ */
+    .why-us {
+        background: var(--cream);
+        padding: 100px 0;
+    }
+
+    .trust-card {
+        padding: 2.4rem 2rem;
+        border: 1px solid var(--sand);
+        border-radius: 4px;
+        background: var(--white);
+        height: 100%;
+        transition: border-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+
+        .trust-card::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            height: 3px;
+            width: 0;
+            background: var(--gold);
+            transition: width 0.4s ease;
+        }
+
+        .trust-card:hover {
+            border-color: var(--gold);
+            transform: translateY(-5px);
+            box-shadow: 0 16px 40px rgba(42,39,36,0.07);
+        }
+
+            .trust-card:hover::after {
+                width: 100%;
+            }
+
+        .trust-card .tc-icon {
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            background: var(--parchment);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+            font-size: 1.3rem;
+            color: var(--gold);
+            transition: background 0.3s, color 0.3s;
+        }
+
+        .trust-card:hover .tc-icon {
+            background: var(--ink);
+            color: var(--gold);
+        }
+
+        .trust-card .tc-title {
+            font-family: var(--ff-sans);
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: var(--ink);
+            margin-bottom: 0.9rem;
+        }
+
+        .trust-card .tc-body {
+            font-size: 0.88rem;
+            line-height: 1.85;
+            color: var(--stone);
+            font-weight: 300;
+        }
+
+    /* ══════════════════════════════════════
+           SECTION 3 — FEATURED COLLECTIONS
+        ══════════════════════════════════════ */
+    .collections {
+        background: var(--parchment);
+        padding: 100px 0;
+    }
+
+    .collections-intro {
+        max-width: 620px;
+    }
+
+        .collections-intro .display-serif {
+            font-size: clamp(2rem, 4vw, 3rem);
+        }
+
+        .collections-intro p {
+            color: var(--stone);
+            font-size: 0.93rem;
+            line-height: 1.9;
+            font-weight: 300;
+        }
+
+    .coll-item {
+        padding: 2.5rem 0;
+        border-bottom: 1px solid var(--sand);
+        display: flex;
+        align-items: flex-start;
+        gap: 2rem;
+        transition: all 0.3s ease;
+        cursor: default;
+    }
+
+        .coll-item:first-of-type {
+            border-top: 1px solid var(--sand);
+        }
+
+        .coll-item:hover .coll-num {
+            color: var(--gold);
+        }
+
+        .coll-item:hover .coll-title {
+            letter-spacing: 0.04em;
+        }
+
+    .coll-num {
+        font-family: var(--ff-serif);
+        font-size: 0.85rem;
+        font-weight: 400;
+        color: var(--sand);
+        padding-top: 5px;
+        min-width: 28px;
+        transition: color 0.3s;
+    }
+
+    .coll-content {
+        flex: 1;
+    }
+
+    .coll-title {
+        font-family: var(--ff-serif);
+        font-size: clamp(1.5rem, 3vw, 2.1rem);
+        font-weight: 300;
+        color: var(--ink);
+        line-height: 1.2;
+        transition: letter-spacing 0.4s ease;
+        margin-bottom: 0.6rem;
+    }
+
+    .coll-desc {
+        font-size: 0.85rem;
+        color: var(--stone);
+        line-height: 1.8;
+        font-weight: 300;
+        max-width: 480px;
+    }
+
+    .coll-tag {
+        font-size: 0.65rem;
+        font-weight: 600;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: var(--gold);
+        border: 1px solid var(--gold);
+        padding: 3px 10px;
+        border-radius: 20px;
+        margin-left: auto;
+        align-self: center;
+        white-space: nowrap;
+    }
+
+    /* ══════════════════════════════════════
+           SECTION 4 — TESTIMONIALS
+        ══════════════════════════════════════ */
+    .testimonials {
+        background: var(--white);
+        padding: 100px 0;
+    }
+
+    .testi-card {
+        background: var(--cream);
+        border: 1px solid var(--sand);
+        border-radius: 4px;
+        padding: 2.5rem 2.2rem;
+        height: 100%;
+        position: relative;
+    }
+
+        .testi-card .quote-mark {
+            font-family: var(--ff-serif);
+            font-size: 5rem;
+            line-height: 0.6;
+            color: var(--gold);
+            opacity: 0.35;
+            margin-bottom: 1.2rem;
+            display: block;
+        }
+
+        .testi-card .testi-text {
+            font-family: var(--ff-serif);
+            font-size: 1.05rem;
+            font-style: italic;
+            font-weight: 300;
+            color: var(--ink);
+            line-height: 1.85;
+            margin-bottom: 2rem;
+        }
+
+        .testi-card .testi-stars {
+            color: var(--gold);
+            font-size: 0.75rem;
+            letter-spacing: 3px;
+            margin-bottom: 1rem;
+        }
+
+        .testi-card .testi-author {
+            display: flex;
+            align-items: center;
+            gap: 0.9rem;
+            padding-top: 1.4rem;
+            border-top: 1px solid var(--sand);
+        }
+
+        .testi-card .author-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--ink);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.72rem;
+            font-weight: 600;
+            color: var(--gold);
+            letter-spacing: 0.05em;
+            flex-shrink: 0;
+        }
+
+        .testi-card .author-name {
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: var(--ink);
+            letter-spacing: 0.04em;
+        }
+
+        .testi-card .author-role {
+            font-size: 0.73rem;
+            color: var(--stone);
+            font-weight: 300;
+            margin-top: 2px;
+        }
+
+    .testi-featured {
+        background: var(--ink);
+        border-color: rgba(176, 154, 126, 0.25);
+    }
+
+        .testi-featured .testi-text {
+            color: rgba(255,255,255,0.85);
+        }
+
+        .testi-featured .testi-author {
+            border-top-color: rgba(255,255,255,0.1);
+        }
+
+        .testi-featured .author-name {
+            color: var(--white);
+        }
+
+        .testi-featured .author-role {
+            color: rgba(255,255,255,0.45);
+        }
+
+        .testi-featured .testi-card {
+            background: transparent;
+        }
+
+    /* ── RESPONSIVE TWEAKS ── */
+    @media (max-width: 768px) {
+        .brand-story .stat-row {
+            gap: 1.8rem;
+        }
+
+        .coll-tag {
+            display: none;
+        }
+
+        .brand-story, .why-us, .collections, .testimonials {
+            padding: 70px 0;
+        }
+    }
+
+
 
 }

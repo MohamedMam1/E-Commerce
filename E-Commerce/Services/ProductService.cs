@@ -172,14 +172,42 @@ namespace E_Commerce.Services
             // Update variants
             if (model.Variants != null && model.Variants.Any())
             {
-                await _repo.DeleteVariantsAsync(product.Id);
-                product.ProductVariants = model.Variants.Select(v => new ProductVariant
+                foreach (var vm in model.Variants)
                 {
-                    Size = v.Size,
-                    Color = v.Color,
-                    Stock = v.Stock,
-                    CreatedAt = DateTime.UtcNow
-                }).ToList();
+                    var existing = product.ProductVariants
+                        .FirstOrDefault(v => v.Id == vm.Id);
+
+                    if (existing != null)
+                    {
+                        existing.Size = vm.Size;
+                        existing.Color = vm.Color;
+                        existing.Stock = vm.Stock;
+                    }
+                    else
+                    {
+                        product.ProductVariants.Add(new ProductVariant
+                        {
+                            Size = vm.Size,
+                            Color = vm.Color,
+                            Stock = vm.Stock,
+                            CreatedAt = DateTime.UtcNow
+                        });
+                    }
+                }
+
+                var modelIds = model.Variants.Select(v => v.Id).ToList();
+
+                var toRemove = product.ProductVariants
+                    .Where(v => !modelIds.Contains(v.Id))
+                    .ToList();
+
+                foreach (var variant in toRemove)
+                {
+                    if (!variant.OrderItemVariants.Any())
+                    {
+                        product.ProductVariants.Remove(variant);
+                    }
+                }
             }
 
             await _repo.UpdateAsync(product);

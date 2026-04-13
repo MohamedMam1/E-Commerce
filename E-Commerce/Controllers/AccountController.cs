@@ -50,7 +50,6 @@ namespace E_Commerce.Controllers
             {
                 FullName = model.FullName?.Trim(),
                 UserName = model.Email?.Trim(),
-                Email = model.Email?.Trim(),
                 PhoneNumber = model.Phone?.Trim(),
                 Address = model.Address?.Trim(),
                 City = model.City?.Trim(),
@@ -62,6 +61,7 @@ namespace E_Commerce.Controllers
 
             if (result.Succeeded)
             {
+                await _userManager.AddToRoleAsync(user, "User");
                 await SendVerificationEmailAsync(user);
                 return RedirectToAction("EmailSent");
             }
@@ -109,7 +109,7 @@ namespace E_Commerce.Controllers
             if (!ModelState.IsValid)
                 return View(model);
         
-            var user = await _userManager.FindByEmailAsync(model.Email.Trim());
+            var user = await _userManager.FindByNameAsync(model.Email.Trim());
 
             if (user != null)
             {
@@ -120,7 +120,7 @@ namespace E_Commerce.Controllers
                 }
                 if (!await _userManager.IsEmailConfirmedAsync(user))
                 {
-                    TempData["UnverifiedEmail"] = user.Email;
+                    TempData["UnverifiedEmail"] = user.UserName;
                     ModelState.AddModelError("", "Email verification is required. Please verify your email before login.");
                     return View(model);
                 }
@@ -132,10 +132,14 @@ namespace E_Commerce.Controllers
                 model.RememberMe,
                 false
             );
-
             if (result.Succeeded)
+            {
+                var currentUser = await _userManager.FindByNameAsync(model.Email.Trim());
+                bool isAdmin = await _userManager.IsInRoleAsync(currentUser, "Admin");
+                if (isAdmin)
+                    return RedirectToAction("Index", "Admin");
                 return RedirectToAction("Index", "Home");
-
+            }
             ModelState.AddModelError("", "Invalid email or password.");
             return View(model);
         }
@@ -156,11 +160,9 @@ namespace E_Commerce.Controllers
             if (user == null)
                 return Challenge();
 
-            // Check if user is admin
             if (await _userManager.IsInRoleAsync(user, "Admin"))
                 return RedirectToAction("Index", "Admin");
 
-            // Regular user goes to user dashboard
             return RedirectToAction("Index", "UserDashboard");
         }
 
@@ -186,7 +188,7 @@ namespace E_Commerce.Controllers
                 return RedirectToAction("Login");
             }
 
-            var user = await _userManager.FindByEmailAsync(email.Trim());
+            var user = await _userManager.FindByNameAsync(email.Trim());
 
             if (user == null)
             {
@@ -225,7 +227,7 @@ namespace E_Commerce.Controllers
             if (!ModelState.IsValid)
                 return View(model);
 
-            var user = await _userManager.FindByEmailAsync(model.Email);
+            var user = await _userManager.FindByNameAsync(model.Email.Trim());
 
             if (user == null)
                 return RedirectToAction("EmailSent");
@@ -233,7 +235,7 @@ namespace E_Commerce.Controllers
             if (!await _userManager.IsEmailConfirmedAsync(user))
             {
                 ModelState.AddModelError("", "Email must be verified first. Please verify your email before resetting your password.");
-                TempData["UnverifiedEmail"] = user.Email;
+                TempData["UnverifiedEmail"] = user.UserName;
                 return View(model);
             }
 
@@ -241,11 +243,11 @@ namespace E_Commerce.Controllers
             var encodedToken = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(token));
 
             var link = Url.Action("ResetPassword", "Account",
-                new { email = user.Email, token = encodedToken },
+                new { email = user.UserName, token = encodedToken },
                 Request.Scheme);
 
             await _emailSender.SendEmailAsync(
-                user.Email,
+                user.UserName,
                 "Reset Password",
                 $"<h3>Reset your password:</h3>" +
                 $"<a href='{link}'>Reset Password</a>"
@@ -277,7 +279,7 @@ namespace E_Commerce.Controllers
             if (!ModelState.IsValid)
                 return View(model);
 
-            var user = await _userManager.FindByEmailAsync(model.Email);
+            var user = await _userManager.FindByNameAsync(model.Email.Trim());
 
             if (user == null)
                 return RedirectToAction("Login");
@@ -312,7 +314,7 @@ namespace E_Commerce.Controllers
                 Request.Scheme);
 
             await _emailSender.SendEmailAsync(
-                user.Email,
+                user.UserName,
                 "Confirm your email",
                 $"<h3>Click below to confirm your email:</h3>" +
                 $"<a href='{link}'>Confirm Email</a>"

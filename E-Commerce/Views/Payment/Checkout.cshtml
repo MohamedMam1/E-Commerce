@@ -3,75 +3,89 @@
     ViewData["Title"] = "Checkout";
 }
 
-<div class="container" style="max-width:600px; margin:50px auto;">
-    <h2>🛒 Order Summary</h2>
+<div class="checkout-page">
+    <div class="container">
+        <span class="eyebrow">Secure Checkout</span>
+        <h1 class="checkout-heading" style="font-family:var(--ff-serif);font-size:clamp(1.8rem,3.5vw,2.6rem);font-weight:300;margin-bottom:2rem;">Order Summary</h1>
 
-    <table class="table table-bordered">
-        <thead>
-            <tr><th>Product</th><th>Size</th><th>Color</th><th>Qty</th><th>Price</th><th>Subtotal</th></tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model.CartItems)
-            {
-                <tr>
-                    <td>@item.ProductName</td>
-                    <td>@item.Size</td>
-                    <td>@item.Color</td>
-                    <td>@item.Quantity</td>
-                    <td>@item.Price LE</td>
-                    <td>@item.Subtotal LE</td>
-                </tr>
-            }
-        </tbody>
-        <tfoot>
-            <tr>
-                <td colspan="5"><strong>Total</strong></td>
-                <td><strong>@Model.TotalAmount LE</strong></td>
-            </tr>
-        </tfoot>
-    </table>
-
-    <hr />
-    <h4>💳 Payment Details</h4>
-
-    <form id="payment-form" asp-controller="Payment" asp-action="ProcessPayment" method="post">
-        <input type="hidden" name="totalAmount" value="@Model.TotalAmount" />
-        <input type="hidden" id="stripeToken" name="stripeToken" />
-
-        <div class="form-group">
-            <label>Card Number</label>
-            <div id="card-number-element"
-                 style="border:1px solid #ccc; padding:12px; border-radius:5px;">
-            </div>
-        </div>
-
-        <div class="form-row" style="display:flex; gap:15px; margin-top:15px;">
-            <div class="form-group" style="flex:1;">
-                <label>Expiry Date</label>
-                <div id="card-expiry-element"
-                     style="border:1px solid #ccc; padding:12px; border-radius:5px;">
+        <div class="row g-4">
+            <div class="col-lg-7">
+                <div class="checkout-card">
+                    <h4>Items</h4>
+                    <table class="checkout-table">
+                        <thead>
+                            <tr>
+                                <th>Product</th>
+                                <th>Size</th>
+                                <th>Colour</th>
+                                <th>Qty</th>
+                                <th>Price</th>
+                                <th>Subtotal</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.CartItems)
+                            {
+                                <tr>
+                                    <td>@item.ProductName</td>
+                                    <td>@item.Size</td>
+                                    <td>@item.Color</td>
+                                    <td>@item.Quantity</td>
+                                    <td>@item.Price LE</td>
+                                    <td style="font-weight:500;">@item.Subtotal LE</td>
+                                </tr>
+                            }
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="5"><strong>Total</strong></td>
+                                <td style="font-family:var(--ff-serif);font-size:1.1rem;font-weight:400;">@Model.TotalAmount LE</td>
+                            </tr>
+                        </tfoot>
+                    </table>
                 </div>
             </div>
-            <div class="form-group" style="flex:1;">
-                <label>CVC</label>
-                <div id="card-cvc-element"
-                     style="border:1px solid #ccc; padding:12px; border-radius:5px;">
+
+            <div class="col-lg-5">
+                <div class="checkout-card">
+                    <h4>Payment Details</h4>
+                    <form id="payment-form" asp-controller="Payment" asp-action="ProcessPayment" method="post">
+                        <input type="hidden" name="totalAmount" value="@Model.TotalAmount" />
+                        <input type="hidden" id="stripeToken" name="stripeToken" />
+
+                        <div class="mb-3">
+                            <label style="font-size:0.68rem;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:var(--stone);display:block;margin-bottom:6px;">Card Number</label>
+                            <div id="card-number-element" class="stripe-field"></div>
+                        </div>
+                        <div class="row g-3 mb-3">
+                            <div class="col-6">
+                                <label style="font-size:0.68rem;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:var(--stone);display:block;margin-bottom:6px;">Expiry</label>
+                                <div id="card-expiry-element" class="stripe-field"></div>
+                            </div>
+                            <div class="col-6">
+                                <label style="font-size:0.68rem;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:var(--stone);display:block;margin-bottom:6px;">CVC</label>
+                                <div id="card-cvc-element" class="stripe-field"></div>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label style="font-size:0.68rem;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:var(--stone);display:block;margin-bottom:6px;">ZIP Code</label>
+                            <input type="text" id="zip" name="zip"
+                                   style="background:var(--cream);border:1px solid var(--sand);border-radius:4px;padding:10px 14px;font-family:var(--ff-sans);font-size:0.88rem;color:var(--ink);width:100%;outline:none;"
+                                   placeholder="12345" maxlength="5" />
+                        </div>
+                        <div id="card-errors" style="color:#c0392b;font-size:0.78rem;margin-bottom:10px;"></div>
+                        <button type="submit" class="btn-pay">Pay @Model.TotalAmount LE</button>
+                        <div class="secure-note mt-3">
+                            <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.5">
+                                <rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                            </svg>
+                            Secured by Stripe
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
-
-        <div class="form-group" style="margin-top:15px;">
-            <label>ZIP Code</label>
-            <input type="text" id="zip" name="zip" class="form-control"
-                   placeholder="12345" maxlength="5" />
-        </div>
-
-        <div id="card-errors" style="color:red; margin:10px 0;"></div>
-
-        <button type="submit" class="btn btn-success btn-lg" style="margin-top:15px; width:100%;">
-            Pay @Model.TotalAmount LE
-        </button>
-    </form>
+    </div>
 </div>
 
 @section Scripts {
@@ -79,34 +93,22 @@
     <script>
         var stripe = Stripe('@Model.StripePublishableKey');
         var elements = stripe.elements();
-
         var cardNumber = elements.create('cardNumber');
         var cardExpiry = elements.create('cardExpiry');
         var cardCvc = elements.create('cardCvc');
-
         cardNumber.mount('#card-number-element');
         cardExpiry.mount('#card-expiry-element');
         cardCvc.mount('#card-cvc-element');
-
         [cardNumber, cardExpiry, cardCvc].forEach(function(el) {
             el.addEventListener('change', function(e) {
-                document.getElementById('card-errors').textContent =
-                    e.error ? e.error.message : '';
+                document.getElementById('card-errors').textContent = e.error ? e.error.message : '';
             });
         });
-
         document.getElementById('payment-form').addEventListener('submit', function(e) {
             e.preventDefault();
-
-            stripe.createToken(cardNumber, {
-                address_zip: document.getElementById('zip').value
-            }).then(function(result) {
-                if (result.error) {
-                    document.getElementById('card-errors').textContent = result.error.message;
-                } else {
-                    document.getElementById('stripeToken').value = result.token.id;
-                    document.getElementById('payment-form').submit();
-                }
+            stripe.createToken(cardNumber, { address_zip: document.getElementById('zip').value }).then(function(result) {
+                if (result.error) { document.getElementById('card-errors').textContent = result.error.message; }
+                else { document.getElementById('stripeToken').value = result.token.id; document.getElementById('payment-form').submit(); }
             });
         });
     </script>

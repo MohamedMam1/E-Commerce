@@ -1,10 +1,22 @@
-﻿@model E_Commerce.ViewModels.PaymentFailedVM
+@model E_Commerce.ViewModels.PaymentFailedVM
 @{
     ViewData["Title"] = "Payment Failed";
 }
 
-<div class="container" style="text-align:center; margin-top:80px;">
-    <h2 style="color:red;">❌ Payment Failed</h2>
-    <p>@Model.ErrorMessage</p>
-    <a href="/Payment/Checkout" class="btn btn-warning">Try Again</a>
+<div class="payment-result-page">
+    <div class="container">
+        <div class="payment-result-card mx-auto">
+            <div class="auth-icon-circle danger mx-auto mb-3">
+                <i class="bi bi-x-lg fs-3"></i>
+            </div>
+            <span class="eyebrow d-block mb-2" style="color:#c0392b;">Payment Failed</span>
+            <h2 class="payment-result-title">Something Went Wrong</h2>
+            <p class="payment-result-sub">@Model.ErrorMessage</p>
+
+            <div class="d-grid gap-2">
+                <a href="/Payment/Checkout" class="btn-auth-primary">Try Again</a>
+                <a asp-controller="Home" asp-action="Index" class="btn-auth-outline">Return to Home</a>
+            </div>
+        </div>
+    </div>
 </div>

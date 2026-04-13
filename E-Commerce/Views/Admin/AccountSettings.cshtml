@@ -1,0 +1,208 @@
+@using E_Commerce.ViewModels.AdminDashboard
+@model EditAdminAccountVM
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    ViewData["Title"] = "Account Settings";
+}
+
+<!-- ?? Sidebar Overlay ????????????????????????????????????????????????? -->
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+
+<!-- ?? Main Wrapper ??????????????????????????????????????????????????? -->
+<div class="main-wrapper">
+
+    <!-- ?? Page Content ??????????????????????????????????????????????? -->
+    <main class="page-content">
+        <div class="page-header">
+            <div>
+                <h1>Account Settings</h1>
+                <p>Manage your profile and change your password.</p>
+            </div>
+        </div>
+
+        <div class="card-box">
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <form asp-action="EditAdminAccount" asp-controller="Admin" method="post">
+
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger mb-3" role="alert"></div>
+
+                        <!-- Personal Information Section -->
+                        <div class="form-section">
+                            <h4 class="section-title mb-4">Personal Information</h4>
+
+                            <div class="mb-3">
+                                <label asp-for="FullName" class="form-label-custom"></label>
+                                <input asp-for="FullName" class="form-control-custom" />
+                                <span asp-validation-for="FullName" class="text-danger small"></span>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label asp-for="Email" class="form-label-custom"></label>
+                                    <input asp-for="Email" class="form-control-custom" readonly style="background-color: #f5f5f5; cursor: not-allowed;" />
+                                    <small class="text-muted d-block mt-1">Email cannot be changed</small>
+                                    <span asp-validation-for="Email" class="text-danger small"></span>
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label asp-for="PhoneNumber" class="form-label-custom"></label>
+                                    <input asp-for="PhoneNumber" class="form-control-custom" />
+                                    <span asp-validation-for="PhoneNumber" class="text-danger small"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <hr class="my-4" />
+
+                        <!-- Address Information Section -->
+                        <div class="form-section">
+                            <h4 class="section-title mb-4">Address Information</h4>
+
+                            <div class="mb-3">
+                                <label asp-for="Address" class="form-label-custom"></label>
+                                <input asp-for="Address" class="form-control-custom" />
+                                <span asp-validation-for="Address" class="text-danger small"></span>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label asp-for="City" class="form-label-custom"></label>
+                                    <input asp-for="City" class="form-control-custom" />
+                                    <span asp-validation-for="City" class="text-danger small"></span>
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label asp-for="PostalCode" class="form-label-custom"></label>
+                                    <input asp-for="PostalCode" class="form-control-custom" />
+                                    <span asp-validation-for="PostalCode" class="text-danger small"></span>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label asp-for="Country" class="form-label-custom"></label>
+                                <input asp-for="Country" class="form-control-custom" />
+                                <span asp-validation-for="Country" class="text-danger small"></span>
+                            </div>
+                        </div>
+
+                        <hr class="my-4" />
+
+                        <!-- Change Password Section -->
+                        <div class="form-section bg-light p-4 rounded border">
+                            <h4 class="section-title mb-3">Change Password</h4>
+                            <p class="text-muted small mb-3">Leave these fields empty if you don't want to change your password.</p>
+
+                            <div class="mb-3">
+                                <label asp-for="CurrentPassword" class="form-label-custom"></label>
+                                <input asp-for="CurrentPassword" class="form-control-custom" type="password" autocomplete="off" placeholder="Enter your current password" />
+                                <span asp-validation-for="CurrentPassword" class="text-danger small"></span>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label asp-for="NewPassword" class="form-label-custom"></label>
+                                    <input asp-for="NewPassword" class="form-control-custom" type="password" placeholder="Enter new password" />
+                                    <span asp-validation-for="NewPassword" class="text-danger small"></span>
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label asp-for="ConfirmPassword" class="form-label-custom"></label>
+                                    <input asp-for="ConfirmPassword" class="form-control-custom" type="password" placeholder="Confirm new password" />
+                                    <span asp-validation-for="ConfirmPassword" class="text-danger small"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="mt-4 d-flex gap-2">
+                            <button type="submit" class="btn-primary-custom">
+                                <i class="bi bi-check-circle me-2"></i>Save Changes
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<style>
+    .form-label-custom {
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 8px;
+        display: block;
+    }
+
+    .form-control-custom {
+        border: 1.5px solid #ddd;
+        border-radius: 6px;
+        padding: 10px 14px;
+        font-size: 14px;
+        font-family: var(--font, 'Public Sans', sans-serif);
+        transition: all 0.2s ease;
+    }
+
+    .form-control-custom:focus {
+        border-color: #0066cc;
+        box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.1);
+        outline: none;
+    }
+
+    .form-section {
+        margin-bottom: 20px;
+    }
+
+    .section-title {
+        color: #333;
+        font-weight: 600;
+        font-size: 16px;
+    }
+
+    .card-box {
+        background: white;
+        border-radius: 8px;
+        padding: 30px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+
+    .btn-primary-custom {
+        background-color: #0066cc;
+        color: white;
+        border: none;
+        padding: 10px 24px;
+        border-radius: 6px;
+        font-weight: 500;
+        font-size: 14px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .btn-primary-custom:hover {
+        background-color: #0052a3;
+        box-shadow: 0 4px 12px rgba(0, 102, 204, 0.3);
+    }
+
+    .btn-outline-secondary {
+        border: 1.5px solid #ddd;
+        color: #666;
+        padding: 10px 24px;
+        border-radius: 6px;
+        font-weight: 500;
+        font-size: 14px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        background: white;
+    }
+
+    .btn-outline-secondary:hover {
+        border-color: #999;
+        color: #333;
+        background-color: #f5f5f5;
+    }
+</style>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

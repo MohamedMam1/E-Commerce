@@ -4,433 +4,7 @@
     ViewData["Title"] = "Shopping Cart";
 }
 
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
-
-<style>
-
-    .cart-page {
-        font-family: 'DM Sans', sans-serif;
-        background: #FAFAF8;
-        min-height: 100vh;
-        color: #1C1C1A;
-    }
-
-    .cart-header {
-        border-bottom: 1px solid #E8E5DF;
-        padding: 2rem 0 1.5rem;
-        margin-bottom: 3rem;
-    }
-
-        .cart-header .breadcrumb-trail {
-            font-size: 12px;
-            letter-spacing: 0.08em;
-            text-transform: uppercase;
-            color: #9C9A94;
-            margin-bottom: 1rem;
-        }
-
-            .cart-header .breadcrumb-trail a {
-                color: #9C9A94;
-                text-decoration: none;
-                transition: color 0.2s;
-            }
-
-                .cart-header .breadcrumb-trail a:hover {
-                    color: #1C1C1A;
-                }
-
-        .cart-header h1 {
-            font-family: 'Playfair Display', serif;
-            font-size: clamp(2rem, 4vw, 3rem);
-            font-weight: 400;
-            letter-spacing: -0.02em;
-            margin: 0;
-            line-height: 1.1;
-        }
-
-        .cart-header .item-count {
-            font-size: 14px;
-            color: #9C9A94;
-            margin-top: 0.5rem;
-            font-weight: 300;
-        }
-
-    /* Cart Table */
-    .cart-table-wrap {
-        overflow-x: auto;
-    }
-
-    .cart-table {
-        width: 100%;
-        border-collapse: collapse;
-    }
-
-        .cart-table thead th {
-            font-size: 11px;
-            letter-spacing: 0.1em;
-            text-transform: uppercase;
-            color: #9C9A94;
-            font-weight: 500;
-            padding: 0 0 1rem;
-            border-bottom: 1px solid #E8E5DF;
-            text-align: left;
-        }
-
-            .cart-table thead th.col-qty {
-                text-align: center;
-            }
-
-            .cart-table thead th.col-price,
-            .cart-table thead th.col-total {
-                text-align: right;
-            }
-
-            .cart-table thead th.col-remove {
-                text-align: center;
-                width: 60px;
-            }
-
-        .cart-table .cart-row {
-            border-bottom: 1px solid #F0EDE7;
-            transition: background 0.2s;
-        }
-
-            .cart-table .cart-row:hover {
-                background: #FDFCFA;
-            }
-
-        .cart-table td {
-            padding: 1.5rem 0;
-            vertical-align: middle;
-        }
-
-            .cart-table td + td {
-                padding-left: 1rem;
-            }
-
-    /* Product cell */
-    .product-cell {
-        display: flex;
-        align-items: center;
-        gap: 1.25rem;
-    }
-
-    .product-img-wrap {
-        width: 80px;
-        height: 80px;
-        border-radius: 8px;
-        overflow: hidden;
-        background: #F0EDE7;
-        flex-shrink: 0;
-    }
-
-        .product-img-wrap img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-    .product-name {
-        font-size: 15px;
-        font-weight: 400;
-        color: #1C1C1A;
-        line-height: 1.4;
-    }
-
-    /* Price */
-    .price-cell {
-        font-size: 15px;
-        color: #5C5A55;
-        text-align: right;
-        font-weight: 300;
-        white-space: nowrap;
-    }
-
-    .total-cell {
-        font-size: 15px;
-        font-weight: 500;
-        color: #1C1C1A;
-        text-align: right;
-        white-space: nowrap;
-    }
-
-    /* Quantity control */
-    .qty-cell {
-        text-align: center;
-    }
-
-    .qty-control {
-        display: inline-flex;
-        align-items: center;
-        border: 1px solid #E0DDD7;
-        border-radius: 100px;
-        overflow: hidden;
-        background: #fff;
-    }
-
-    .qty-btn {
-        width: 32px;
-        height: 32px;
-        background: none;
-        border: none;
-        cursor: pointer;
-        font-size: 16px;
-        color: #5C5A55;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        transition: background 0.15s, color 0.15s;
-        flex-shrink: 0;
-    }
-
-        .qty-btn:hover {
-            background: #F0EDE7;
-            color: #1C1C1A;
-        }
-
-    .qty-input {
-        width: 36px;
-        text-align: center;
-        border: none;
-        font-family: 'DM Sans', sans-serif;
-        font-size: 14px;
-        font-weight: 500;
-        background: none;
-        color: #1C1C1A;
-        pointer-events: none;
-        padding: 0;
-    }
-
-    /* Remove button */
-    .remove-cell {
-        text-align: center;
-    }
-
-    .remove-btn {
-        background: none;
-        border: none;
-        cursor: pointer;
-        color: #C5C2BA;
-        padding: 6px;
-        border-radius: 50%;
-        transition: background 0.15s, color 0.15s;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-    }
-
-        .remove-btn:hover {
-            background: #FDECEA;
-            color: #C0392B;
-        }
-
-    .remove-icon {
-        width: 16px;
-        height: 16px;
-        stroke: currentColor;
-        fill: none;
-        stroke-width: 1.5;
-        stroke-linecap: round;
-    }
-
-    /* Empty cart */
-    .empty-cart {
-        padding: 4rem 0;
-        text-align: center;
-    }
-
-    .empty-cart-icon {
-        width: 64px;
-        height: 64px;
-        margin: 0 auto 1.5rem;
-        opacity: 0.2;
-    }
-
-    .empty-cart h3 {
-        font-family: 'Playfair Display', serif;
-        font-size: 1.5rem;
-        font-weight: 400;
-        color: #1C1C1A;
-        margin-bottom: 0.5rem;
-    }
-
-    .empty-cart p {
-        color: #9C9A94;
-        font-size: 14px;
-        font-weight: 300;
-        margin-bottom: 2rem;
-    }
-
-    .btn-continue {
-        display: inline-block;
-        padding: 0.75rem 2rem;
-        background: #1C1C1A;
-        color: #FAFAF8;
-        text-decoration: none;
-        font-size: 13px;
-        letter-spacing: 0.06em;
-        border-radius: 100px;
-        transition: opacity 0.2s;
-    }
-
-        .btn-continue:hover {
-            opacity: 0.8;
-            color: #FAFAF8;
-        }
-
-    /* Cart actions */
-    .cart-actions {
-        display: flex;
-        justify-content: flex-start;
-        margin-top: 1.5rem;
-    }
-
-    .btn-clear {
-        background: none;
-        border: 1px solid #E0DDD7;
-        padding: 0.6rem 1.5rem;
-        font-family: 'DM Sans', sans-serif;
-        font-size: 13px;
-        letter-spacing: 0.04em;
-        color: #9C9A94;
-        border-radius: 100px;
-        cursor: pointer;
-        transition: all 0.2s;
-    }
-
-        .btn-clear:hover {
-            border-color: #1C1C1A;
-            color: #1C1C1A;
-        }
-
-    /* Order Summary Panel */
-    .summary-panel {
-        background: #fff;
-        border: 1px solid #E8E5DF;
-        border-radius: 16px;
-        padding: 2rem;
-        position: sticky;
-        top: 2rem;
-    }
-
-        .summary-panel h2 {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.3rem;
-            font-weight: 400;
-            margin: 0 0 1.5rem;
-            color: #1C1C1A;
-        }
-
-    .summary-line {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 0.75rem 0;
-        border-bottom: 1px solid #F0EDE7;
-        font-size: 14px;
-    }
-
-        .summary-line:last-of-type {
-            border-bottom: none;
-        }
-
-        .summary-line .label {
-            color: #9C9A94;
-            font-weight: 300;
-        }
-
-        .summary-line .value {
-            font-weight: 400;
-            color: #1C1C1A;
-        }
-
-    .summary-total {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 1.25rem 0 0;
-        margin-top: 0.5rem;
-        border-top: 2px solid #1C1C1A;
-    }
-
-        .summary-total .label {
-            font-size: 15px;
-            font-weight: 500;
-            color: #1C1C1A;
-        }
-
-        .summary-total .value {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.5rem;
-            font-weight: 400;
-            color: #1C1C1A;
-        }
-
-    .btn-checkout {
-        display: block;
-        width: 100%;
-        margin-top: 1.5rem;
-        padding: 1rem;
-        background: #1C1C1A;
-        color: #FAFAF8;
-        text-align: center;
-        text-decoration: none;
-        font-family: 'DM Sans', sans-serif;
-        font-size: 14px;
-        font-weight: 500;
-        letter-spacing: 0.05em;
-        border-radius: 100px;
-        transition: opacity 0.2s;
-    }
-
-        .btn-checkout:hover {
-            opacity: 0.85;
-            color: #FAFAF8;
-        }
-
-    .secure-note {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 6px;
-        margin-top: 1rem;
-        font-size: 12px;
-        color: #C5C2BA;
-        font-weight: 300;
-    }
-
-        .secure-note svg {
-            width: 12px;
-            height: 12px;
-            stroke: currentColor;
-            fill: none;
-            stroke-width: 1.5;
-        }
-
-    @@media (max-width: 991px) {
-        .summary-panel {
-            margin-top: 2rem;
-            position: static;
-        }
-    }
-
-    @@media (max-width: 575px) {
-        .product-img-wrap {
-            width: 56px;
-            height: 56px;
-        }
-
-        .product-name {
-            font-size: 13px;
-        }
-
-        .price-cell, .total-cell {
-            font-size: 13px;
-        }
-    }
-</style>
-
-<div class="cart-page">
+<div class="cart-page py-5">
     <div class="container">
         <div class="cart-header">
             <div class="breadcrumb-trail">
@@ -448,7 +22,7 @@
         <div class="row">
             <!-- Cart Items -->
             <div class="col-lg-8 mb-5">
-                <div class="cart-table-wrap">
+                <div class="cart-table-wrap" style="overflow-x:auto;">
                     <table class="cart-table">
                         @if (Model.Items.Any())
                         {
@@ -474,23 +48,19 @@
                                         <td>
                                             <span class="product-name">@item.ProductName</span>
                                         </td>
-                                        <td class="price-cell">
-                                            $@item.Price.ToString("0.00")
-                                        </td>
-                                        <td class="price-cell" style="text-align:left;font-size:13px;color:#7a7873;">
+                                        <td class="price-cell">$@item.Price.ToString("0.00")</td>
+                                        <td class="price-cell" style="text-align:left;font-size:0.78rem;color:var(--stone);">
                                             @item.Size / @item.Color
                                         </td>
                                         <td class="qty-cell">
                                             <div class="qty-control">
-                                                <button type="button" class="qty-btn" onclick="updateQuantity(@item.CartItemId, @(item.Quantity - 1), @item.MaxQuantity, @item.Quantity)" aria-label="Decrease quantity">&#x2212;</button>
+                                                <button type="button" class="qty-btn" onclick="updateQuantity(@item.CartItemId, @(item.Quantity - 1), @item.MaxQuantity, @item.Quantity)" aria-label="Decrease">&#x2212;</button>
                                                 <input class="qty-input" type="number" value="@item.Quantity" readonly title="Max @item.MaxQuantity in stock">
-                                                <button type="button" class="qty-btn" onclick="updateQuantity(@item.CartItemId, @(item.Quantity + 1), @item.MaxQuantity, @item.Quantity)" aria-label="Increase quantity">&#x2B;</button>
+                                                <button type="button" class="qty-btn" onclick="updateQuantity(@item.CartItemId, @(item.Quantity + 1), @item.MaxQuantity, @item.Quantity)" aria-label="Increase">&#x2B;</button>
                                             </div>
-                                            <div class="stext-102 cl6" style="font-size:11px;margin-top:6px;">Max @item.MaxQuantity in stock</div>
+                                            <div style="font-size:0.65rem;color:var(--stone);margin-top:4px;text-align:center;">Max @item.MaxQuantity</div>
                                         </td>
-                                        <td class="total-cell">
-                                            $@item.Subtotal.ToString("0.00")
-                                        </td>
+                                        <td class="total-cell">$@item.Subtotal.ToString("0.00")</td>
                                         <td class="remove-cell">
                                             <form asp-action="RemoveFromCart" asp-controller="Cart" method="post" class="d-inline">
                                                 <input type="hidden" name="cartItemId" value="@item.CartItemId" />
@@ -514,7 +84,7 @@
                                 <tr>
                                     <td colspan="7">
                                         <div class="empty-cart">
-                                            <svg class="empty-cart-icon" viewBox="0 0 64 64" fill="none" stroke="#1C1C1A" stroke-width="1.5">
+                                            <svg class="empty-cart-icon" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.5">
                                                 <path d="M8 8h5l6 32h30l4-22H18" />
                                                 <circle cx="26" cy="52" r="3" />
                                                 <circle cx="42" cy="52" r="3" />
@@ -546,29 +116,17 @@
                 <div class="col-lg-4">
                     <div class="summary-panel">
                         <h2>Order Summary</h2>
-
                         <div class="summary-line">
                             <span class="label">Subtotal</span>
                             <span class="value">$@Model.TotalPrice.ToString("0.00")</span>
                         </div>
-                    @*     <div class="summary-line">
-                            <span class="label">Shipping</span>
-                            <span class="value" style="color: #6B9E78;">Calculated at checkout</span>
-                        </div>
-                        <div class="summary-line">
-                            <span class="label">Tax</span>
-                            <span class="value" style="color: #9C9A94;">Calculated at checkout</span>
-                        </div> *@
-
                         <div class="summary-total">
                             <span class="label">Total</span>
                             <span class="value">$@Model.TotalPrice.ToString("0.00")</span>
                         </div>
-
                         <a href="/Payment/Checkout" class="btn-checkout">Proceed to Checkout &rarr;</a>
-
                         <div class="secure-note">
-                            <svg viewBox="0 0 24 24">
+                            <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.5">
                                 <rect x="3" y="11" width="18" height="11" rx="2" />
                                 <path d="M7 11V7a5 5 0 0 1 10 0v4" />
                             </svg>
@@ -584,63 +142,16 @@
 @section Scripts {
     <script>
         var cartQtyRequestInFlight = false;
-
-        function cartAlert(title, text, icon) {
-            var msg = title + "\n\n" + text;
-            if (typeof swal !== 'function') {
-                window.alert(msg);
-                return;
-            }
-            try {
-                swal({
-                    title: title,
-                    text: text,
-                    icon: icon || "info",
-                    button: "OK",
-                    closeOnClickOutside: false,
-                    closeOnEsc: false
-                });
-            } catch (e) {
-                window.alert(msg);
-            }
-        }
-
         function updateQuantity(cartItemId, newQuantity, maxQty, currentQty) {
-            if (newQuantity < 0) return;
-            if (cartQtyRequestInFlight) return;
-
-            if (newQuantity === currentQty) return;
-
-            if (newQuantity > maxQty) {
-                cartAlert(
-                    "Stock limit",
-                    "Only " + maxQty + " available in stock for this item. Click OK to continue.",
-                    "warning");
-                return;
-            }
-
+            if (newQuantity < 0 || cartQtyRequestInFlight || newQuantity === currentQty) return;
+            if (newQuantity > maxQty) { window.alert("Only " + maxQty + " available in stock."); return; }
             cartQtyRequestInFlight = true;
             $.ajax({
-                url: '/Cart/UpdateQuantity',
-                type: 'POST',
-                dataType: 'json',
+                url: '/Cart/UpdateQuantity', type: 'POST', dataType: 'json',
                 data: { cartItemId: cartItemId, quantity: newQuantity },
-                success: function (result) {
-                    if (result && result.success) {
-                        location.reload();
-                    } else {
-                        cartAlert(
-                            "Could not update",
-                            (result && result.message) ? result.message : "Try again.",
-                            "error");
-                    }
-                },
-                error: function () {
-                    cartAlert("Error", "Could not reach the server.", "error");
-                },
-                complete: function () {
-                    cartQtyRequestInFlight = false;
-                }
+                success: function(r) { if (r && r.success) location.reload(); else window.alert(r && r.message ? r.message : "Try again."); },
+                error: function() { window.alert("Could not reach the server."); },
+                complete: function() { cartQtyRequestInFlight = false; }
             });
         }
     </script>

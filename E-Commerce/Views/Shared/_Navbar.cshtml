@@ -1,78 +1,86 @@
-@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
 @{
 }
 
+<style>
+	a {
+		text-decoration: none;
+	}
+
+	.main-menu a {
+		color: #000;
+		transition: color 0.3s ease;
+	}
+
+	.main-menu a:hover {
+		color: #B09A7E;
+	}
+
+	.main-menu li.active-menu > a {
+		color: #B09A7E;
+		font-weight: 600;
+	}
+
+	.main-menu-m a {
+		color: #fff;
+	}
+</style>
 <header>
 	<!-- Header desktop -->
 	<div class="container-menu-desktop">
-		<!-- Topbar -->
-		<div class="top-bar">
-			<div class="content-topbar flex-sb-m h-full container">
-			</div>
-		</div>
 
 		<div class="wrap-menu-desktop">
 			<nav class="limiter-menu-desktop container">
 
 				<!-- Logo desktop -->
-				<a href="@Url.Action("Index", "Home")" class="logo">
-					<img src="~/images/icons/logo-01.png" alt="IMG-LOGO">
+				<a href="@Url.Action("Index", "Home")" class="logo" style="font-weight: bold; font-size: 1.8rem; letter-spacing: 0.05em; color: #B09A7E;">
+					Vestra
 				</a>
 
 				<!-- Menu desktop -->
 				<div class="menu-desktop">
 					<ul class="main-menu">
-						<li class="active-menu">
-							<a href="@Url.Action("Index", "Home")">Home</a>
-							
+
+						<li class="@(ViewContext.RouteData.Values["action"]?.ToString() == "Index" && ViewContext.RouteData.Values["controller"]?.ToString() == "Home" ? "active-menu" : "")">
+							<a asp-controller="Home" asp-action="Index">Home</a>
 						</li>
 
-						<li>
+						<li class="@(ViewContext.RouteData.Values["controller"]?.ToString() == "Product" ? "active-menu" : "")">
 							<a asp-controller="Product" asp-action="Index">Shop</a>
 						</li>
 
-					
-
-						<li>
+						<li class="@(ViewContext.RouteData.Values["action"]?.ToString() == "About" ? "active-menu" : "")">
 							<a asp-controller="Home" asp-action="About">About</a>
 						</li>
 
-						<li>
+						<li class="@(ViewContext.RouteData.Values["action"]?.ToString() == "Contact" ? "active-menu" : "")">
 							<a asp-controller="Home" asp-action="Contact">Contact</a>
 						</li>
+
 					</ul>
 				</div>
 
 				<!-- Icon header -->
 				<div class="wrap-icon-header flex-w flex-r-m">
 
-				@* 	<!-- Search -->
-					<div class="icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11 js-show-modal-search">
-						<i class="zmdi zmdi-search"></i>
-					</div> *@
-
-					<!-- Cart -->
-					<a asp-controller="Cart" asp-action="Index" class="dis-block icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11 " >
+					<a asp-controller="Cart" asp-action="Index"
+					   class="icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11">
 						<i class="zmdi zmdi-shopping-cart"></i>
 					</a>
 
-					<!-- Wishlist -->
-					<a asp-controller="Wishlist" asp-action="Index" class="dis-block icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11 " >
+					<a asp-controller="Wishlist" asp-action="Index"
+					   class="icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11">
 						<i class="zmdi zmdi-favorite-outline"></i>
 					</a>
 
-					<!-- USER ICON -->
 					@if (User.Identity.IsAuthenticated)
 					{
 						<div class="dropdown p-l-22 p-r-11">
 							<a href="#" class="icon-header-item cl2 hov-cl1 trans-04 dropdown-toggle"
-							   id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+							   id="userDropdown" data-bs-toggle="dropdown">
 								<i class="zmdi zmdi-account"></i>
 							</a>
 
-							<ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+							<ul class="dropdown-menu dropdown-menu-end">
 								<li>
 									<a class="dropdown-item" asp-controller="Account" asp-action="Dashboard">
 										Dashboard
@@ -89,36 +97,40 @@
 					else
 					{
 						<a asp-controller="Account" asp-action="Login"
-						   class="dis-block icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11">
+						   class="icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11">
 							<i class="zmdi zmdi-account"></i>
 						</a>
 					}
 
 				</div>
+
 			</nav>
 		</div>
 	</div>
 
 	<!-- Header Mobile -->
 	<div class="wrap-header-mobile">
-		<!-- Logo moblie -->
+
+		<!-- Logo mobile -->
 		<div class="logo-mobile">
-			<a href="index.html"><img src="~/images/icons/logo-01.png" alt="IMG-LOGO"></a>
+			<a href="@Url.Action("Index", "Home")" style="font-weight: bold; font-size: 1.5rem; letter-spacing: 0.05em; display: flex; align-items: center; height: 100%; color: #B09A7E;">
+				Vestra
+			</a>
 		</div>
 
 		<!-- Icon header -->
 		<div class="wrap-icon-header flex-w flex-r-m m-r-15">
-			<div class="icon-header-item cl2 hov-cl1 trans-04 p-r-11 js-show-modal-search">
-				<i class="zmdi zmdi-search"></i>
-			</div>
 
-			<a asp-controller="Cart" asp-action="Index" class="dis-block icon-header-item cl2 hov-cl1 trans-04 p-r-11 p-l-10 icon-header-noti" data-notify="2">
+			<a asp-controller="Cart" asp-action="Index"
+			   class="icon-header-item cl2 hov-cl1 trans-04 p-r-11 p-l-10">
 				<i class="zmdi zmdi-shopping-cart"></i>
 			</a>
 
-			<a asp-controller="Wishlist" asp-action="Index" class="dis-block icon-header-item cl2 hov-cl1 trans-04 p-r-11 p-l-10 icon-header-noti" data-notify="0">
+			<a asp-controller="Wishlist" asp-action="Index"
+			   class="icon-header-item cl2 hov-cl1 trans-04 p-r-11 p-l-10">
 				<i class="zmdi zmdi-favorite-outline"></i>
 			</a>
+
 		</div>
 
 		<!-- Button show menu -->
@@ -129,85 +141,27 @@
 		</div>
 	</div>
 
-
 	<!-- Menu Mobile -->
 	<div class="menu-mobile">
-		<ul class="topbar-mobile">
-			<li>
-				<div class="left-top-bar">
-					Free shipping for standard order over $100
-				</div>
-			</li>
-
-			<li>
-				<div class="right-top-bar flex-w h-full">
-					<a href="#" class="flex-c-m p-lr-10 trans-04">
-						Help & FAQs
-					</a>
-
-					<a href="#" class="flex-c-m p-lr-10 trans-04">
-						My Account
-					</a>
-
-					<a href="#" class="flex-c-m p-lr-10 trans-04">
-						EN
-					</a>
-
-					<a href="#" class="flex-c-m p-lr-10 trans-04">
-						USD
-					</a>
-				</div>
-			</li>
-		</ul>
-
 		<ul class="main-menu-m">
+
 			<li>
-				<a href="index.html">Home</a>
-				<ul class="sub-menu-m">
-					<li><a href="index.html">Homepage 1</a></li>
-					<li><a href="home-02.html">Homepage 2</a></li>
-					<li><a href="home-03.html">Homepage 3</a></li>
-				</ul>
-				<span class="arrow-main-menu-m">
-					<i class="fa fa-angle-right" aria-hidden="true"></i>
-				</span>
+				<a asp-controller="Home" asp-action="Index">Home</a>
 			</li>
 
 			<li>
-				<a href="product.html">Shop</a>
+				<a asp-controller="Product" asp-action="Index">Shop</a>
 			</li>
 
 			<li>
-				<a href="shoping-cart.html" class="label1 rs1" data-label1="hot">Features</a>
+				<a asp-controller="Home" asp-action="About">About</a>
 			</li>
 
 			<li>
-				<a href="blog.html">Blog</a>
+				<a asp-controller="Home" asp-action="Contact">Contact</a>
 			</li>
 
-			<li>
-				<a href="about.html">About</a>
-			</li>
-
-			<li>
-				<a href="contact.html">Contact</a>
-			</li>
 		</ul>
 	</div>
 
-	<!-- Modal Search -->
-	<div class="modal-search-header flex-c-m trans-04 js-hide-modal-search">
-		<div class="container-search-header">
-			<button class="flex-c-m btn-hide-modal-search trans-04 js-hide-modal-search">
-				<img src="~/images/icons/icon-close2.png" alt="CLOSE">
-			</button>
-
-			<form class="wrap-search-header flex-w p-l-15">
-				<button class="flex-c-m trans-04">
-					<i class="zmdi zmdi-search"></i>
-				</button>
-				<input class="plh3" type="text" name="search" placeholder="Search...">
-			</form>
-		</div>
-	</div>
 </header>

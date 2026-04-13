@@ -8,7 +8,6 @@ namespace E_Commerce.ViewModels.UserDashboard
         [Display(Name = "Full Name")]
         public string FullName { get; set; }
 
-        [Required]
         [Display(Name = "Email")]
         [EmailAddress]
         public string Email { get; set; }
@@ -37,6 +36,20 @@ namespace E_Commerce.ViewModels.UserDashboard
         [Display(Name = "Country")]
         [StringLength(100)]
         public string Country { get; set; }
+
+        [DataType(DataType.Password)]
+        [Display(Name = "Current Password")]
+        public string? CurrentPassword { get; set; }
+
+        [DataType(DataType.Password)]
+        [Display(Name = "New Password")]
+        [MinLength(6, ErrorMessage = "Password must be at least 6 characters")]
+        public string? NewPassword { get; set; }
+
+        [DataType(DataType.Password)]
+        [Display(Name = "Confirm New Password")]
+        [Compare("NewPassword", ErrorMessage = "The new password and confirmation password do not match.")]
+        public string? ConfirmPassword { get; set; }
     }
 }
 

@@ -1,26 +1,481 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+@{
+	ViewData["Title"] = "Home Page";
 }
+<style>
+	/* ── SHARED UTILITIES ── */
+	.eyebrow {
+		font-family: var(--ff-sans);
+		font-size: 0.68rem;
+		font-weight: 600;
+		letter-spacing: 0.22em;
+		text-transform: uppercase;
+		color: var(--gold);
+	}
 
-<!-- Slider -->
+	.display-serif {
+		font-family: var(--ff-serif);
+		font-weight: 300;
+		line-height: 1.15;
+		color: var(--ink);
+	}
+
+	.section-divider {
+		width: 40px;
+		height: 1px;
+		background: var(--gold);
+		display: block;
+		margin: 1.5rem auto;
+	}
+
+		.section-divider.left {
+			margin: 1.5rem 0;
+		}
+
+	/* ══════════════════════════════════════
+		   HERO SLIDER — unified with site design
+		══════════════════════════════════════ */
+	.section-slide .item-slick1 {
+		background-size: cover;
+		background-position: center;
+		position: relative;
+	}
+
+		/* Dark overlay so text is always readable */
+		.section-slide .item-slick1::before {
+			content: '';
+			position: absolute;
+			inset: 0;
+			z-index: 0;
+		}
+
+		.section-slide .item-slick1 > * {
+			position: relative;
+			z-index: 1;
+		}
+
+	/* Slide text — use site serif/sans */
+	.section-slide .ltext-101 {
+		font-family: var(--ff-sans);
+		font-size: 0.72rem;
+		font-weight: 600;
+		letter-spacing: 0.28em;
+		text-transform: uppercase;
+		color: var(--gold) !important;
+		display: block;
+		margin-bottom: 1rem;
+	}
+
+	.section-slide .ltext-201 {
+		font-family: var(--ff-serif) !important;
+		font-size: clamp(3rem, 7vw, 5.5rem) !important;
+		font-weight: 300 !important;
+		line-height: 1.1 !important;
+		color: black !important;
+		letter-spacing: -0.01em;
+	}
+
+	/* CTA button — matches site gold palette */
+	.section-slide .hov-btn1 {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		font-family: var(--ff-sans);
+		font-size: 0.72rem;
+		font-weight: 600;
+		letter-spacing: 0.22em;
+		text-transform: uppercase;
+		color: var(--ink) !important;
+		background: var(--gold) !important;
+		border: 1px solid var(--gold) !important;
+		padding: 14px 38px !important;
+		border-radius: 2px !important;
+		text-decoration: none;
+		transition: background 0.35s ease, color 0.35s ease, border-color 0.35s ease;
+	}
+
+		.section-slide .hov-btn1:hover {
+			background: transparent !important;
+			color: var(--white) !important;
+			border-color: rgba(255,255,255,0.6) !important;
+		}
+
+	/* ══════════════════════════════════════
+		   SECTION 1 — BRAND STORY
+		══════════════════════════════════════ */
+	.brand-story {
+		background: var(--ink);
+		padding: 100px 0;
+		position: relative;
+		overflow: hidden;
+	}
+
+		.brand-story::before {
+			content: '';
+			position: absolute;
+			top: -60px;
+			right: -60px;
+			width: 420px;
+			height: 420px;
+			border-radius: 50%;
+			border: 1px solid rgba(176, 154, 126, 0.12);
+			pointer-events: none;
+		}
+
+		.brand-story::after {
+			content: '';
+			position: absolute;
+			bottom: -100px;
+			left: -80px;
+			width: 580px;
+			height: 580px;
+			border-radius: 50%;
+			border: 1px solid rgba(176, 154, 126, 0.07);
+			pointer-events: none;
+		}
+
+		.brand-story .story-year {
+			font-family: var(--ff-serif);
+			font-size: clamp(5rem, 12vw, 9rem);
+			font-weight: 300;
+			color: rgba(176, 154, 126, 0.10);
+			line-height: 1;
+			position: absolute;
+			top: 60px;
+			right: 5%;
+			pointer-events: none;
+			user-select: none;
+		}
+
+		.brand-story .display-serif {
+			color: var(--white);
+			font-size: clamp(2.2rem, 4.5vw, 3.4rem);
+		}
+
+		.brand-story .story-body {
+			color: rgba(255,255,255,0.62);
+			font-size: 0.95rem;
+			line-height: 1.95;
+			font-weight: 300;
+		}
+
+		.brand-story .story-pull {
+			font-family: var(--ff-serif);
+			font-size: clamp(1.15rem, 2vw, 1.4rem);
+			font-weight: 400;
+			font-style: italic;
+			color: var(--gold);
+			line-height: 1.7;
+			border-left: 2px solid var(--gold);
+			padding-left: 1.5rem;
+			margin: 2.5rem 0;
+		}
+
+		.brand-story .stat-row {
+			display: flex;
+			gap: 3rem;
+			margin-top: 2.8rem;
+			padding-top: 2.8rem;
+			border-top: 1px solid rgba(255,255,255,0.08);
+		}
+
+		.brand-story .stat-item .stat-num {
+			font-family: var(--ff-serif);
+			font-size: 2.2rem;
+			font-weight: 300;
+			color: var(--white);
+			line-height: 1;
+		}
+
+		.brand-story .stat-item .stat-label {
+			font-size: 0.7rem;
+			font-weight: 500;
+			letter-spacing: 0.18em;
+			text-transform: uppercase;
+			color: var(--stone);
+			margin-top: 6px;
+		}
+
+	/* ══════════════════════════════════════
+		   SECTION 2 — WHY CHOOSE US
+		══════════════════════════════════════ */
+	.why-us {
+		background: var(--cream);
+		padding: 100px 0;
+	}
+
+	.trust-card {
+		padding: 2.4rem 2rem;
+		border: 1px solid var(--sand);
+		border-radius: 4px;
+		background: var(--white);
+		height: 100%;
+		transition: border-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+		position: relative;
+		overflow: hidden;
+	}
+
+		.trust-card::after {
+			content: '';
+			position: absolute;
+			bottom: 0;
+			left: 0;
+			height: 3px;
+			width: 0;
+			background: var(--gold);
+			transition: width 0.4s ease;
+		}
+
+		.trust-card:hover {
+			border-color: var(--gold);
+			transform: translateY(-5px);
+			box-shadow: 0 16px 40px rgba(42,39,36,0.07);
+		}
+
+			.trust-card:hover::after {
+				width: 100%;
+			}
+
+		.trust-card .tc-icon {
+			width: 52px;
+			height: 52px;
+			border-radius: 50%;
+			background: var(--parchment);
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			margin-bottom: 1.5rem;
+			font-size: 1.3rem;
+			color: var(--gold);
+			transition: background 0.3s, color 0.3s;
+		}
+
+		.trust-card:hover .tc-icon {
+			background: var(--ink);
+			color: var(--gold);
+		}
+
+		.trust-card .tc-title {
+			font-family: var(--ff-sans);
+			font-size: 0.8rem;
+			font-weight: 600;
+			letter-spacing: 0.18em;
+			text-transform: uppercase;
+			color: var(--ink);
+			margin-bottom: 0.9rem;
+		}
+
+		.trust-card .tc-body {
+			font-size: 0.88rem;
+			line-height: 1.85;
+			color: var(--stone);
+			font-weight: 300;
+		}
+
+	/* ══════════════════════════════════════
+		   SECTION 3 — FEATURED COLLECTIONS
+		══════════════════════════════════════ */
+	.collections {
+		background: var(--parchment);
+		padding: 100px 0;
+	}
+
+	.collections-intro {
+		max-width: 620px;
+	}
+
+		.collections-intro .display-serif {
+			font-size: clamp(2rem, 4vw, 3rem);
+		}
+
+		.collections-intro p {
+			color: var(--stone);
+			font-size: 0.93rem;
+			line-height: 1.9;
+			font-weight: 300;
+		}
+
+	.coll-item {
+		padding: 2.5rem 0;
+		border-bottom: 1px solid var(--sand);
+		display: flex;
+		align-items: flex-start;
+		gap: 2rem;
+		transition: all 0.3s ease;
+		cursor: default;
+	}
+
+		.coll-item:first-of-type {
+			border-top: 1px solid var(--sand);
+		}
+
+		.coll-item:hover .coll-num {
+			color: var(--gold);
+		}
+
+		.coll-item:hover .coll-title {
+			letter-spacing: 0.04em;
+		}
+
+	.coll-num {
+		font-family: var(--ff-serif);
+		font-size: 0.85rem;
+		font-weight: 400;
+		color: var(--sand);
+		padding-top: 5px;
+		min-width: 28px;
+		transition: color 0.3s;
+	}
+
+	.coll-content {
+		flex: 1;
+	}
+
+	.coll-title {
+		font-family: var(--ff-serif);
+		font-size: clamp(1.5rem, 3vw, 2.1rem);
+		font-weight: 300;
+		color: var(--ink);
+		line-height: 1.2;
+		transition: letter-spacing 0.4s ease;
+		margin-bottom: 0.6rem;
+	}
+
+	.coll-desc {
+		font-size: 0.85rem;
+		color: var(--stone);
+		line-height: 1.8;
+		font-weight: 300;
+		max-width: 480px;
+	}
+
+	.coll-tag {
+		font-size: 0.65rem;
+		font-weight: 600;
+		letter-spacing: 0.2em;
+		text-transform: uppercase;
+		color: var(--gold);
+		border: 1px solid var(--gold);
+		padding: 3px 10px;
+		border-radius: 20px;
+		margin-left: auto;
+		align-self: center;
+		white-space: nowrap;
+	}
+
+	/* ══════════════════════════════════════
+		   SECTION 4 — TESTIMONIALS
+		══════════════════════════════════════ */
+	.testimonials {
+		background: var(--white);
+		padding: 100px 0;
+	}
+
+	.testi-card {
+		background: var(--cream);
+		border: 1px solid var(--sand);
+		border-radius: 4px;
+		padding: 2.5rem 2.2rem;
+		height: 100%;
+		position: relative;
+	}
+
+		.testi-card .quote-mark {
+			font-family: var(--ff-serif);
+			font-size: 5rem;
+			line-height: 0.6;
+			color: var(--gold);
+			opacity: 0.35;
+			margin-bottom: 1.2rem;
+			display: block;
+		}
+
+		.testi-card .testi-text {
+			font-family: var(--ff-serif);
+			font-size: 1.05rem;
+			font-style: italic;
+			font-weight: 300;
+			color: var(--ink);
+			line-height: 1.85;
+			margin-bottom: 2rem;
+		}
+
+		.testi-card .testi-stars {
+			color: var(--gold);
+			font-size: 0.75rem;
+			letter-spacing: 3px;
+			margin-bottom: 1rem;
+		}
+
+		.testi-card .testi-author {
+			display: flex;
+			align-items: center;
+			gap: 0.9rem;
+			padding-top: 1.4rem;
+			border-top: 1px solid var(--sand);
+		}
+
+		.testi-card .author-avatar {
+			width: 40px;
+			height: 40px;
+			border-radius: 50%;
+			background: var(--ink);
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			font-size: 0.72rem;
+			font-weight: 600;
+			color: var(--gold);
+			letter-spacing: 0.05em;
+			flex-shrink: 0;
+		}
+
+		.testi-card .author-name {
+			font-size: 0.82rem;
+			font-weight: 600;
+			color: var(--ink);
+			letter-spacing: 0.04em;
+		}
+
+		.testi-card .author-role {
+			font-size: 0.73rem;
+			color: var(--stone);
+			font-weight: 300;
+			margin-top: 2px;
+		}
+
+	/* ── RESPONSIVE ── */
+	@@media (max-width: 768px) {
+		.brand-story .stat-row {
+			gap: 1.8rem;
+		}
+
+		.coll-tag {
+			display: none;
+		}
+
+		.brand-story, .why-us, .collections, .testimonials {
+			padding: 70px 0;
+		}
+	}
+</style>
+
+
+<!-- ══════════════════════════════════════════════════════
+	 HERO SLIDER
+══════════════════════════════════════════════════════ -->
 <section class="section-slide">
 	<div class="wrap-slick1">
 		<div class="slick1">
+
 			<div class="item-slick1" style="background-image: url(images/slide-01.jpg);">
 				<div class="container h-full">
 					<div class="flex-col-l-m h-full p-t-100 p-b-30 respon5">
 						<div class="layer-slick1 animated visible-false" data-appear="fadeInDown" data-delay="0">
-							<span class="ltext-101 cl2 respon2">
-								Women Collection 2018
-							</span>
+							<span class="ltext-101 cl2 respon2">Women Collection 2026</span>
 						</div>
-
 						<div class="layer-slick1 animated visible-false" data-appear="fadeInUp" data-delay="800">
-							<h2 class="ltext-201 cl2 p-t-19 p-b-43 respon1">
-								NEW SEASON
-							</h2>
+							<h2 class="ltext-201 cl2 p-t-19 p-b-43 respon1">New Season</h2>
 						</div>
-
 						<div class="layer-slick1 animated visible-false" data-appear="zoomIn" data-delay="1600">
 							<a asp-controller="Product" asp-action="Index" class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04">
 								Shop Now
@@ -34,17 +489,11 @@
 				<div class="container h-full">
 					<div class="flex-col-l-m h-full p-t-100 p-b-30 respon5">
 						<div class="layer-slick1 animated visible-false" data-appear="rollIn" data-delay="0">
-							<span class="ltext-101 cl2 respon2">
-								Men New-Season
-							</span>
+							<span class="ltext-101 cl2 respon2">Men New-Season</span>
 						</div>
-
 						<div class="layer-slick1 animated visible-false" data-appear="lightSpeedIn" data-delay="800">
-							<h2 class="ltext-201 cl2 p-t-19 p-b-43 respon1">
-								Jackets & Coats
-							</h2>
+							<h2 class="ltext-201 cl2 p-t-19 p-b-43 respon1">Jackets &amp; Coats</h2>
 						</div>
-
 						<div class="layer-slick1 animated visible-false" data-appear="slideInUp" data-delay="1600">
 							<a asp-controller="Product" asp-action="Index" class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04">
 								Shop Now
@@ -58,17 +507,11 @@
 				<div class="container h-full">
 					<div class="flex-col-l-m h-full p-t-100 p-b-30 respon5">
 						<div class="layer-slick1 animated visible-false" data-appear="rotateInDownLeft" data-delay="0">
-							<span class="ltext-101 cl2 respon2">
-								Men Collection 2018
-							</span>
+							<span class="ltext-101 cl2 respon2">Men Collection 2026</span>
 						</div>
-
 						<div class="layer-slick1 animated visible-false" data-appear="rotateInUpRight" data-delay="800">
-							<h2 class="ltext-201 cl2 p-t-19 p-b-43 respon1">
-								New arrivals
-							</h2>
+							<h2 class="ltext-201 cl2 p-t-19 p-b-43 respon1">New Arrivals</h2>
 						</div>
-
 						<div class="layer-slick1 animated visible-false" data-appear="rotateIn" data-delay="1600">
 							<a asp-controller="Product" asp-action="Index" class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04">
 								Shop Now
@@ -77,864 +520,285 @@
 					</div>
 				</div>
 			</div>
+
 		</div>
 	</div>
 </section>
 
 
-<!-- Banner -->
-<div class="sec-banner bg0 p-t-80 p-b-50">
+<!-- ══════════════════════════════════════════════════════
+	 SECTION 1 — BRAND STORY
+══════════════════════════════════════════════════════ -->
+<section class="brand-story">
+	<div class="story-year">EST.</div>
 	<div class="container">
-		<div class="row">
-			<div class="col-md-6 col-xl-4 p-b-30 m-lr-auto">
-				<!-- Block1 -->
-				<div class="block1 wrap-pic-w">
-					<img src="images/banner-01.jpg" alt="IMG-BANNER">
+		<div class="row align-items-center gy-5">
 
-					<a asp-controller="Product" asp-action="Index" class="block1-txt ab-t-l s-full flex-col-l-sb p-lr-38 p-tb-34 trans-03 respon3">
-						<div class="block1-txt-child1 flex-col-l">
-							<span class="block1-name ltext-102 trans-04 p-b-8">
-								Women
-							</span>
+			<div class="col-lg-5">
+				<span class="eyebrow">Our Story</span>
+				<span class="section-divider left"></span>
+				<h2 class="display-serif" style="font-size:clamp(2.2rem,4.5vw,3.4rem);">
+					Crafted with<br>
+					<em>intention,</em><br>
+					worn with purpose.
+				</h2>
+			</div>
 
-							<span class="block1-info stext-102 trans-04">
-								Spring 2018
-							</span>
-						</div>
-
-						<div class="block1-txt-child2 p-b-4 trans-05">
-							<div class="block1-link stext-101 cl0 trans-09">
-								Shop Now
-							</div>
-						</div>
-					</a>
+			<div class="col-lg-6 offset-lg-1">
+				<p class="story-body">
+					We started with a single belief — that clothing should feel as good as it looks. Not fast. Not disposable. Built around real people, real wardrobes, and the idea that great style is a quiet confidence, not a loud statement.
+				</p>
+				<blockquote class="story-pull">
+					"Every piece we design begins with a question: will this still be worn five years from now?"
+				</blockquote>
+				<p class="story-body">
+					From our sourcing partners to our studio team, every decision we make is guided by quality, longevity, and a deep respect for the craft of dressmaking. We believe in fewer, better — and we design accordingly.
+				</p>
+				<div class="stat-row flex-wrap">
+					<div class="stat-item">
+						<div class="stat-num">12+</div>
+						<div class="stat-label">Years of Craft</div>
+					</div>
+					<div class="stat-item">
+						<div class="stat-num">40+</div>
+						<div class="stat-label">Countries Served</div>
+					</div>
+					<div class="stat-item">
+						<div class="stat-num">100%</div>
+						<div class="stat-label">Ethical Sourcing</div>
+					</div>
 				</div>
 			</div>
 
-			<div class="col-md-6 col-xl-4 p-b-30 m-lr-auto">
-				<!-- Block1 -->
-				<div class="block1 wrap-pic-w">
-					<img src="images/banner-02.jpg" alt="IMG-BANNER">
+		</div>
+	</div>
+</section>
 
-					<a asp-controller="Product" asp-action="Index" class="block1-txt ab-t-l s-full flex-col-l-sb p-lr-38 p-tb-34 trans-03 respon3">
-						<div class="block1-txt-child1 flex-col-l">
-							<span class="block1-name ltext-102 trans-04 p-b-8">
-								Men
-							</span>
 
-							<span class="block1-info stext-102 trans-04">
-								Spring 2018
-							</span>
-						</div>
+<!-- ══════════════════════════════════════════════════════
+	 SECTION 2 — WHY CHOOSE US
+══════════════════════════════════════════════════════ -->
+<section class="why-us">
+	<div class="container">
 
-						<div class="block1-txt-child2 p-b-4 trans-05">
-							<div class="block1-link stext-101 cl0 trans-09">
-								Shop Now
-							</div>
-						</div>
-					</a>
+		<div class="text-center mb-5 pb-2">
+			<span class="eyebrow">Why Choose Us</span>
+			<span class="section-divider"></span>
+			<h2 class="display-serif" style="font-size:clamp(1.9rem,3.5vw,2.8rem);">
+				The difference is in<br><em>the details</em>
+			</h2>
+		</div>
+
+		<div class="row g-4 mt-2">
+
+			<div class="col-sm-6 col-lg-3">
+				<div class="trust-card">
+					<div class="tc-icon"><i class="bi bi-scissors"></i></div>
+					<div class="tc-title">Premium Materials</div>
+					<p class="tc-body">We source only from certified mills and ethical suppliers. Every fabric passes a rigorous quality check before it reaches our studio floor.</p>
 				</div>
 			</div>
 
-			<div class="col-md-6 col-xl-4 p-b-30 m-lr-auto">
-				<!-- Block1 -->
-				<div class="block1 wrap-pic-w">
-					<img src="images/banner-03.jpg" alt="IMG-BANNER">
-
-					<a asp-controller="Product" asp-action="Index" class="block1-txt ab-t-l s-full flex-col-l-sb p-lr-38 p-tb-34 trans-03 respon3">
-						<div class="block1-txt-child1 flex-col-l">
-							<span class="block1-name ltext-102 trans-04 p-b-8">
-								Accessories
-							</span>
-
-							<span class="block1-info stext-102 trans-04">
-								New Trend
-							</span>
-						</div>
-
-						<div class="block1-txt-child2 p-b-4 trans-05">
-							<div class="block1-link stext-101 cl0 trans-09">
-								Shop Now
-							</div>
-						</div>
-					</a>
+			<div class="col-sm-6 col-lg-3">
+				<div class="trust-card">
+					<div class="tc-icon"><i class="bi bi-patch-check"></i></div>
+					<div class="tc-title">Expert Tailoring</div>
+					<p class="tc-body">Each garment is cut and finished by skilled artisans who care about the craft. Clean seams, precise fits — nothing leaves our studio untested.</p>
 				</div>
+			</div>
+
+			<div class="col-sm-6 col-lg-3">
+				<div class="trust-card">
+					<div class="tc-icon"><i class="bi bi-arrow-repeat"></i></div>
+					<div class="tc-title">Worry-Free Returns</div>
+					<p class="tc-body">Not the right fit? We offer simple, no-fuss returns within 30 days. Your satisfaction is the standard we hold ourselves to every single day.</p>
+				</div>
+			</div>
+
+			<div class="col-sm-6 col-lg-3">
+				<div class="trust-card">
+					<div class="tc-icon"><i class="bi bi-globe2"></i></div>
+					<div class="tc-title">Sustainably Made</div>
+					<p class="tc-body">From recycled packaging to low-waste production runs, our environmental commitments are built into our process — not bolted on as an afterthought.</p>
+				</div>
+			</div>
+
+			<div class="col-sm-6 col-lg-3">
+				<div class="trust-card">
+					<div class="tc-icon"><i class="bi bi-person-lines-fill"></i></div>
+					<div class="tc-title">Size Inclusivity</div>
+					<p class="tc-body">Great style belongs to every body. Our collections are designed with a full size range in mind — because fashion should never be a privilege.</p>
+				</div>
+			</div>
+
+			<div class="col-sm-6 col-lg-3">
+				<div class="trust-card">
+					<div class="tc-icon"><i class="bi bi-chat-heart"></i></div>
+					<div class="tc-title">Personal Styling</div>
+					<p class="tc-body">Unsure what to pair or how to build a capsule wardrobe? Our style advisors are available to guide you through every season.</p>
+				</div>
+			</div>
+
+			<div class="col-sm-6 col-lg-3">
+				<div class="trust-card">
+					<div class="tc-icon"><i class="bi bi-truck"></i></div>
+					<div class="tc-title">Fast Delivery</div>
+					<p class="tc-body">Orders are processed same-day and dispatched within 24 hours. We partner with trusted carriers to ensure your order arrives on time, every time.</p>
+				</div>
+			</div>
+
+			<div class="col-sm-6 col-lg-3">
+				<div class="trust-card">
+					<div class="tc-icon"><i class="bi bi-shield-lock"></i></div>
+					<div class="tc-title">Secure Shopping</div>
+					<p class="tc-body">Your data and payments are always protected. We use end-to-end encryption across our entire checkout — shop with total confidence.</p>
+				</div>
+			</div>
+
+		</div>
+	</div>
+</section>
+
+
+<!-- ══════════════════════════════════════════════════════
+	 SECTION 3 — FEATURED COLLECTIONS
+══════════════════════════════════════════════════════ -->
+<section class="collections">
+	<div class="container">
+
+		<div class="row gy-5 align-items-start">
+
+			<div class="col-lg-4">
+				<div class="collections-intro">
+					<span class="eyebrow">Collections</span>
+					<span class="section-divider left"></span>
+					<h2 class="display-serif" style="font-size:clamp(2rem,4vw,3rem); margin-bottom: 1.5rem;">
+						Curated for<br>every<br><em>chapter of life</em>
+					</h2>
+					<p>
+						Each collection is built around a mood, a season, and a lifestyle. Not trends. Not fast fashion. Just thoughtfully designed pieces that earn their place in your wardrobe and stay there.
+					</p>
+				</div>
+			</div>
+
+			<div class="col-lg-7 offset-lg-1">
+
+				<div class="coll-item">
+					<span class="coll-num">01</span>
+					<div class="coll-content">
+						<h3 class="coll-title">The Essentials Edit</h3>
+						<p class="coll-desc">Timeless wardrobe foundations — neutral tones, relaxed silhouettes, and fabrics that move with you. Designed to be layered, mixed, and worn daily without thinking.</p>
+					</div>
+					<span class="coll-tag">Women · Men</span>
+				</div>
+
+				<div class="coll-item">
+					<span class="coll-num">02</span>
+					<div class="coll-content">
+						<h3 class="coll-title">Urban Professional</h3>
+						<p class="coll-desc">Sharp tailoring meets modern comfort. This collection is for those who need to look polished from 9am to 9pm — without changing twice.</p>
+					</div>
+					<span class="coll-tag">Workwear</span>
+				</div>
+
+				<div class="coll-item">
+					<span class="coll-num">03</span>
+					<div class="coll-content">
+						<h3 class="coll-title">Weekend Luxe</h3>
+						<p class="coll-desc">Elevated loungewear and relaxed separates for the days when effort feels optional but style is non-negotiable. Soft, breathable, utterly comfortable.</p>
+					</div>
+					<span class="coll-tag">Casual</span>
+				</div>
+
+				<div class="coll-item">
+					<span class="coll-num">04</span>
+					<div class="coll-content">
+						<h3 class="coll-title">Evening Atelier</h3>
+						<p class="coll-desc">Refined occasion dressing for those who refuse to blend in. Statement cuts, tactile fabrics, and finishes that catch the light at every right moment.</p>
+					</div>
+					<span class="coll-tag">Occasions</span>
+				</div>
+
 			</div>
 		</div>
 	</div>
-</div>
+</section>
 
 
-<!-- Product -->
-@* <section class="bg0 p-t-23 p-b-140">
+<!-- ══════════════════════════════════════════════════════
+	 SECTION 4 — TESTIMONIALS
+══════════════════════════════════════════════════════ -->
+<section class="testimonials">
 	<div class="container">
-		<div class="p-b-10">
-			<h3 class="ltext-103 cl5">
-				Product Overview
-			</h3>
+
+		<div class="text-center mb-5 pb-2">
+			<span class="eyebrow">Testimonials</span>
+			<span class="section-divider"></span>
+			<h2 class="display-serif" style="font-size:clamp(1.9rem,3.5vw,2.8rem);">
+				Worn. Loved.<br><em>Passed on.</em>
+			</h2>
 		</div>
 
-		<div class="flex-w flex-sb-m p-b-52">
-			<div class="flex-w flex-l-m filter-tope-group m-tb-10">
-				<button class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5 how-active1" data-filter="*">
-					All Products
-				</button>
+		<div class="row g-4">
 
-				<button class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5" data-filter=".women">
-					Women
-				</button>
-
-				<button class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5" data-filter=".men">
-					Men
-				</button>
-
-				<button class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5" data-filter=".bag">
-					Bag
-				</button>
-
-				<button class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5" data-filter=".shoes">
-					Shoes
-				</button>
-
-				<button class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5" data-filter=".watches">
-					Watches
-				</button>
-			</div>
-
-			<div class="flex-w flex-c-m m-tb-10">
-				<div class="flex-c-m stext-106 cl6 size-104 bor4 pointer hov-btn3 trans-04 m-r-8 m-tb-4 js-show-filter">
-					<i class="icon-filter cl2 m-r-6 fs-15 trans-04 zmdi zmdi-filter-list"></i>
-					<i class="icon-close-filter cl2 m-r-6 fs-15 trans-04 zmdi zmdi-close dis-none"></i>
-					Filter
-				</div>
-
-				<div class="flex-c-m stext-106 cl6 size-105 bor4 pointer hov-btn3 trans-04 m-tb-4 js-show-search">
-					<i class="icon-search cl2 m-r-6 fs-15 trans-04 zmdi zmdi-search"></i>
-					<i class="icon-close-search cl2 m-r-6 fs-15 trans-04 zmdi zmdi-close dis-none"></i>
-					Search
-				</div>
-			</div>
-
-			<!-- Search product -->
-			<div class="dis-none panel-search w-full p-t-10 p-b-15">
-				<div class="bor8 dis-flex p-l-15">
-					<button class="size-113 flex-c-m fs-16 cl2 hov-cl1 trans-04">
-						<i class="zmdi zmdi-search"></i>
-					</button>
-
-					<input class="mtext-107 cl2 size-114 plh2 p-r-15" type="text" name="search-product" placeholder="Search">
-				</div>
-			</div>
-
-			<!-- Filter -->
-			<div class="dis-none panel-filter w-full p-t-10">
-				<div class="wrap-filter flex-w bg6 w-full p-lr-40 p-t-27 p-lr-15-sm">
-					<div class="filter-col1 p-r-15 p-b-27">
-						<div class="mtext-102 cl2 p-b-15">
-							Sort By
-						</div>
-
-						<ul>
-							<li class="p-b-6">
-								<a href="#" class="filter-link stext-106 trans-04">
-									Default
-								</a>
-							</li>
-
-							<li class="p-b-6">
-								<a href="#" class="filter-link stext-106 trans-04">
-									Popularity
-								</a>
-							</li>
-
-							<li class="p-b-6">
-								<a href="#" class="filter-link stext-106 trans-04">
-									Average rating
-								</a>
-							</li>
-
-							<li class="p-b-6">
-								<a href="#" class="filter-link stext-106 trans-04 filter-link-active">
-									Newness
-								</a>
-							</li>
-
-							<li class="p-b-6">
-								<a href="#" class="filter-link stext-106 trans-04">
-									Price: Low to High
-								</a>
-							</li>
-
-							<li class="p-b-6">
-								<a href="#" class="filter-link stext-106 trans-04">
-									Price: High to Low
-								</a>
-							</li>
-						</ul>
-					</div>
-
-					<div class="filter-col2 p-r-15 p-b-27">
-						<div class="mtext-102 cl2 p-b-15">
-							Price
-						</div>
-
-						<ul>
-							<li class="p-b-6">
-								<a href="#" class="filter-link stext-106 trans-04 filter-link-active">
-									All
-								</a>
-							</li>
-
-							<li class="p-b-6">
-								<a href="#" class="filter-link stext-106 trans-04">
-									$0.00 - $50.00
-								</a>
-							</li>
-
-							<li class="p-b-6">
-								<a href="#" class="filter-link stext-106 trans-04">
-									$50.00 - $100.00
-								</a>
-							</li>
-
-							<li class="p-b-6">
-								<a href="#" class="filter-link stext-106 trans-04">
-									$100.00 - $150.00
-								</a>
-							</li>
-
-							<li class="p-b-6">
-								<a href="#" class="filter-link stext-106 trans-04">
-									$150.00 - $200.00
-								</a>
-							</li>
-
-							<li class="p-b-6">
-								<a href="#" class="filter-link stext-106 trans-04">
-									$200.00+
-								</a>
-							</li>
-						</ul>
-					</div>
-
-					<div class="filter-col3 p-r-15 p-b-27">
-						<div class="mtext-102 cl2 p-b-15">
-							Color
-						</div>
-
-						<ul>
-							<li class="p-b-6">
-								<span class="fs-15 lh-12 m-r-6" style="color: #222;">
-									<i class="zmdi zmdi-circle"></i>
-								</span>
-
-								<a href="#" class="filter-link stext-106 trans-04">
-									Black
-								</a>
-							</li>
-
-							<li class="p-b-6">
-								<span class="fs-15 lh-12 m-r-6" style="color: #4272d7;">
-									<i class="zmdi zmdi-circle"></i>
-								</span>
-
-								<a href="#" class="filter-link stext-106 trans-04 filter-link-active">
-									Blue
-								</a>
-							</li>
-
-							<li class="p-b-6">
-								<span class="fs-15 lh-12 m-r-6" style="color: #b3b3b3;">
-									<i class="zmdi zmdi-circle"></i>
-								</span>
-
-								<a href="#" class="filter-link stext-106 trans-04">
-									Grey
-								</a>
-							</li>
-
-							<li class="p-b-6">
-								<span class="fs-15 lh-12 m-r-6" style="color: #00ad5f;">
-									<i class="zmdi zmdi-circle"></i>
-								</span>
-
-								<a href="#" class="filter-link stext-106 trans-04">
-									Green
-								</a>
-							</li>
-
-							<li class="p-b-6">
-								<span class="fs-15 lh-12 m-r-6" style="color: #fa4251;">
-									<i class="zmdi zmdi-circle"></i>
-								</span>
-
-								<a href="#" class="filter-link stext-106 trans-04">
-									Red
-								</a>
-							</li>
-
-							<li class="p-b-6">
-								<span class="fs-15 lh-12 m-r-6" style="color: #aaa;">
-									<i class="zmdi zmdi-circle-o"></i>
-								</span>
-
-								<a href="#" class="filter-link stext-106 trans-04">
-									White
-								</a>
-							</li>
-						</ul>
-					</div>
-
-					<div class="filter-col4 p-b-27">
-						<div class="mtext-102 cl2 p-b-15">
-							Tags
-						</div>
-
-						<div class="flex-w p-t-4 m-r--5">
-							<a href="#" class="flex-c-m stext-107 cl6 size-301 bor7 p-lr-15 hov-tag1 trans-04 m-r-5 m-b-5">
-								Fashion
-							</a>
-
-							<a href="#" class="flex-c-m stext-107 cl6 size-301 bor7 p-lr-15 hov-tag1 trans-04 m-r-5 m-b-5">
-								Lifestyle
-							</a>
-
-							<a href="#" class="flex-c-m stext-107 cl6 size-301 bor7 p-lr-15 hov-tag1 trans-04 m-r-5 m-b-5">
-								Denim
-							</a>
-
-							<a href="#" class="flex-c-m stext-107 cl6 size-301 bor7 p-lr-15 hov-tag1 trans-04 m-r-5 m-b-5">
-								Streetstyle
-							</a>
-
-							<a href="#" class="flex-c-m stext-107 cl6 size-301 bor7 p-lr-15 hov-tag1 trans-04 m-r-5 m-b-5">
-								Crafts
-							</a>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-
-		<div class="row isotope-grid">
-			<div class="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item women">
-				<!-- Block2 -->
-				<div class="block2">
-					<div class="block2-pic hov-img0">
-						<img src="images/product-01.jpg" alt="IMG-PRODUCT">
-
-						<a href="#" class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04 js-show-modal1">
-							Quick View
-						</a>
-					</div>
-
-					<div class="block2-txt flex-w flex-t p-t-14">
-						<div class="block2-txt-child1 flex-col-l ">
-							<a href="product-detail.html" class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
-								Esprit Ruffle Shirt
-							</a>
-
-							<span class="stext-105 cl3">
-								$16.64
-							</span>
-						</div>
-
-						<div class="block2-txt-child2 flex-r p-t-3">
-							<a href="#" class="btn-addwish-b2 dis-block pos-relative js-addwish-b2">
-								<img class="icon-heart1 dis-block trans-04" src="images/icons/icon-heart-01.png" alt="ICON">
-								<img class="icon-heart2 dis-block trans-04 ab-t-l" src="images/icons/icon-heart-02.png" alt="ICON">
-							</a>
+			<div class="col-md-6 col-lg-3">
+				<div class="testi-card">
+					<span class="quote-mark">"</span>
+					<div class="testi-stars">★★★★★</div>
+					<p class="testi-text">"I bought the linen blazer six months ago and I've worn it more than anything else in my wardrobe. The quality genuinely surprised me."</p>
+					<div class="testi-author">
+						<div class="author-avatar">SA</div>
+						<div>
+							<div class="author-name">Sara A.</div>
+							<div class="author-role">Verified Customer</div>
 						</div>
 					</div>
 				</div>
 			</div>
 
-			<div class="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item women">
-				<!-- Block2 -->
-				<div class="block2">
-					<div class="block2-pic hov-img0">
-						<img src="images/product-02.jpg" alt="IMG-PRODUCT">
-
-						<a href="#" class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04 js-show-modal1">
-							Quick View
-						</a>
+			<div class="col-md-6 col-lg-3" style="background:var(--ink); border-radius:4px; padding: 2.5rem 2.2rem; position:relative;">
+				<span style="font-family:var(--ff-serif);font-size:5rem;line-height:.6;color:var(--gold);opacity:.4;display:block;margin-bottom:1.2rem;">"</span>
+				<div style="color:var(--gold);font-size:.75rem;letter-spacing:3px;margin-bottom:1rem;">★★★★★</div>
+				<p style="font-family:var(--ff-serif);font-size:1.05rem;font-style:italic;font-weight:300;color:rgba(255,255,255,.85);line-height:1.85;margin-bottom:2rem;">"The delivery was fast, the packaging was beautiful, and the coat fits like it was made for me. I'll be a loyal customer for a long time."</p>
+				<div style="display:flex;align-items:center;gap:.9rem;padding-top:1.4rem;border-top:1px solid rgba(255,255,255,.1);">
+					<div style="width:40px;height:40px;border-radius:50%;background:var(--gold);display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:600;color:var(--ink);letter-spacing:.05em;flex-shrink:0;">MK</div>
+					<div>
+						<div style="font-size:.82rem;font-weight:600;color:#fff;letter-spacing:.04em;">Mohamed K.</div>
+						<div style="font-size:.73rem;color:rgba(255,255,255,.45);font-weight:300;margin-top:2px;">Verified Customer</div>
 					</div>
+				</div>
+			</div>
 
-					<div class="block2-txt flex-w flex-t p-t-14">
-						<div class="block2-txt-child1 flex-col-l ">
-							<a href="product-detail.html" class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
-								Herschel supply
-							</a>
-
-							<span class="stext-105 cl3">
-								$35.31
-							</span>
-						</div>
-
-						<div class="block2-txt-child2 flex-r p-t-3">
-							<a href="#" class="btn-addwish-b2 dis-block pos-relative js-addwish-b2">
-								<img class="icon-heart1 dis-block trans-04" src="images/icons/icon-heart-01.png" alt="ICON">
-								<img class="icon-heart2 dis-block trans-04 ab-t-l" src="images/icons/icon-heart-02.png" alt="ICON">
-							</a>
+			<div class="col-md-6 col-lg-3">
+				<div class="testi-card">
+					<span class="quote-mark">"</span>
+					<div class="testi-stars">★★★★★</div>
+					<p class="testi-text">"Finally a brand that takes quality seriously. Every stitch is exactly right. I've recommended this store to everyone I know who cares about what they wear."</p>
+					<div class="testi-author">
+						<div class="author-avatar">LR</div>
+						<div>
+							<div class="author-name">Layla R.</div>
+							<div class="author-role">Verified Customer</div>
 						</div>
 					</div>
 				</div>
 			</div>
 
-			<div class="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item men">
-				<!-- Block2 -->
-				<div class="block2">
-					<div class="block2-pic hov-img0">
-						<img src="images/product-03.jpg" alt="IMG-PRODUCT">
-
-						<a href="#" class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04 js-show-modal1">
-							Quick View
-						</a>
-					</div>
-
-					<div class="block2-txt flex-w flex-t p-t-14">
-						<div class="block2-txt-child1 flex-col-l ">
-							<a href="product-detail.html" class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
-								Only Check Trouser
-							</a>
-
-							<span class="stext-105 cl3">
-								$25.50
-							</span>
-						</div>
-
-						<div class="block2-txt-child2 flex-r p-t-3">
-							<a href="#" class="btn-addwish-b2 dis-block pos-relative js-addwish-b2">
-								<img class="icon-heart1 dis-block trans-04" src="images/icons/icon-heart-01.png" alt="ICON">
-								<img class="icon-heart2 dis-block trans-04 ab-t-l" src="images/icons/icon-heart-02.png" alt="ICON">
-							</a>
+			<div class="col-md-6 col-lg-3">
+				<div class="testi-card">
+					<span class="quote-mark">"</span>
+					<div class="testi-stars">★★★★☆</div>
+					<p class="testi-text">"The return process was seamless when I needed to exchange a size. The team was responsive and helpful. Customer service that matches the product quality."</p>
+					<div class="testi-author">
+						<div class="author-avatar">TH</div>
+						<div>
+							<div class="author-name">Tarek H.</div>
+							<div class="author-role">Verified Customer</div>
 						</div>
 					</div>
 				</div>
 			</div>
 
-			<div class="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item women">
-				<!-- Block2 -->
-				<div class="block2">
-					<div class="block2-pic hov-img0">
-						<img src="images/product-04.jpg" alt="IMG-PRODUCT">
-
-						<a href="#" class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04 js-show-modal1">
-							Quick View
-						</a>
-					</div>
-
-					<div class="block2-txt flex-w flex-t p-t-14">
-						<div class="block2-txt-child1 flex-col-l ">
-							<a href="product-detail.html" class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
-								Classic Trench Coat
-							</a>
-
-							<span class="stext-105 cl3">
-								$75.00
-							</span>
-						</div>
-
-						<div class="block2-txt-child2 flex-r p-t-3">
-							<a href="#" class="btn-addwish-b2 dis-block pos-relative js-addwish-b2">
-								<img class="icon-heart1 dis-block trans-04" src="images/icons/icon-heart-01.png" alt="ICON">
-								<img class="icon-heart2 dis-block trans-04 ab-t-l" src="images/icons/icon-heart-02.png" alt="ICON">
-							</a>
-						</div>
-					</div>
-				</div>
-			</div>
-
-			<div class="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item women">
-				<!-- Block2 -->
-				<div class="block2">
-					<div class="block2-pic hov-img0">
-						<img src="images/product-05.jpg" alt="IMG-PRODUCT">
-
-						<a href="#" class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04 js-show-modal1">
-							Quick View
-						</a>
-					</div>
-
-					<div class="block2-txt flex-w flex-t p-t-14">
-						<div class="block2-txt-child1 flex-col-l ">
-							<a href="product-detail.html" class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
-								Front Pocket Jumper
-							</a>
-
-							<span class="stext-105 cl3">
-								$34.75
-							</span>
-						</div>
-
-						<div class="block2-txt-child2 flex-r p-t-3">
-							<a href="#" class="btn-addwish-b2 dis-block pos-relative js-addwish-b2">
-								<img class="icon-heart1 dis-block trans-04" src="images/icons/icon-heart-01.png" alt="ICON">
-								<img class="icon-heart2 dis-block trans-04 ab-t-l" src="images/icons/icon-heart-02.png" alt="ICON">
-							</a>
-						</div>
-					</div>
-				</div>
-			</div>
-
-			<div class="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item watches">
-				<!-- Block2 -->
-				<div class="block2">
-					<div class="block2-pic hov-img0">
-						<img src="images/product-06.jpg" alt="IMG-PRODUCT">
-
-						<a href="#" class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04 js-show-modal1">
-							Quick View
-						</a>
-					</div>
-
-					<div class="block2-txt flex-w flex-t p-t-14">
-						<div class="block2-txt-child1 flex-col-l ">
-							<a href="product-detail.html" class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
-								Vintage Inspired Classic
-							</a>
-
-							<span class="stext-105 cl3">
-								$93.20
-							</span>
-						</div>
-
-						<div class="block2-txt-child2 flex-r p-t-3">
-							<a href="#" class="btn-addwish-b2 dis-block pos-relative js-addwish-b2">
-								<img class="icon-heart1 dis-block trans-04" src="images/icons/icon-heart-01.png" alt="ICON">
-								<img class="icon-heart2 dis-block trans-04 ab-t-l" src="images/icons/icon-heart-02.png" alt="ICON">
-							</a>
-						</div>
-					</div>
-				</div>
-			</div>
-
-			<div class="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item women">
-				<!-- Block2 -->
-				<div class="block2">
-					<div class="block2-pic hov-img0">
-						<img src="images/product-07.jpg" alt="IMG-PRODUCT">
-
-						<a href="#" class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04 js-show-modal1">
-							Quick View
-						</a>
-					</div>
-
-					<div class="block2-txt flex-w flex-t p-t-14">
-						<div class="block2-txt-child1 flex-col-l ">
-							<a href="product-detail.html" class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
-								Shirt in Stretch Cotton
-							</a>
-
-							<span class="stext-105 cl3">
-								$52.66
-							</span>
-						</div>
-
-						<div class="block2-txt-child2 flex-r p-t-3">
-							<a href="#" class="btn-addwish-b2 dis-block pos-relative js-addwish-b2">
-								<img class="icon-heart1 dis-block trans-04" src="images/icons/icon-heart-01.png" alt="ICON">
-								<img class="icon-heart2 dis-block trans-04 ab-t-l" src="images/icons/icon-heart-02.png" alt="ICON">
-							</a>
-						</div>
-					</div>
-				</div>
-			</div>
-
-			<div class="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item women">
-				<!-- Block2 -->
-				<div class="block2">
-					<div class="block2-pic hov-img0">
-						<img src="images/product-08.jpg" alt="IMG-PRODUCT">
-
-						<a href="#" class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04 js-show-modal1">
-							Quick View
-						</a>
-					</div>
-
-					<div class="block2-txt flex-w flex-t p-t-14">
-						<div class="block2-txt-child1 flex-col-l ">
-							<a href="product-detail.html" class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
-								Pieces Metallic Printed
-							</a>
-
-							<span class="stext-105 cl3">
-								$18.96
-							</span>
-						</div>
-
-						<div class="block2-txt-child2 flex-r p-t-3">
-							<a href="#" class="btn-addwish-b2 dis-block pos-relative js-addwish-b2">
-								<img class="icon-heart1 dis-block trans-04" src="images/icons/icon-heart-01.png" alt="ICON">
-								<img class="icon-heart2 dis-block trans-04 ab-t-l" src="images/icons/icon-heart-02.png" alt="ICON">
-							</a>
-						</div>
-					</div>
-				</div>
-			</div>
-
-			<div class="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item shoes">
-				<!-- Block2 -->
-				<div class="block2">
-					<div class="block2-pic hov-img0">
-						<img src="images/product-09.jpg" alt="IMG-PRODUCT">
-
-						<a href="#" class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04 js-show-modal1">
-							Quick View
-						</a>
-					</div>
-
-					<div class="block2-txt flex-w flex-t p-t-14">
-						<div class="block2-txt-child1 flex-col-l ">
-							<a href="product-detail.html" class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
-								Converse All Star Hi Plimsolls
-							</a>
-
-							<span class="stext-105 cl3">
-								$75.00
-							</span>
-						</div>
-
-						<div class="block2-txt-child2 flex-r p-t-3">
-							<a href="#" class="btn-addwish-b2 dis-block pos-relative js-addwish-b2">
-								<img class="icon-heart1 dis-block trans-04" src="images/icons/icon-heart-01.png" alt="ICON">
-								<img class="icon-heart2 dis-block trans-04 ab-t-l" src="images/icons/icon-heart-02.png" alt="ICON">
-							</a>
-						</div>
-					</div>
-				</div>
-			</div>
-
-			<div class="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item women">
-				<!-- Block2 -->
-				<div class="block2">
-					<div class="block2-pic hov-img0">
-						<img src="images/product-10.jpg" alt="IMG-PRODUCT">
-
-						<a href="#" class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04 js-show-modal1">
-							Quick View
-						</a>
-					</div>
-
-					<div class="block2-txt flex-w flex-t p-t-14">
-						<div class="block2-txt-child1 flex-col-l ">
-							<a href="product-detail.html" class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
-								Femme T-Shirt In Stripe
-							</a>
-
-							<span class="stext-105 cl3">
-								$25.85
-							</span>
-						</div>
-
-						<div class="block2-txt-child2 flex-r p-t-3">
-							<a href="#" class="btn-addwish-b2 dis-block pos-relative js-addwish-b2">
-								<img class="icon-heart1 dis-block trans-04" src="images/icons/icon-heart-01.png" alt="ICON">
-								<img class="icon-heart2 dis-block trans-04 ab-t-l" src="images/icons/icon-heart-02.png" alt="ICON">
-							</a>
-						</div>
-					</div>
-				</div>
-			</div>
-
-			<div class="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item men">
-				<!-- Block2 -->
-				<div class="block2">
-					<div class="block2-pic hov-img0">
-						<img src="images/product-11.jpg" alt="IMG-PRODUCT">
-
-						<a href="#" class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04 js-show-modal1">
-							Quick View
-						</a>
-					</div>
-
-					<div class="block2-txt flex-w flex-t p-t-14">
-						<div class="block2-txt-child1 flex-col-l ">
-							<a href="product-detail.html" class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
-								Herschel supply
-							</a>
-
-							<span class="stext-105 cl3">
-								$63.16
-							</span>
-						</div>
-
-						<div class="block2-txt-child2 flex-r p-t-3">
-							<a href="#" class="btn-addwish-b2 dis-block pos-relative js-addwish-b2">
-								<img class="icon-heart1 dis-block trans-04" src="images/icons/icon-heart-01.png" alt="ICON">
-								<img class="icon-heart2 dis-block trans-04 ab-t-l" src="images/icons/icon-heart-02.png" alt="ICON">
-							</a>
-						</div>
-					</div>
-				</div>
-			</div>
-
-			<div class="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item men">
-				<!-- Block2 -->
-				<div class="block2">
-					<div class="block2-pic hov-img0">
-						<img src="images/product-12.jpg" alt="IMG-PRODUCT">
-
-						<a href="#" class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04 js-show-modal1">
-							Quick View
-						</a>
-					</div>
-
-					<div class="block2-txt flex-w flex-t p-t-14">
-						<div class="block2-txt-child1 flex-col-l ">
-							<a href="product-detail.html" class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
-								Herschel supply
-							</a>
-
-							<span class="stext-105 cl3">
-								$63.15
-							</span>
-						</div>
-
-						<div class="block2-txt-child2 flex-r p-t-3">
-							<a href="#" class="btn-addwish-b2 dis-block pos-relative js-addwish-b2">
-								<img class="icon-heart1 dis-block trans-04" src="images/icons/icon-heart-01.png" alt="ICON">
-								<img class="icon-heart2 dis-block trans-04 ab-t-l" src="images/icons/icon-heart-02.png" alt="ICON">
-							</a>
-						</div>
-					</div>
-				</div>
-			</div>
-
-			<div class="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item women">
-				<!-- Block2 -->
-				<div class="block2">
-					<div class="block2-pic hov-img0">
-						<img src="images/product-13.jpg" alt="IMG-PRODUCT">
-
-						<a href="#" class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04 js-show-modal1">
-							Quick View
-						</a>
-					</div>
-
-					<div class="block2-txt flex-w flex-t p-t-14">
-						<div class="block2-txt-child1 flex-col-l ">
-							<a href="product-detail.html" class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
-								T-Shirt with Sleeve
-							</a>
-
-							<span class="stext-105 cl3">
-								$18.49
-							</span>
-						</div>
-
-						<div class="block2-txt-child2 flex-r p-t-3">
-							<a href="#" class="btn-addwish-b2 dis-block pos-relative js-addwish-b2">
-								<img class="icon-heart1 dis-block trans-04" src="images/icons/icon-heart-01.png" alt="ICON">
-								<img class="icon-heart2 dis-block trans-04 ab-t-l" src="images/icons/icon-heart-02.png" alt="ICON">
-							</a>
-						</div>
-					</div>
-				</div>
-			</div>
-
-			<div class="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item women">
-				<!-- Block2 -->
-				<div class="block2">
-					<div class="block2-pic hov-img0">
-						<img src="images/product-14.jpg" alt="IMG-PRODUCT">
-
-						<a href="#" class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04 js-show-modal1">
-							Quick View
-						</a>
-					</div>
-
-					<div class="block2-txt flex-w flex-t p-t-14">
-						<div class="block2-txt-child1 flex-col-l ">
-							<a href="product-detail.html" class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
-								Pretty Little Thing
-							</a>
-
-							<span class="stext-105 cl3">
-								$54.79
-							</span>
-						</div>
-
-						<div class="block2-txt-child2 flex-r p-t-3">
-							<a href="#" class="btn-addwish-b2 dis-block pos-relative js-addwish-b2">
-								<img class="icon-heart1 dis-block trans-04" src="images/icons/icon-heart-01.png" alt="ICON">
-								<img class="icon-heart2 dis-block trans-04 ab-t-l" src="images/icons/icon-heart-02.png" alt="ICON">
-							</a>
-						</div>
-					</div>
-				</div>
-			</div>
-
-			<div class="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item watches">
-				<!-- Block2 -->
-				<div class="block2">
-					<div class="block2-pic hov-img0">
-						<img src="images/product-15.jpg" alt="IMG-PRODUCT">
-
-						<a href="#" class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04 js-show-modal1">
-							Quick View
-						</a>
-					</div>
-
-					<div class="block2-txt flex-w flex-t p-t-14">
-						<div class="block2-txt-child1 flex-col-l ">
-							<a href="product-detail.html" class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
-								Mini Silver Mesh Watch
-							</a>
-
-							<span class="stext-105 cl3">
-								$86.85
-							</span>
-						</div>
-
-						<div class="block2-txt-child2 flex-r p-t-3">
-							<a href="#" class="btn-addwish-b2 dis-block pos-relative js-addwish-b2">
-								<img class="icon-heart1 dis-block trans-04" src="images/icons/icon-heart-01.png" alt="ICON">
-								<img class="icon-heart2 dis-block trans-04 ab-t-l" src="images/icons/icon-heart-02.png" alt="ICON">
-							</a>
-						</div>
-					</div>
-				</div>
-			</div>
-
-			<div class="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item women">
-				<!-- Block2 -->
-				<div class="block2">
-					<div class="block2-pic hov-img0">
-						<img src="images/product-16.jpg" alt="IMG-PRODUCT">
-
-						<a href="#" class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04 js-show-modal1">
-							Quick View
-						</a>
-					</div>
-
-					<div class="block2-txt flex-w flex-t p-t-14">
-						<div class="block2-txt-child1 flex-col-l ">
-							<a href="product-detail.html" class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
-								Square Neck Back
-							</a>
-
-							<span class="stext-105 cl3">
-								$29.64
-							</span>
-						</div>
-
-						<div class="block2-txt-child2 flex-r p-t-3">
-							<a href="#" class="btn-addwish-b2 dis-block pos-relative js-addwish-b2">
-								<img class="icon-heart1 dis-block trans-04" src="images/icons/icon-heart-01.png" alt="ICON">
-								<img class="icon-heart2 dis-block trans-04 ab-t-l" src="images/icons/icon-heart-02.png" alt="ICON">
-							</a>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-
-		<!-- Load more -->
-		<div class="flex-c-m flex-w w-full p-t-45">
-			<a href="#" class="flex-c-m stext-101 cl5 size-103 bg2 bor1 hov-btn1 p-lr-15 trans-04">
-				Load More
-			</a>
 		</div>
 	</div>
-</section> *@
+</section>
